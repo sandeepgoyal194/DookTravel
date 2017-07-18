@@ -1,0 +1,139 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_marginTop="5dp"
+                android:paddingLeft="20dp"
+                android:gravity="center_vertical"
+                android:background="@color/light_grey"
+                android:text="@string/contact_detail"
+                android:textSize="16sp"
+                android:id="@+id/tvContactDetail"
+                android:textColor="@color/grey3"
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+
+
+
+            <LinearLayout
+                android:id="@+id/ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/back_basic_detail"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/ed_layout_secondaryEmail"
+                    android:layout_width="match_parent"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/edSecondaryEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/secondary_email"
+                        android:lines="1"
+                        android:textColor="@color/pilot"
+                        android:textSize="14sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/ed_layout_mobile_no_1"
+                    android:layout_width="match_parent"
+                    android:textColorHint="@color/black"
+
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/edMobile_no_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:hint="@string/mobile_no_1"
+                        android:lines="1"
+                        android:textColor="@color/pilot"
+
+                        android:textSize="14sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/ed_layout_Mobile_no_2"
+                    android:layout_width="match_parent"
+                    android:textColorHint="@color/black"
+                    android:layout_height="wrap_content">
+
+
+                    <EditText
+                        android:id="@+id/edMobile_no_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:hint="@string/mobile_no_2"
+                        android:imeOptions="actionDone"
+                        android:lines="1"
+                        android:textColor="@color/pilot"
+
+                        android:textSize="14sp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/ed_layout_skype_id"
+                    android:layout_width="match_parent"
+                    android:textColorHint="@color/black"
+                    android:layout_height="wrap_content">
+
+
+                    <EditText
+                        android:id="@+id/edSkype_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:hint="@string/skype_id"
+                        android:textColor="@color/pilot"
+                        android:imeOptions="actionDone"
+                        android:lines="1"
+                        android:textSize="14sp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+    <Button
+        android:id="@+id/btnNext"
+        android:background="@drawable/button_round"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="150dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/next"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

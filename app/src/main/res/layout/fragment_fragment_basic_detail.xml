@@ -1,0 +1,211 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.softmine.dooktravel.fragments.FragmentBasicDetail">
+    <ImageView
+        android:id="@+id/imgProfile"
+        android:scaleType="fitXY"
+        android:background="@color/grey"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/man" />
+    <!-- TODO: Update blank fragment layout -->
+
+    <ScrollView
+        android:layout_below="@id/imgProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/tvBasicDetail"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="20dp"
+        android:gravity="center_vertical"
+        android:background="@color/light_grey"
+        android:text="@string/basic_details"
+        android:textSize="16sp"
+        android:textColor="@color/grey3"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/back_basic_detail"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ed_layout_firstName"
+                android:layout_width="match_parent"
+                android:textColorHint="@color/black"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edFirstname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/first_name"
+                    android:imeOptions="actionNext"
+                    android:lines="1"
+                    android:textColorHint="@color/pilot"
+                    android:textColor="@color/pilot"
+                    android:textSize="14sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ed_layout_MiddleName"
+                android:layout_width="match_parent"
+                android:textColorHint="@color/black"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edMiddleName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:hint="@string/middle_name"
+                    android:lines="1"
+                    android:textColor="@color/pilot"
+                    android:textSize="14sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ed_layout_LastName"
+                android:layout_width="match_parent"
+                android:textColorHint="@color/black"
+                android:layout_height="wrap_content">
+
+
+                <EditText
+                    android:id="@+id/edlastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:hint="@string/last_name"
+                    android:imeOptions="actionDone"
+                    android:lines="1"
+
+                    android:textColor="@color/pilot"
+                    android:textSize="14sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvGender"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/gender"
+                        android:textSize="14sp" />
+
+                    <Spinner
+                        style="@style/SpinnerTheme"
+                        android:id="@+id/spinner_gender"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="2dp"
+                        android:entries="@array/gender"
+                         />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:textColor="@color/black"
+                        android:id="@+id/tvdateOfBirth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/date_of_birth"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/spinner_dob"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="2dp"
+                        android:hint="@string/dob"
+                        android:gravity="center"
+                        android:textColorHint="@color/black"
+                        android:textColor="@color/black"
+                        android:background="@color/white"
+                         />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvMaritalStatus"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/marital_status"
+                        android:textSize="14sp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_marital_status"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="2dp"
+                        style="@style/SpinnerTheme"
+                        android:layout_marginBottom="80dp"
+                        android:entries="@array/marital_status"
+                         />
+                </LinearLayout>
+
+            </RelativeLayout>
+            </LinearLayout>
+
+
+    </LinearLayout>
+    </ScrollView>
+    <Button
+        android:id="@+id/btnNext"
+        android:background="@drawable/button_round"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="150dp"
+        android:text="@string/next"
+        android:layout_marginBottom="20dp"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

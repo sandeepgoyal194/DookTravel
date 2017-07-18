@@ -1,0 +1,103 @@
+<resources>
+    <string name="app_name">DookTravel</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logo">Logo</string>
+    <string name="login">Log In</string>
+    <string name="logIn">LOGIN</string>
+
+    <string name="username">USERNAME</string>
+    <string name="password">PASSWORD</string>
+    <string name="tv_forgot_password">Forgot your password?</string>
+    <string name="login_fb">LOGIN WITH FACEBOOK</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="sign_up"><u>Sign UP</u></string>
+    <string name="signup">Sign UP</string>
+
+    <string name="login_u"><u>Login</u></string>
+    <string name="email_address">EMAIL ADDRESS</string>
+    <string name="or">OR</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="sign_up_below">Please Sign up below</string>
+    <string name="title_activity_home">Profile</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="update_profile">UPDATE PROFILE</string>
+    <string name="change_password">CHANGE PASSWORD</string>
+    <string name="logout">LOGOUT</string>
+    <string name="basic_details">BASIC DETAILS</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="gender">Gender</string>
+    <string name="marital_status">Marital Status</string>
+    <string name="dob">DD/MM/YYYY</string>
+    <string name="next">NEXT</string>
+    <string name="middle_name">Middle Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="professional_detail">PROFESSIONAL DETAILS</string>
+    <string name="organization">Organization Name</string>
+    <string name="designation">Designation</string>
+    <string name="category">Category</string>
+    <string name="working_since">Working Since</string>
+    <string name="current_address">CURRENT ADDRESS</string>
+    <string name="country">Country</string>
+    <string name="city">City</string>
+    <string name="province">Province</string>
+    <string name="zip">Zip/Postal Code</string>
+    <string name="address">Address</string>
+    <string name="submit">SUBMIT</string>
+    <string name="about_me">ABOUT ME</string>
+    <string name="tv_no_of_char">0/250</string>
+    <string name="first_name">First Name</string>
+    <string name="contact">Contact</string>
+    <string name="email">Email</string>
+    <string name="skype">Skype</string>
+    <string name="description">Description</string>
+    <string name="search_result">SEARCH RESULT</string>
+    <string name="keyword">Keyword</string>
+    <string name="go">GO</string>
+    <string name="contact_detail">CONTACT DETAILS</string>
+    <string name="secondary_email">Secondary email</string>
+    <string name="mobile_no_1">Mobile No. 1.</string>
+    <string name="mobile_no_2">Mobile No. 2.</string>
+    <string name="skype_id">Skype ID</string>
+    <string name="profile">Profile</string>
+    <string name="selectMarital_status">Please select marital status</string>
+    <string name="enter_dob">Please enter date of birth</string>
+    <string name="select_gender">Please select your gender</string>
+
+    <string-array name="gender">
+        <item>Select</item>
+        <item>Male</item>
+        <item>Female</item>
+
+    </string-array>
+
+
+    <string-array name="marital_status">
+        <item>Select</item>
+        <item>Single</item>
+        <item>Married</item>
+
+    </string-array>
+    <string-array name="category">
+        <item>Select</item>
+
+
+    </string-array>
+    <string-array name="country">
+        <item>Select</item>
+        <item>India</item>
+
+    </string-array>
+
+    <string-array name="state">
+        <item>Select</item>
+        <item>Delhi</item>
+
+    </string-array>
+
+</resources>
