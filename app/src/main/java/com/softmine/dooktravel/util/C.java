@@ -43,6 +43,6 @@ public class C {
     public static final String TOKEN = "token";
     public static final String MEMBER_ID ="member_id" ;
     public static final String PROFILE_METHOD ="profile" ;
-    public static final String IS_LOGIN = "is_login";
+    public static final String IS_LOGIN = "isLogin";
     public static final String LOGOUT ="logout" ;
 }
