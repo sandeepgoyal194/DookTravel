@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.softmine.dooktravel.R;
-import com.softmine.dooktravel.pojos.Model;
+import com.softmine.dooktravel.pojos.ProfileListMembers;
 import com.softmine.dooktravel.util.Utils;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by GAURAV on 7/1/2017.
@@ -21,7 +21,7 @@ public class AdapterSearchResult extends RecyclerView
         .Adapter<AdapterSearchResult
         .DataObjectHolder> {
     private static String LOG_TAG = "MyRecyclerViewAdapter";
-    private ArrayList<Model> mDataset;
+    private List<ProfileListMembers> mDataset;
     private static ClickListener mClickListener;
     static Context context;
     public static class DataObjectHolder extends RecyclerView.ViewHolder
@@ -53,7 +53,7 @@ public class AdapterSearchResult extends RecyclerView
         this.mClickListener = mClickListener;
     }
 
-    public AdapterSearchResult(ArrayList<Model> myDataset, Context context) {
+    public AdapterSearchResult(List<ProfileListMembers> myDataset, Context context) {
         mDataset = myDataset;
         this.context=context;
     }
@@ -70,13 +70,13 @@ public class AdapterSearchResult extends RecyclerView
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        holder.tvName.setText(mDataset.get(position).getName());
-        holder.tvCompany.setText(mDataset.get(position).getCompany());
-        holder.tvAddress.setText(mDataset.get(position).getAddress());
+        holder.tvName.setText(mDataset.get(position).getFirstName()+" "+mDataset.get(position).getLastName());
+        holder.tvCompany.setText(mDataset.get(position).getOrganization());
+        holder.tvAddress.setText(mDataset.get(position).getStateName()+mDataset.get(position).getCountryName());
 
     }
 
-    public void addItem(Model dataObj, int index) {
+    public void addItem(ProfileListMembers dataObj, int index) {
         mDataset.add(index, dataObj);
         notifyItemInserted(index);
     }

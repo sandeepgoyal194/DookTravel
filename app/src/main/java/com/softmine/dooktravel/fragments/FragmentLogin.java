@@ -16,7 +16,18 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.softmine.dooktravel.ActivityHome;
 import com.softmine.dooktravel.MainActivity;
@@ -33,9 +44,6 @@ import com.softmine.dooktravel.validations.Validations;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -44,11 +52,20 @@ public class FragmentLogin extends Fragment implements CompleteListener{
     Validations validation = new Validations();
     TextView tvSignUp,tvforgotPassword,tvDontHaveAccount;
     Button btnLogin,btnFacebook;
+    LoginButton loginButton;
+    CallbackManager callbackManager;
     ValidateEditText etUsername,etPassword;
     public FragmentLogin() {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationsContext());
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,16 +75,31 @@ public class FragmentLogin extends Fragment implements CompleteListener{
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            LoginManager.getInstance().logOut();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         tvSignUp=(TextView)view.findViewById(R.id.tv_sign_up);
         tvSignUp.setOnClickListener(tvSignUpClickListner);
         btnLogin=(Button)view.findViewById(R.id.btnLogin);
+        loginButton=(LoginButton)view.findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email");
         btnLogin.setOnClickListener(mLoginButtonClickListner);
         tvforgotPassword=(TextView)view.findViewById(R.id.tvForgotPassword);
+        tvforgotPassword.setOnClickListener(mForgotPasswordClickListner);
         tvDontHaveAccount=(TextView)view.findViewById(R.id.tv_dont_have_account);
         btnFacebook=(Button)view.findViewById(R.id.btnfb);
-        flags = 0 | Validations.FLAG_NOT_EMPTY;
+            flags = 0 | Validations.FLAG_NOT_EMPTY;
         flags = flags | Validations.TYPE_EMAIL;
         etUsername=new ValidateEditText((EditText)view.findViewById(R.id.edUsername),getActivity(),flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
@@ -80,28 +112,110 @@ public class FragmentLogin extends Fragment implements CompleteListener{
         tvforgotPassword.setTypeface(Utils.getRegularTypeFace(getActivity()));
         tvDontHaveAccount.setTypeface(Utils.getRegularItalicTypeFace(getActivity()));
         btnFacebook.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
+        btnFacebook.setOnClickListener(mButtonClickListner);
         validation.addtoList(etPassword);
         validation.addtoList(etUsername);
+        callbackManager =CallbackManager.Factory.create();
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+            Log.e("DEBUG","UserID="+loginResult.getAccessToken().getUserId()+"Token="+loginResult.getAccessToken().getToken());
+
+                requestData();
+            }
+
+            @Override
+            public void onCancel() {
+            Log.e("DEBUG","Login Cancelled");
+                Toast.makeText(getActivity(),R.string.login_cancled,Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.e("DEBUG","error"+error.toString());
+            }
+        });
+    }
+    public void requestData(){
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+
+                JSONObject json = response.getJSONObject();
+                try {
+                    if (json != null) {
+                        Log.e("DEBUG","DATA=="+json.toString());
+                    /*    String text = "<b>Name :</b> " + json.getString("name") + "<br><br><b>Email :</b> " + json.getString("email") + "<br><br><b>Profile link :</b> " + json.getString("link");
+                    //    details_txt.setText(Html.fromHtml(text));
+                   //     profile.setProfileId(json.getString("id"));
+                        Log.e("DEBUG","text=="+text+"===id=="+json.getString("id"));*/
+                      /*  name=json.getString("name");
+                        email=json.getString("email");
+                        regId=json.getString("id");*/
+
+                        userFacebookLogin(json.getString("id"),json.getString("email"));
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(),"Email ID required",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,link,email,picture");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
 
+    View.OnClickListener mForgotPasswordClickListner=new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ((MainActivity)getActivity()).fragmnetLoader(8,null);
+        }
+    };
+
+    View.OnClickListener mButtonClickListner=new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+         loginButton.performClick();
+        }
+    };
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+       // super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode,resultCode,data);
+    }
+
+
+    void userFacebookLogin(String token,String email){
+        JSONObject jsonBody = new JSONObject();
+        try {
+             /*   jsonBody.put(C.EMAIL, "pradeep.bansal@techmobia.com");
+                jsonBody.put(C.PASSWORD, "abc123");
+                jsonBody.put(C.SOCAIL_ID, "");*/
+            jsonBody.put(C.EMAIL, email);
+            jsonBody.put(C.PASSWORD, "");
+            jsonBody.put(C.SOCAIL_ID,token);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ServiceConnection serviceConnection = new ServiceConnection();
+        serviceConnection.makeJsonObjectRequest(C.LOGIN_METHOD, jsonBody, FragmentLogin.this);
+    }
     View.OnClickListener mLoginButtonClickListner=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             /*Intent  intent=new Intent(getActivity(), ActivityHome.class);
             startActivity(intent);*/
             if(validation.validateAllEditText()) {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put(C.EMAIL, etUsername.getString());
-                params.put(C.PASSWORD, etUsername.getString());
-                params.put(C.SOCAIL_ID, "");
+
 
                 JSONObject jsonBody = new JSONObject();
                 try {
-             /*   jsonBody.put(C.EMAIL, "pradeep.bansal@techmobia.com");
-                jsonBody.put(C.PASSWORD, "abc123");
-                jsonBody.put(C.SOCAIL_ID, "");*/
-                    jsonBody.put(C.EMAIL, etUsername.getString());
-                    jsonBody.put(C.PASSWORD, etPassword.getString());
+                    jsonBody.put(C.EMAIL, etUsername.getEditText().getText().toString());
+                    jsonBody.put(C.PASSWORD, etPassword.getEditText().getText().toString());
                     jsonBody.put(C.SOCAIL_ID, "");
 
                 } catch (JSONException e) {

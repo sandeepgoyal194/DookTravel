@@ -6,20 +6,16 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
- * Created by gaurav.garg on 18-07-2017.
+ * Created by GAURAV on 7/20/2017.
  */
 
-public class Profile implements Serializable {
-
+public class ProfileListMembers implements Serializable {
     @SerializedName("member_id")
     @Expose
     private String memberId;
     @SerializedName("email_id")
     @Expose
     private String emailId;
-    @SerializedName("token")
-    @Expose
-    private String token;
     @SerializedName("phone")
     @Expose
     private String phone;
@@ -56,9 +52,9 @@ public class Profile implements Serializable {
     @SerializedName("working_since")
     @Expose
     private String workingSince;
-    @SerializedName("address")
+    @SerializedName("addr ess")
     @Expose
-    private String address;
+    private String addrEss;
     @SerializedName("country_id")
     @Expose
     private String countryId;
@@ -91,9 +87,8 @@ public class Profile implements Serializable {
      * No args constructor for use in serialization
      *
      */
-    public Profile() {
+    public ProfileListMembers() {
     }
-
 
     /**
      *
@@ -106,14 +101,13 @@ public class Profile implements Serializable {
      * @param cityName
      * @param categoryId
      * @param about
+     * @param addrEss
      * @param maritalStatus
      * @param city
      * @param workingSince
      * @param categoryName
      * @param organization
      * @param emailId
-     * @param token
-     * @param address
      * @param stateId
      * @param zipCode
      * @param stateName
@@ -123,12 +117,10 @@ public class Profile implements Serializable {
      * @param firstName
      * @param skype
      */
-
-
-    public Profile(String memberId, String emailId, String token, String phone, String categoryId, String categoryName, String firstName, String middleName, String lastName, String profilePic, String gender, String dateOfBirth, String maritalStatus, String organization, String workingSince, String address, String countryId, String countryName, String stateId, String stateName, String city, String cityName, String zipCode, String skype, String about) {
+    public ProfileListMembers(String memberId, String emailId, String phone, String categoryId, String categoryName, String firstName, String middleName, String lastName, String profilePic, String gender, String dateOfBirth, String maritalStatus, String organization, String workingSince, String addrEss, String countryId, String countryName, String stateId, String stateName, String city, String cityName, String zipCode, String skype, String about) {
+        super();
         this.memberId = memberId;
         this.emailId = emailId;
-        this.token = token;
         this.phone = phone;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
@@ -141,7 +133,7 @@ public class Profile implements Serializable {
         this.maritalStatus = maritalStatus;
         this.organization = organization;
         this.workingSince = workingSince;
-        this.address = address;
+        this.addrEss = addrEss;
         this.countryId = countryId;
         this.countryName = countryName;
         this.stateId = stateId;
@@ -167,14 +159,6 @@ public class Profile implements Serializable {
 
     public void setEmailId(String emailId) {
         this.emailId = emailId;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public String getPhone() {
@@ -273,12 +257,12 @@ public class Profile implements Serializable {
         this.workingSince = workingSince;
     }
 
-    public String getAddress() {
-        return address;
+    public String getAddrEss() {
+        return addrEss;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAddrEss(String addrEss) {
+        this.addrEss = addrEss;
     }
 
     public String getCountryId() {
@@ -352,4 +336,5 @@ public class Profile implements Serializable {
     public void setAbout(String about) {
         this.about = about;
     }
+
 }

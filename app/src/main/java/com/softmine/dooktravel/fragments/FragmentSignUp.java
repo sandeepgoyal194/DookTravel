@@ -16,12 +16,22 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
-import com.softmine.dooktravel.ActivityHome;
 import com.softmine.dooktravel.MainActivity;
 import com.softmine.dooktravel.R;
-import com.softmine.dooktravel.pojos.LoginStatus;
+import com.softmine.dooktravel.pojos.ProfileDetail;
 import com.softmine.dooktravel.pojos.RegisterStatus;
 import com.softmine.dooktravel.serviceconnection.CompleteListener;
 import com.softmine.dooktravel.serviceconnection.ServiceConnection;
@@ -42,12 +52,30 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
     Button btnSignUp,btnFacebook;
     ValidateEditText etUserName;
     int flags;
+    String email="",socailId="";
+    LoginButton loginButton;
+    CallbackManager callbackManager;
     Validations validation = new Validations();
     public FragmentSignUp() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationsContext());
 
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            LoginManager.getInstance().logOut();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,15 +89,20 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
         tvLogin=(TextView)view.findViewById(R.id.tv_login);
         tvLogin.setOnClickListener(tvLoginCLickListner);
         tvAlreadyAccount=(TextView)view.findViewById(R.id.tv_already_have_account);
-
+        loginButton=(LoginButton)view.findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email");
         btnSignUp=(Button)view.findViewById(R.id.btnSignUp);
         btnFacebook=(Button)view.findViewById(R.id.btnfb);
+        btnFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginButton.performClick();
+            }
+        });
         btnSignUp.setOnClickListener(mSignUpClickLisnter);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
         flags = flags | Validations.TYPE_EMAIL;
         etUserName=new ValidateEditText((EditText)view.findViewById(R.id.edEmail),getActivity(),flags);
-
-
         tvLogin.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
         tvAlreadyAccount.setTypeface(Utils.getRegularItalicTypeFace(getActivity()));
 
@@ -79,9 +112,75 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
 
         etUserName.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
         validation.addtoList(etUserName);
+        callbackManager =CallbackManager.Factory.create();
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.e("DEBUG","UserID="+loginResult.getAccessToken().getUserId()+"Token="+loginResult.getAccessToken().getToken());
+               requestData();
+            }
 
+            @Override
+            public void onCancel() {
+                Log.e("DEBUG","Login Cancelled");
+                Toast.makeText(getActivity(),R.string.login_cancled, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.e("DEBUG","error"+error.toString());
+            }
+        });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode,resultCode,data);
+    }
+
+    public void requestData(){
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+
+                JSONObject json = response.getJSONObject();
+                try {
+                    if (json != null) {
+                        Log.e("DEBUG","DATA=="+json.toString());
+                        userFacebookLogin(json.getString("id"),json.getString("email"));
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(),"Email ID required",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,link,email,picture");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+    void userFacebookLogin(String token,String email){
+        JSONObject jsonBody = new JSONObject();
+        try {
+             /*   jsonBody.put(C.EMAIL, "pradeep.bansal@techmobia.com");
+                jsonBody.put(C.PASSWORD, "abc123");
+                jsonBody.put(C.SOCAIL_ID, "");*/
+            this.email=email;
+            socailId=token;
+            jsonBody.put(C.EMAIL, email);
+            // jsonBody.put(C.PASSWORD, etPassword.getString());
+            jsonBody.put(C.SOCAIL_ID,token);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.e("DEBUG","Request="+jsonBody.toString());
+        ServiceConnection serviceConnection = new ServiceConnection();
+        serviceConnection.makeJsonObjectRequest(C.SIGNUP_METHOD, jsonBody, FragmentSignUp.this);
+    }
     View.OnClickListener mSignUpClickLisnter=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -98,7 +197,9 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
              /*   jsonBody.put(C.EMAIL, "pradeep.bansal@techmobia.com");
                 jsonBody.put(C.PASSWORD, "abc123");
                 jsonBody.put(C.SOCAIL_ID, "");*/
-                    jsonBody.put(C.EMAIL, etUserName.getString());
+                    email=etUserName.getEditText().getText().toString();
+                    socailId="";
+                    jsonBody.put(C.EMAIL,email);
                     jsonBody.put(C.SOCAIL_ID, "");
 
                 } catch (JSONException e) {
@@ -126,7 +227,12 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
         if(!registerStatus.getError()){
            /* Intent intent=new Intent(getActivity(), ActivityHome.class);
             startActivity(intent);*/
-           ((MainActivity)getActivity()).fragmnetLoader(C.FRAGMENT_BASIC_DETAIL,null);
+           ProfileDetail profileDetail=new ProfileDetail();
+            profileDetail.setEmail(email);
+            profileDetail.setSocialid(socailId);
+            Bundle bundle=new Bundle();
+            bundle.putSerializable(C.DATA,profileDetail);
+           ((MainActivity)getActivity()).fragmnetLoader(C.FRAGMENT_BASIC_DETAIL,bundle);
         }
         else {
             getDailogConfirm(registerStatus.getMessage(),"");

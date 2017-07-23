@@ -1,5 +1,6 @@
 package com.softmine.dooktravel;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.softmine.dooktravel.fragments.FragmentBasicDetail;
 import com.softmine.dooktravel.fragments.FragmentContactDetail;
+import com.softmine.dooktravel.fragments.FragmentForgotPassword;
 import com.softmine.dooktravel.fragments.FragmentLogin;
 import com.softmine.dooktravel.fragments.FragmentProfessionalDetail;
 import com.softmine.dooktravel.fragments.FragmentSignUp;
@@ -72,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.container, fragment);
                 fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_CONTACT_DETAIL);
                 break;
-            case C.FRAGMENT_PROFESSIONAL_DETAIL:
-                tvTitle.setText(getResources().getString(R.string.profile));
-                fragment = new FragmentProfessionalDetail();
+            case C.FRAGMENT_FORGOT_PASSWORD:
+
+                fragment = new FragmentForgotPassword();
                 fragmentTransaction.replace(R.id.container, fragment);
-                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PROFESSIONAL_DETAIL);
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_FORGOT_PASSWORD);
                 break;
         }
         fragment.setArguments(bundle);
@@ -107,5 +109,14 @@ public class MainActivity extends AppCompatActivity {
         } else {
             finish();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(fragment instanceof FragmentLogin || fragment instanceof FragmentSignUp ){
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }

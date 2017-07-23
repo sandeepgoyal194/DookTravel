@@ -1,15 +1,20 @@
 package com.softmine.dooktravel.fragments;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,15 +22,18 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.softmine.dooktravel.ActivityHome;
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.pojos.CategoryList;
 import com.softmine.dooktravel.pojos.CityList;
 import com.softmine.dooktravel.pojos.CountryList;
+import com.softmine.dooktravel.pojos.LoginStatus;
 import com.softmine.dooktravel.pojos.Profile;
 import com.softmine.dooktravel.pojos.ProfileDetail;
+import com.softmine.dooktravel.pojos.ProfileStatus;
+import com.softmine.dooktravel.pojos.RegisterStatus;
 import com.softmine.dooktravel.pojos.StateList;
 import com.softmine.dooktravel.serviceconnection.CompleteListener;
 import com.softmine.dooktravel.serviceconnection.ServiceConnection;
@@ -45,16 +53,17 @@ import java.util.Locale;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentProfessionalDetail extends Fragment implements CompleteListener{
+public class FragmentProfessionalDetail extends AppCompatActivity implements CompleteListener {
     String action;
     ProfileDetail profileDetail;
     Button btnSubmit;
-    TextView tvProfesstionalDetail,tvCategory,tvWorkingHour,tvWorkingSince,tvCurrentAdd,tvCountry,tvCity,tvProvince,tvAboutMe,tvPostal;
-    ValidateEditText etOraginization,etDesignation,etAddress,etAboutMe,etZipCode;
-    Spinner spnCategory,spnCountry,spnCity,spnProvince;
+    TextView tvProfesstionalDetail, tvCategory, tvWorkingHour, tvWorkingSince, tvCurrentAdd, tvCountry, tvCity, tvProvince, tvAboutMe, tvPostal;
+    ValidateEditText etOraginization, etDesignation, etAddress, etAboutMe, etZipCode;
+    Spinner spnCategory, spnCountry, spnCity, spnProvince;
     CountryList countryList;
     StateList stateList;
     CityList cityList;
+    CategoryList categoryList;
     int flags;
     Validations validation = new Validations();
 
@@ -63,8 +72,9 @@ public class FragmentProfessionalDetail extends Fragment implements CompleteList
     private int month;
     private int day;
     private DatePickerDialog DatePickerDialog;
-    boolean isLogin=false;
     Profile profile;
+    int mCountryPos = 0, mCityPos = 0, mStatePos = 0, mCategoryPos = 0;
+
     public FragmentProfessionalDetail() {
         // Required empty public constructor
     }
@@ -72,55 +82,66 @@ public class FragmentProfessionalDetail extends Fragment implements CompleteList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = this.getArguments();
+        Bundle bundle = getIntent().getBundleExtra("details");
+        setContentView(R.layout.fragment_fragment_professional_detail);
         if (bundle != null) {
-            if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
-                isLogin=true;
+            if (C.isloggedIn) {
                 profile = (Profile) bundle.getSerializable(C.PROFILE_METHOD);
-            }
-            else {
-                isLogin=false;
+            } else {
                 profileDetail = (ProfileDetail) bundle.getSerializable(C.DATA);
             }
         }
+        onViewCreated(this, bundle);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        btnSubmit=(Button)view.findViewById(R.id.btnSubmit);
+
+    public void onViewCreated(Activity view, @Nullable Bundle savedInstanceState) {
+        btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
         btnSubmit.setOnClickListener(mBtnSubmitCLickLisner);
-        tvProfesstionalDetail=(TextView)view.findViewById(R.id.tvProfessionalDetail);
-        tvCategory=(TextView)view.findViewById(R.id.tvCategory);
-        tvWorkingHour=(TextView)view.findViewById(R.id.tvWorkingHour);
-        tvCurrentAdd=(TextView)view.findViewById(R.id.tvCurrentAddress);
-        tvCountry=(TextView)view.findViewById(R.id.tvCountry);
-        tvCity=(TextView)view.findViewById(R.id.tvCity);
-        tvProvince=(TextView)view.findViewById(R.id.tvProvince);
+        tvProfesstionalDetail = (TextView) view.findViewById(R.id.tvProfessionalDetail);
+        tvCategory = (TextView) view.findViewById(R.id.tvCategory);
+        tvWorkingHour = (TextView) view.findViewById(R.id.tvWorkingHour);
+        tvCurrentAdd = (TextView) view.findViewById(R.id.tvCurrentAddress);
+        tvCountry = (TextView) view.findViewById(R.id.tvCountry);
+        tvCity = (TextView) view.findViewById(R.id.tvCity);
+        tvProvince = (TextView) view.findViewById(R.id.tvProvince);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
-        etZipCode=new ValidateEditText((EditText)view.findViewById(R.id.et_Postal),getActivity(),flags);
-        tvAboutMe=(TextView)view.findViewById(R.id.tvAboutUs);
-        tvWorkingSince=(TextView) view.findViewById(R.id.tv_working_since);
+        flags = flags | Validations.TYPE_PINCODE;
+        etZipCode = new ValidateEditText((EditText) view.findViewById(R.id.et_Postal), getActivity(), flags);
+        tvAboutMe = (TextView) view.findViewById(R.id.tvAboutUs);
+        tvWorkingSince = (TextView) view.findViewById(R.id.tv_working_since);
         tvWorkingSince.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePickerDialog.show();
             }
         });
-        tvPostal=(TextView) view.findViewById(R.id.et_Postal);
+        tvPostal = (TextView) view.findViewById(R.id.et_Postal);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
-        etOraginization=new ValidateEditText((EditText)view.findViewById(R.id.edOrganization),getActivity(),flags);
+        etOraginization = new ValidateEditText((EditText) view.findViewById(R.id.edOrganization), getActivity(), flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
-        etDesignation=new ValidateEditText((EditText)view.findViewById(R.id.edDesignation),getActivity(),flags);
+        etDesignation = new ValidateEditText((EditText) view.findViewById(R.id.edDesignation), getActivity(), flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
-        etAddress=new ValidateEditText((EditText)view.findViewById(R.id.edAddress),getActivity(),flags);
+        etAddress = new ValidateEditText((EditText) view.findViewById(R.id.edAddress), getActivity(), flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
-        etAboutMe=new ValidateEditText((EditText)view.findViewById(R.id.edAboutMe),getActivity(),flags);
+        etAboutMe = new ValidateEditText((EditText) view.findViewById(R.id.edAboutMe), getActivity(), flags);
 
-        spnCategory=(Spinner)view.findViewById(R.id.spinner_category);
-        spnCountry=(Spinner)view.findViewById(R.id.spinner_country);
+        spnCategory = (Spinner) view.findViewById(R.id.spinner_category);
+
+        spnCategory.setOnItemSelectedListener(mOnCategorySelectedListner);
+        spnCountry = (Spinner) view.findViewById(R.id.spinner_country);
         spnCountry.setOnItemSelectedListener(mOnCountrySelectedListner);
-        spnCity=(Spinner)view.findViewById(R.id.spinner_city);
-        spnProvince=(Spinner)view.findViewById(R.id.spinner_province);
+        spnCity = (Spinner) view.findViewById(R.id.spinner_city);
+        spnProvince = (Spinner) view.findViewById(R.id.spinner_province);
         spnProvince.setOnItemSelectedListener(mOnStateItemSelectedListner);
         spnCity.setOnItemSelectedListener(mOnCityItemSelectedListner);
 
@@ -145,26 +166,26 @@ public class FragmentProfessionalDetail extends Fragment implements CompleteList
         etAboutMe.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
 
         Calendar newCalendar = Calendar.getInstance();
-        year  = newCalendar.get(Calendar.YEAR);
+        year = newCalendar.get(Calendar.YEAR);
         month = newCalendar.get(Calendar.MONTH);
-        day   = newCalendar.get(Calendar.DAY_OF_MONTH);
+        day = newCalendar.get(Calendar.DAY_OF_MONTH);
         dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         DatePickerDialog = new DatePickerDialog(getActivity(), new android.app.DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int y, int monthOfYear, int dayOfMonth) {
-                year  = y;
+                year = y;
                 month = monthOfYear;
-                day   = dayOfMonth;
+                day = dayOfMonth;
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(y, monthOfYear, dayOfMonth);
                 tvWorkingSince.setText(dateFormatter.format(newDate.getTime()));
             }
 
-        },year, month, day);
+        }, year, month, day);
 
-        if(isLogin){
+        if (C.isloggedIn) {
             etOraginization.getEditText().setText(profile.getOrganization());
-           // etDesignation.getEditText().setText(profile.);
+            // etDesignation.getEditText().setText(profile.);
             etZipCode.getEditText().setText(profile.getZipCode());
             etAddress.getEditText().setText(profile.getAddress());
             etAboutMe.getEditText().setText(profile.getAbout());
@@ -175,13 +196,41 @@ public class FragmentProfessionalDetail extends Fragment implements CompleteList
     }
 
 
-    AdapterView.OnItemSelectedListener mOnStateItemSelectedListner=new AdapterView.OnItemSelectedListener() {
+    AdapterView.OnItemSelectedListener mOnCategorySelectedListner = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-           if(stateList!=null && position!=0) {
-           //    profileDetail.setStateid(stateList.getState().get(position - 1).getId());
-               getCityList(stateList.getState().get(position - 1).getId());
-           }
+            if (categoryList != null && position != 0 && position != mCategoryPos) {
+                //    profileDetail.setStateid(stateList.getState().get(position - 1).getId());
+                mCategoryPos = position;
+                if (C.isloggedIn) {
+                    profile.setCategoryId(categoryList.getCategory().get(position - 1).getCategoryId());
+                } else {
+                    profileDetail.setCategoryid(categoryList.getCategory().get(position - 1).getCategoryId());
+                }
+
+            }
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
+    AdapterView.OnItemSelectedListener mOnStateItemSelectedListner = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            if (stateList != null && position != 0 && position != mStatePos) {
+                //    profileDetail.setStateid(stateList.getState().get(position - 1).getId());
+                mStatePos = position;
+                if (C.isloggedIn) {
+                    profile.setStateId(stateList.getState().get(position - 1).getId());
+                } else {
+                    profileDetail.setStateid(stateList.getState().get(position - 1).getId());
+                }
+
+                getCityList(stateList.getState().get(position - 1).getId());
+            }
 
         }
 
@@ -191,12 +240,19 @@ public class FragmentProfessionalDetail extends Fragment implements CompleteList
         }
     };
 
-    AdapterView.OnItemSelectedListener mOnCountrySelectedListner=new AdapterView.OnItemSelectedListener() {
+    AdapterView.OnItemSelectedListener mOnCountrySelectedListner = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-            if(countryList!=null && position!=0) {
-            //    profileDetail.setCountryid(countryList.getCountry().get(position - 1).getId());
+            if (countryList != null && position != 0 && position != mCountryPos) {
+                mCountryPos = position;
+                //    profileDetail.setCountryid(countryList.getCountry().get(position -
+
+                if (C.isloggedIn) {
+                    profile.setCountryId(countryList.getCountry().get(position - 1).getId());
+                } else {
+                    profileDetail.setCountryid(countryList.getCountry().get(position - 1).getId());
+                }
                 getStateList(countryList.getCountry().get(position - 1).getId());
             }
         }
@@ -207,10 +263,16 @@ public class FragmentProfessionalDetail extends Fragment implements CompleteList
         }
     };
 
-    AdapterView.OnItemSelectedListener mOnCityItemSelectedListner=new AdapterView.OnItemSelectedListener() {
+    AdapterView.OnItemSelectedListener mOnCityItemSelectedListner = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            if(cityList!=null && position!=0){
+            if (cityList != null && position != 0 && position != mCityPos) {
+                mCityPos = position;
+                if (C.isloggedIn) {
+                    profile.setCity(cityList.getCity().get(position - 1).getId());
+                } else {
+                    profileDetail.setCityid(cityList.getCity().get(position - 1).getId());
+                }
                 //profileDetail.setCityid(cityList.getCity().get(position-1).getId());
             }
 
@@ -222,79 +284,119 @@ public class FragmentProfessionalDetail extends Fragment implements CompleteList
         }
     };
 
-    void  getCategoryList(){
-        action=C.CATEGORY_LIST_METHOD;
-        ServiceConnection serviceConnection=new ServiceConnection();
-        serviceConnection.makeJsonObjectRequest(C.CATEGORY_LIST_METHOD,null,FragmentProfessionalDetail.this);
+    void getCategoryList() {
+        action = C.CATEGORY_LIST_METHOD;
+        ServiceConnection serviceConnection = new ServiceConnection();
+        serviceConnection.makeJsonObjectRequest(C.CATEGORY_LIST_METHOD, null, FragmentProfessionalDetail.this);
     }
 
-    View.OnClickListener mBtnSubmitCLickLisner=new View.OnClickListener() {
+    View.OnClickListener mBtnSubmitCLickLisner = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-           // ((ActivityHome)getActivity()).fragmnetLoader(C.FRAGMENT_SEARCH_RESULT,null);
-           // Map<String,String> params = new HashMap<String, String>();
-            if(isLogin) {
-                Toast.makeText(getActivity(),"Under development",Toast.LENGTH_LONG).show();
-            }
-            else {
-           /*     profileDetail.setOrganization(etOraginization.toString());
+            // ((ActivityHome)getActivity()).fragmnetLoader(C.FRAGMENT_SEARCH_RESULT,null);
+            // Map<String,String> params = new HashMap<String, String>();
+            if (C.isloggedIn) {
+                //    Toast.makeText(getActivity(),"Under development",Toast.LENGTH_LONG).show();
+                profile.setOrganization(etOraginization.getEditText().getText().toString());
+                profile.setWorkingSince(tvWorkingSince.getText().toString());
+                profile.setZipCode(etZipCode.getEditText().getText().toString());
+                profile.setAddress(etAddress.getEditText().getText().toString());
+                profile.setAbout(etAboutMe.getEditText().getText().toString());
+
+                Gson gson = new Gson();
+                String obj = gson.toJson(profile);
+                try {
+                    action = C.UPDATE_PROFILE_METHOD;
+                    JSONObject jsonObject = new JSONObject(obj);
+                    ServiceConnection serviceConnection = new ServiceConnection();
+                    serviceConnection.makeJsonObjectRequest(C.UPDATE_PROFILE_METHOD, jsonObject, FragmentProfessionalDetail.this);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                profileDetail.setOrganization(etOraginization.getEditText().getText().toString());
                 profileDetail.setWorking(tvWorkingSince.getText().toString());
-                profileDetail.setAddress(etAddress.toString());
-                ServiceConnection serviceConnection = new ServiceConnection();
-                serviceConnection.sendToServer(C.COUNTRY_METHOD, null, FragmentProfessionalDetail.this);*/
-                Toast.makeText(getActivity(),"Under development",Toast.LENGTH_LONG).show();
+                profileDetail.setAddress(etAddress.getEditText().getText().toString());
+                profileDetail.setAbout(etAboutMe.getEditText().getText().toString());
+                profileDetail.setZip(etZipCode.getEditText().getText().toString());
+                Gson gson = new Gson();
+                String obj = gson.toJson(profileDetail);
+                try {
+                    JSONObject jsonObject = new JSONObject(obj);
+                    action = C.REGISTER_COUNTINUE_METHOD;
+                    ServiceConnection serviceConnection = new ServiceConnection();
+                    serviceConnection.makeJsonObjectRequest(C.REGISTER_COUNTINUE_METHOD, jsonObject, FragmentProfessionalDetail.this);
+                    //     Toast.makeText(getActivity(),"Under development",Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     };
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fragment_professional_detail, container, false);
-    }
 
     @Override
     public void done(String response) {
-        Log.e(FragmentProfessionalDetail.class.getName(),"RESPONSE=="+response);
+        Log.e(FragmentProfessionalDetail.class.getName(), "RESPONSE==" + response);
+        if (action.equals(C.LOGIN_METHOD)) {
+            Log.e(FragmentLogin.class.getName(), "RESPONSE==" + response);
+            // Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
 
-        if(action.equals(C.CATEGORY_LIST_METHOD)){
             Gson gson = new Gson();
-            CategoryList categoryList= gson.fromJson(response,CategoryList.class);
-            if(!categoryList.getError()){
-            String[] catArr = new String[categoryList.getCategory().size()+1];
-            catArr[0] = C.SELECT;
-                for (int i=0;i<categoryList.getCategory().size();i++){
-
-                catArr[i+1] = String.valueOf(categoryList.getCategory().get(i).getCategoryName());
+            LoginStatus loginStatus = gson.fromJson(response, LoginStatus.class);
+            if (!loginStatus.getError()) {
+                SharedPreference.getInstance(getActivity()).setString(C.TOKEN, loginStatus.getMember().getToken());
+                SharedPreference.getInstance(getActivity()).setString(C.MEMBER_ID, loginStatus.getMember().getMemberId());
+                SharedPreference.getInstance(getActivity()).setString(C.EMAIL, loginStatus.getMember().getEmailId());
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN, true);
+                Intent intent = new Intent(getActivity(), ActivityHome.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            } else {
+                getDailogConfirm(loginStatus.getMessage(), "");
             }
+        } else if (action.equals(C.CATEGORY_LIST_METHOD)) {
+            Gson gson = new Gson();
+            categoryList = gson.fromJson(response, CategoryList.class);
+            if (!categoryList.getError()) {
+                String[] catArr = new String[categoryList.getCategory().size() + 1];
+                catArr[0] = C.SELECT;
+                for (int i = 0; i < categoryList.getCategory().size(); i++) {
+
+                    catArr[i + 1] = String.valueOf(categoryList.getCategory().get(i).getCategoryName());
+
+                }
 
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, catArr); //selected item will look like a spinner set from XML
 
                 spnCategory.setAdapter(spinnerArrayAdapter);
                 spinnerArrayAdapter.notifyDataSetChanged();
-
-                profile.getCategoryName();
+                if (C.isloggedIn) {
+                    int pos = spinnerArrayAdapter.getPosition(profile.getCategoryName());
+                    spnCategory.setSelection(pos);
+                }
                 getCountryList();
 
             }
-        }
-      else   if(action.equals(C.COUNTRY_METHOD)){
+        } else if (action.equals(C.COUNTRY_METHOD)) {
             Gson gson = new Gson();
-            countryList= gson.fromJson(response,CountryList.class);
-            if(!countryList.getError()){
-            String[] countArr = new String[countryList.getCountry().size()+1];
-            countArr[0] = C.SELECT;
-            for (int i=0;i<countryList.getCountry().size();i++){
-                countArr[i+1] = String.valueOf(countryList.getCountry().get(i).getName());
-            }
+            countryList = gson.fromJson(response, CountryList.class);
+            if (!countryList.getError()) {
+                String[] countArr = new String[countryList.getCountry().size() + 1];
+                countArr[0] = C.SELECT;
+                for (int i = 0; i < countryList.getCountry().size(); i++) {
+                    countArr[i + 1] = String.valueOf(countryList.getCountry().get(i).getName());
+                }
 
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
 
                 spnCountry.setAdapter(spinnerArrayAdapter);
                 spinnerArrayAdapter.notifyDataSetChanged();
+                if (C.isloggedIn) {
+                    int pos = spinnerArrayAdapter.getPosition(profile.getCountryName());
+                    spnCountry.setSelection(pos, false);
+                }
 
-            }
-            else {
+            } else {
                 String[] countArr = new String[1];
                 countArr[0] = C.SELECT;
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
@@ -302,24 +404,24 @@ public class FragmentProfessionalDetail extends Fragment implements CompleteList
                 spinnerArrayAdapter.notifyDataSetChanged();
 
             }
-        }
-        else   if(action.equals(C.STATE_METHOD)){
+        } else if (action.equals(C.STATE_METHOD)) {
             Gson gson = new Gson();
-            stateList= gson.fromJson(response,StateList.class);
-            if(!stateList.getError()){
-            String[] stateArr = new String[stateList.getState().size()+1];
-            stateArr[0] = C.SELECT;
-            for (int i=0;i<stateList.getState().size();i++){
-                stateArr[i+1] = String.valueOf(stateList.getState().get(i).getName());
-            }
+            stateList = gson.fromJson(response, StateList.class);
+            if (!stateList.getError()) {
+                String[] stateArr = new String[stateList.getState().size() + 1];
+                stateArr[0] = C.SELECT;
+                for (int i = 0; i < stateList.getState().size(); i++) {
+                    stateArr[i + 1] = String.valueOf(stateList.getState().get(i).getName());
+                }
 
 
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
                 spnProvince.setAdapter(spinnerArrayAdapter);
                 spinnerArrayAdapter.notifyDataSetChanged();
-
-            }
-            else {
+                if (C.isloggedIn) {
+                    spnProvince.setSelection(spinnerArrayAdapter.getPosition(profile.getStateName()));
+                }
+            } else {
                 String[] stateArr = new String[1];
                 stateArr[0] = C.SELECT;
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
@@ -327,43 +429,56 @@ public class FragmentProfessionalDetail extends Fragment implements CompleteList
                 spinnerArrayAdapter.notifyDataSetChanged();
 
             }
-        }
-        else   if(action.equals(C.CITY_METHOD)){
+        } else if (action.equals(C.CITY_METHOD)) {
             Gson gson = new Gson();
-            cityList= gson.fromJson(response,CityList.class);
-            if(!cityList.getError()){
-            String[] cityArr = new String[cityList.getCity().size()+1];
-            cityArr[0] = C.SELECT;
-            for (int i=0;i<cityList.getCity().size();i++){
-                cityArr[i+1] = String.valueOf(cityList.getCity().get(i).getName());
-            }
+            cityList = gson.fromJson(response, CityList.class);
+            if (!cityList.getError()) {
+                String[] cityArr = new String[cityList.getCity().size() + 1];
+                cityArr[0] = C.SELECT;
+                for (int i = 0; i < cityList.getCity().size(); i++) {
+                    cityArr[i + 1] = String.valueOf(cityList.getCity().get(i).getName());
+                }
 
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, cityArr); //selected item will look like a spinner set from XML
                 spnCity.setAdapter(spinnerArrayAdapter);
                 spinnerArrayAdapter.notifyDataSetChanged();
-
-            }
-
-            else {
+                if (C.isloggedIn) {
+                    spnCity.setSelection(spinnerArrayAdapter.getPosition(profile.getCityName()));
+                }
+            } else {
                 String[] cityArr = new String[1];
                 cityArr[0] = C.SELECT;
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, cityArr); //selected item will look like a spinner set from XML
                 spnCity.setAdapter(spinnerArrayAdapter);
                 spinnerArrayAdapter.notifyDataSetChanged();
             }
+        } else if (action.equals(C.REGISTER_COUNTINUE_METHOD)) {
+            Gson gson = new Gson();
+            RegisterStatus registerStatus = gson.fromJson(response, RegisterStatus.class);
+            getDailogConfirm(registerStatus.getMessage(), "1");
+
+        } else if (action.equals(C.UPDATE_PROFILE_METHOD)) {
+            Gson gson = new Gson();
+            ProfileStatus profileStatus = gson.fromJson(response, ProfileStatus.class);
+            if (!profileStatus.getError()) {
+                getDailogConfirm(profileStatus.getMessage(), "");
+
+            } else {
+                getDailogConfirm(profileStatus.getMessage(), "");
+            }
         }
     }
 
-   void getCountryList(){
-       action=C.COUNTRY_METHOD;
-       ServiceConnection serviceConnection=new ServiceConnection();
-       serviceConnection.makeJsonObjectRequest(C.COUNTRY_METHOD,null,FragmentProfessionalDetail.this);
+    void getCountryList() {
+        action = C.COUNTRY_METHOD;
+        ServiceConnection serviceConnection = new ServiceConnection();
+        serviceConnection.makeJsonObjectRequest(C.COUNTRY_METHOD, null, FragmentProfessionalDetail.this);
     }
 
-    void getStateList(String countryId){
-        Log.e("DEBUG","countryId="+countryId);
+    void getStateList(String countryId) {
+        Log.e("DEBUG", "countryId=" + countryId);
 
-        action=C.STATE_METHOD;
+        action = C.STATE_METHOD;
 
         JSONObject jsonBody = new JSONObject();
         try {
@@ -372,14 +487,14 @@ public class FragmentProfessionalDetail extends Fragment implements CompleteList
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ServiceConnection serviceConnection=new ServiceConnection();
-        serviceConnection.makeJsonObjectRequest(C.STATE_METHOD,jsonBody,FragmentProfessionalDetail.this);
+        ServiceConnection serviceConnection = new ServiceConnection();
+        serviceConnection.makeJsonObjectRequest(C.STATE_METHOD, jsonBody, FragmentProfessionalDetail.this);
 
     }
 
-    void getCityList(String stateId){
-        Log.e("DEBUG","StateID="+stateId);
-        action=C.CITY_METHOD;
+    void getCityList(String stateId) {
+        Log.e("DEBUG", "StateID=" + stateId);
+        action = C.CITY_METHOD;
 
         JSONObject jsonBody = new JSONObject();
         try {
@@ -388,12 +503,73 @@ public class FragmentProfessionalDetail extends Fragment implements CompleteList
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ServiceConnection serviceConnection=new ServiceConnection();
-        serviceConnection.makeJsonObjectRequest(C.CITY_METHOD,jsonBody,FragmentProfessionalDetail.this);
+        ServiceConnection serviceConnection = new ServiceConnection();
+        serviceConnection.makeJsonObjectRequest(C.CITY_METHOD, jsonBody, FragmentProfessionalDetail.this);
 
     }
+
     @Override
     public Context getApplicationsContext() {
         return getActivity();
+    }
+
+    void getDailogConfirm(String dataText, final String titleText) {
+        try {
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            //tell the Dialog to use the dialog.xml as it's layout description
+            dialog.setContentView(R.layout.dialog_with_two_button);
+            // dialog.setTitle("Android Custom Dialog Box");
+            dialog.setCancelable(false);
+            TextView dataTextTv = (TextView) dialog.findViewById(R.id.dialog_data_text);
+            TextView titleTextTv = (TextView) dialog.findViewById(R.id.dialog_title_text);
+            TextView cancelTv = (TextView) dialog.findViewById(R.id.dialog_cancel_text);
+            TextView okTextTv = (TextView) dialog.findViewById(R.id.dialog_ok_text);
+
+            cancelTv.setVisibility(View.GONE);
+            dataTextTv.setText(dataText);
+            titleTextTv.setText(titleText);
+
+            cancelTv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            okTextTv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    if (titleText.equals("1")) {
+                        if (validation.validateAllEditText()) {
+
+
+                            JSONObject jsonBody = new JSONObject();
+                            try {
+                                jsonBody.put(C.EMAIL, profileDetail.getEmail());
+                                jsonBody.put(C.PASSWORD, profileDetail.getPassword());
+                                jsonBody.put(C.SOCAIL_ID, "");
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            action = C.LOGIN_METHOD;
+                            ServiceConnection serviceConnection = new ServiceConnection();
+                            serviceConnection.makeJsonObjectRequest(C.LOGIN_METHOD, jsonBody, FragmentProfessionalDetail.this);
+                        }
+                    }
+                }
+            });
+
+            dialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Context getActivity() {
+        return this;
     }
 }

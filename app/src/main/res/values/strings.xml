@@ -9,6 +9,8 @@
 
     <string name="username">USERNAME</string>
     <string name="password">PASSWORD</string>
+    <string name="confirmPassword">CONFIRM PASSWORD</string>
+
     <string name="tv_forgot_password">Forgot your password?</string>
     <string name="login_fb">LOGIN WITH FACEBOOK</string>
     <string name="dont_have_account">Don\'t have an account?</string>
@@ -55,6 +57,7 @@
     <string name="contact">Contact</string>
     <string name="email">Email</string>
     <string name="skype">Skype</string>
+    <string name="login_cancled">Login Cancelled</string>
     <string name="description">Description</string>
     <string name="search_result">SEARCH RESULT</string>
     <string name="keyword">Keyword</string>
@@ -99,5 +102,14 @@
         <item>Delhi</item>
 
     </string-array>
-
+    <string name="facebook_app_id">248148885702445</string>
+    <string name="password_validate">Password and Confirm Password should be match</string>
+    <string name="select_state">Please select state</string>
+    <string name="select_country">Please select country</string>
+    <string name="select_catogary">select category</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="upload_image">Upload</string>
+    <string name="edit">Edit</string>
+    <string name="password_ed">Password</string>
 </resources>

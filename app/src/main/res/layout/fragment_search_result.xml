@@ -27,7 +27,7 @@
         <EditText
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:id="@+id/edAboutMe"
+            android:id="@+id/etkeyword"
             android:gravity="center"
             android:layout_gravity="center_horizontal"
             android:layout_width="200dp"

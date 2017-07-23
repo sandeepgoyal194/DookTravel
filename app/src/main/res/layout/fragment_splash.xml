@@ -6,11 +6,10 @@
     tools:context="com.softmine.dooktravel.fragments.FragmentSplash">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ImageView
         android:layout_centerInParent="true"
          android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:text="@string/logo" />
+        android:src="@mipmap/dook_logo"/>
 
 </RelativeLayout>

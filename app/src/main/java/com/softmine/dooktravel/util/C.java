@@ -20,6 +20,8 @@ public class C {
     public static final int FRAGMENT_SEARCH_RESULT = 6;
     public static final String TAG_FRAGMENT_SEARCH_RESULT ="searchResult" ;
     public static final int FRAGMENT_CONTACT_DETAIL = 7;
+    public static final int FRAGMENT_FORGOT_PASSWORD = 8;
+    public static final String TAG_FRAGMENT_FORGOT_PASSWORD = "forgot_password";
     public static final String TAG_FRAGMENT_CONTACT_DETAIL ="contact_detail" ;
     public static final String TAG_FRAGMENT_BASIC_DETAIL = "basic_detail";
 
@@ -45,4 +47,15 @@ public class C {
     public static final String PROFILE_METHOD ="profile" ;
     public static final String IS_LOGIN = "isLogin";
     public static final String LOGOUT ="logout" ;
+    public static final String REGISTER_COUNTINUE_METHOD ="registercontinue" ;
+    public static final String UPDATE_PROFILE_METHOD ="updateprofile" ;
+    public static final String PROFILE_LIST_METHOD ="profilelist" ;
+    public static final String EMAIL_FORGOT_PASSWORD ="email_id" ;
+    public static final String FORGOT_METHOD = "forgotpassword";
+    public static final int FRAGMENT_CHANGE_PASSWORD = 9;
+    public static final String TAG_FRAGMENT_CHANGE_PASSWORD ="change_password" ;
+
+
+    public static  boolean isloggedIn =false ;
+
 }

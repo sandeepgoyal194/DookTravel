@@ -1,186 +1,190 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
->
+    android:background="@color/white">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/bg"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_below="@id/toolbar"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_centerVertical="true">
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
-
-        <LinearLayout
-
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <TextView
-                android:id="@+id/tvProfessionalDetail"
-                android:layout_marginTop="5dp"
-                android:paddingLeft="20dp"
-                android:textSize="16sp"
-                android:gravity="center_vertical"
-                android:background="@color/light_grey"
-                android:text="@string/professional_detail"
-                android:layout_width="match_parent"
-                android:textColor="@color/grey3"
-                android:layout_height="30dp" />
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/ll"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/back_basic_detail"
-                android:gravity="center"
                 android:orientation="vertical">
 
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/ed_layout_firstName"
+
+                <TextView
+                    android:id="@+id/tvProfessionalDetail"
                     android:layout_width="match_parent"
-                    android:textColorHint="@color/black"
-                    android:layout_height="wrap_content">
+                    android:layout_height="30dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/light_grey"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:text="@string/professional_detail"
+                    android:textColor="@color/grey3"
+                    android:textSize="16sp" />
 
-                    <EditText
-                        android:id="@+id/edOrganization"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/organization"
-
-                        android:lines="1"
-                        android:textColor="@color/pilot"
-                        android:textSize="14sp" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/ed_layout_MiddleName"
-                    android:layout_width="match_parent"
-                    android:textColorHint="@color/black"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/edDesignation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:hint="@string/designation"
-
-                        android:lines="1"
-                        android:textColor="@color/pilot"
-                        android:textSize="14sp" />
-                </android.support.design.widget.TextInputLayout>
-
-                <RelativeLayout
+                <LinearLayout
+                    android:id="@+id/ll"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/back_basic_detail"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ed_layout_firstName"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:textColorHint="@color/black">
 
-                        <TextView
-                            android:id="@+id/tvCategory"
+                        <EditText
+                            android:id="@+id/edOrganization"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/organization"
+
+                            android:lines="1"
+                            android:textColor="@color/pilot"
+                            android:textSize="14sp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ed_layout_MiddleName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/black">
+
+                        <EditText
+                            android:id="@+id/edDesignation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:hint="@string/designation"
+
+                            android:lines="1"
+                            android:textColor="@color/pilot"
+                            android:textSize="14sp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/category"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
+                            android:orientation="vertical">
 
-                        <Spinner
-                            android:id="@+id/spinner_category"
-                            android:layout_width="120dp"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="2dp"
-                            style="@style/SpinnerTheme"
-                            android:entries="@array/category"
-                            />
-                    </LinearLayout>
+                            <TextView
+                                android:id="@+id/tvCategory"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/category"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:orientation="vertical">
+                            <Spinner
+                                android:id="@+id/spinner_category"
+                                style="@style/SpinnerTheme"
+                                android:layout_width="120dp"
+                                android:layout_height="40dp"
+                                android:layout_marginTop="2dp"
+                                android:entries="@array/category" />
+                        </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/tvWorkingHour"
-                            android:textColor="@color/black"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/working_since"
-                            android:textSize="14sp" />
+                            android:layout_alignParentRight="true"
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/tv_working_since"
-                            android:layout_width="120dp"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="2dp"
-                            android:hint="@string/dob"
-                            android:textColor="@color/black"
-                            android:gravity="center"
-                            android:background="@drawable/view_back_border"
-                            />
-                    </LinearLayout>
-                </RelativeLayout>
+                            <TextView
+                                android:id="@+id/tvWorkingHour"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/working_since"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tv_working_since"
+                                android:layout_width="120dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="right|end"
+                                android:layout_marginTop="2dp"
+                                android:background="@drawable/view_back_border"
+                                android:gravity="center"
+                                android:hint="@string/dob"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+
+                </LinearLayout>
 
 
             </LinearLayout>
 
 
-        </LinearLayout>
-
-
             <LinearLayout
 
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
 
                 <TextView
-                    android:textSize="16sp"
                     android:id="@+id/tvCurrentAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
                     android:layout_marginTop="5dp"
-                    android:paddingLeft="20dp"
-                    android:gravity="center_vertical"
                     android:background="@color/light_grey"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
                     android:text="@string/current_address"
                     android:textColor="@color/grey3"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp" />
+                    android:textSize="16sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center"
+                    android:layout_marginBottom="15dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"
                     android:background="@drawable/back_basic_detail"
                     android:gravity="center"
                     android:orientation="vertical">
-
 
 
                     <RelativeLayout
@@ -203,16 +207,12 @@
 
                             <Spinner
                                 android:id="@+id/spinner_country"
+                                style="@style/SpinnerTheme"
                                 android:layout_width="120dp"
                                 android:layout_height="40dp"
                                 android:layout_marginTop="2dp"
-                                style="@style/SpinnerTheme"
-                                android:entries="@array/category"
-                                />
+                                android:entries="@array/category" />
                         </LinearLayout>
-
-
-
 
 
                         <LinearLayout
@@ -231,22 +231,21 @@
 
                             <Spinner
                                 android:id="@+id/spinner_city"
+                                style="@style/SpinnerTheme"
                                 android:layout_width="120dp"
                                 android:layout_height="40dp"
                                 android:layout_marginTop="2dp"
-                                android:hint="@string/dob"
-                                android:gravity="center"
                                 android:entries="@array/category"
-                                style="@style/SpinnerTheme"
-                                />
+                                android:gravity="center"
+                                android:hint="@string/dob" />
                         </LinearLayout>
                     </RelativeLayout>
 
 
                     <RelativeLayout
-                        android:layout_marginTop="15dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
                         android:orientation="horizontal">
 
                         <LinearLayout
@@ -256,24 +255,20 @@
 
                             <TextView
                                 android:id="@+id/tvProvince"
-                                android:textColor="@color/black"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/province"
+                                android:textColor="@color/black"
                                 android:textSize="14sp" />
 
                             <Spinner
                                 android:id="@+id/spinner_province"
+                                style="@style/SpinnerTheme"
                                 android:layout_width="120dp"
                                 android:layout_height="40dp"
                                 android:layout_marginTop="2dp"
-                                style="@style/SpinnerTheme"
-                                android:entries="@array/category"
-                                />
+                                android:entries="@array/category" />
                         </LinearLayout>
-
-
-
 
 
                         <LinearLayout
@@ -284,32 +279,34 @@
 
                             <TextView
                                 android:id="@+id/tvPostalCode"
-                                android:textColor="@color/black"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:lines="1"
                                 android:text="@string/zip"
+                                android:textColor="@color/black"
                                 android:textSize="14sp" />
 
                             <EditText
                                 android:id="@+id/et_Postal"
                                 android:layout_width="120dp"
                                 android:layout_height="40dp"
+                                android:layout_gravity="right|end"
                                 android:layout_marginTop="2dp"
-                                android:gravity="center"
-                                android:maxLength="6"
-                                android:inputType="number"
-                                android:textColor="@color/black"
                                 android:background="@drawable/view_back_border"
-                                />
+
+                                android:gravity="center"
+                                android:inputType="number"
+                                android:maxLength="6"
+                                android:textColor="@color/black" />
                         </LinearLayout>
                     </RelativeLayout>
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/ed_layout_address"
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:textColorHint="@color/black"
-                        android:layout_height="wrap_content">
+                        android:textColorHint="@color/black">
 
                         <EditText
                             android:id="@+id/edAddress"
@@ -330,56 +327,58 @@
 
             <LinearLayout
 
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
 
                 <TextView
                     android:id="@+id/tvAboutUs"
-                    android:layout_marginTop="5dp"
-                    android:paddingLeft="20dp"
-                    android:gravity="center_vertical"
-                    android:background="@color/light_grey"
-                    android:text="@string/about_me"
-                    android:textSize="16sp"
-                    android:textColor="@color/grey3"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp" />
+                    android:layout_height="30dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/light_grey"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:text="@string/about_me"
+                    android:textColor="@color/grey3"
+                    android:textSize="16sp" />
 
                 <EditText
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
                     android:id="@+id/edAboutMe"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:imeOptions="actionNext"
-                    android:lines="6"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:layout_marginTop="15dp"
                     android:background="@drawable/view_back_border"
+                    android:imeOptions="actionNext"
+                    android:maxLength="250"
                     android:textSize="12sp" />
-                    <TextView
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_gravity="right"
-                        android:hint="@string/tv_no_of_char"
-                        android:layout_marginBottom="100dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginBottom="100dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="2dp"
+                    android:hint="@string/tv_no_of_char" />
 
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
     <Button
         android:id="@+id/btnSubmit"
-        android:background="@drawable/button_round"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
         android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
+        android:background="@drawable/button_round"
         android:text="@string/submit"
-        android:textSize="16sp"
         android:textColor="@color/white"
-        android:layout_height="wrap_content" />
+        android:textSize="16sp" />
 </RelativeLayout>

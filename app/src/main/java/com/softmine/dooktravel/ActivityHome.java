@@ -1,5 +1,6 @@
 package com.softmine.dooktravel;
 
+import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,14 +21,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.softmine.dooktravel.adapter.AdapterSideMenu;
 import com.softmine.dooktravel.fragments.FragmentBasicDetail;
+import com.softmine.dooktravel.fragments.FragmentChangePassword;
 import com.softmine.dooktravel.fragments.FragmentContactDetail;
-import com.softmine.dooktravel.fragments.FragmentLogin;
 import com.softmine.dooktravel.fragments.FragmentProfessionalDetail;
 import com.softmine.dooktravel.fragments.FragmentProfileDetail;
 import com.softmine.dooktravel.fragments.FragmentSearchResult;
@@ -47,6 +49,9 @@ public class ActivityHome extends AppCompatActivity
     ListView listView;
     private Fragment fragment;
     TextView tvTitle;
+    ImageView imgTitle;
+    int mSelectedPos=-1;
+    Toolbar mToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,16 +63,17 @@ public class ActivityHome extends AppCompatActivity
         }
         setContentView(R.layout.activity_home);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         tvTitle=(TextView)findViewById(R.id.tvTitle);
+        imgTitle=(ImageView)findViewById(R.id.imgLogo);
         tvTitle.setTypeface(Utils.getRegularTypeFace(this));
         listView=(ListView) findViewById(R.id.lvMenuItem);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -75,17 +81,23 @@ public class ActivityHome extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         adapterSideMenu = new AdapterSideMenu(this, Utils.getSideMenuList());
         listView.setAdapter(adapterSideMenu);
-        fragmnetLoader(C.FRAGMENT_BASIC_DETAIL,null);
+        fragmnetLoader(C.FRAGMENT_SEARCH_RESULT,null);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
 
-                if(position==0){
-                    fragmnetLoader(C.FRAGMENT_PROFILE_DETAIL,null);
+                if(position==0 && mSelectedPos!=position){
+                    mSelectedPos=position;
+                    fragmnetLoader(C.FRAGMENT_BASIC_DETAIL,null);
                 }
-                else if(position==2){
+                else if(position==1 && mSelectedPos!=position){
+                    mSelectedPos=position;
+                    fragmnetLoader(C.FRAGMENT_CHANGE_PASSWORD,null);
+                }
+                else if(position==2&&mSelectedPos!=position){
+                    mSelectedPos=position;
                     getDailogConfirm("Are you sure you want to logout?","");
                 }
             }
@@ -180,13 +192,22 @@ public class ActivityHome extends AppCompatActivity
                 }
                 else if(fragmentTag.equals(C.TAG_FRAGMENT_SEARCH_RESULT)){
                     tvTitle.setText(getResources().getString(R.string.logo));
+
                 }
                 else if(fragmentTag.equals(C.TAG_FRAGMENT_CONTACT_DETAIL)){
                     tvTitle.setText(getResources().getString(R.string.profile));
                 }
 
+
             } else {
+                if(fragment instanceof FragmentBasicDetail){
+                    imgTitle.setVisibility(View.VISIBLE);
+                    tvTitle.setText(getResources().getString(R.string.logo));
+                    tvTitle.setVisibility(View.GONE);
+                    mSelectedPos=-1;
+                }
                 super.onBackPressed();
+
             }
         }
     }
@@ -194,21 +215,17 @@ public class ActivityHome extends AppCompatActivity
     public void fragmnetLoader(int fragmentType, Bundle bundle) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        imgTitle.setVisibility(View.GONE);
 
         switch (fragmentType) {
             case C.FRAGMENT_BASIC_DETAIL:
                 tvTitle.setText(getResources().getString(R.string.profile));
                 fragment = new FragmentBasicDetail();
-                fragmentTransaction.replace(R.id.container, fragment);
-               //  fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_BASIC_DETAIL);
-                break;
-            case C.FRAGMENT_PROFESSIONAL_DETAIL:
-                tvTitle.setText(getResources().getString(R.string.profile));
-                fragment = new FragmentProfessionalDetail();
-                fragmentTransaction.replace(R.id.container, fragment);
-                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PROFESSIONAL_DETAIL);
+                fragmentTransaction.add(R.id.container, fragment);
+                 fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_BASIC_DETAIL);
                 break;
             case C.FRAGMENT_PROFILE_DETAIL:
+
                 tvTitle.setText(getResources().getString(R.string.profile));
                 fragment = new FragmentProfileDetail();
                 fragmentTransaction.replace(R.id.container, fragment);
@@ -216,10 +233,12 @@ public class ActivityHome extends AppCompatActivity
                 break;
 
             case C.FRAGMENT_SEARCH_RESULT:
+                imgTitle.setVisibility(View.VISIBLE);
                 tvTitle.setText(getResources().getString(R.string.logo));
+                tvTitle.setVisibility(View.GONE);
                 fragment = new FragmentSearchResult();
                 fragmentTransaction.replace(R.id.container, fragment);
-                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_SEARCH_RESULT);
+               // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_SEARCH_RESULT);
                 break;
 
             case C.FRAGMENT_CONTACT_DETAIL:
@@ -227,6 +246,15 @@ public class ActivityHome extends AppCompatActivity
                 fragment = new FragmentContactDetail();
                 fragmentTransaction.replace(R.id.container, fragment);
                 fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_CONTACT_DETAIL);
+                break;
+
+            case C.FRAGMENT_CHANGE_PASSWORD:
+                imgTitle.setVisibility(View.VISIBLE);
+                tvTitle.setText(getResources().getString(R.string.logo));
+                tvTitle.setVisibility(View.GONE);
+                fragment = new FragmentChangePassword();
+                fragmentTransaction.add(R.id.container, fragment);
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_CHANGE_PASSWORD);
                 break;
         }
         fragment.setArguments(bundle);
