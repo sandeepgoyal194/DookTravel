@@ -1,6 +1,5 @@
 package com.softmine.dooktravel;
 
-import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -51,7 +50,6 @@ public class ActivityHome extends AppCompatActivity
     TextView tvTitle;
     ImageView imgTitle;
     int mSelectedPos=-1;
-    Toolbar mToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +61,8 @@ public class ActivityHome extends AppCompatActivity
         }
         setContentView(R.layout.activity_home);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         tvTitle=(TextView)findViewById(R.id.tvTitle);
@@ -73,7 +71,7 @@ public class ActivityHome extends AppCompatActivity
         listView=(ListView) findViewById(R.id.lvMenuItem);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -182,7 +180,7 @@ public class ActivityHome extends AppCompatActivity
                 getSupportFragmentManager().executePendingTransactions();
 
                 if(fragmentTag.equals(C.TAG_FRAGMENT_BASIC_DETAIL)){
-                    tvTitle.setText(getResources().getString(R.string.profile));
+                    tvTitle.setText(getResources().getString(R.string.basic_details));
                 }
                 else if(fragmentTag.equals(C.TAG_FRAGMENT_PROFESSIONAL_DETAIL)){
                     tvTitle.setText(getResources().getString(R.string.profile));
@@ -219,13 +217,14 @@ public class ActivityHome extends AppCompatActivity
 
         switch (fragmentType) {
             case C.FRAGMENT_BASIC_DETAIL:
-                tvTitle.setText(getResources().getString(R.string.profile));
+                tvTitle.setVisibility(View.VISIBLE);
+                tvTitle.setText(getResources().getString(R.string.basic_details));
                 fragment = new FragmentBasicDetail();
                 fragmentTransaction.add(R.id.container, fragment);
                  fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_BASIC_DETAIL);
                 break;
             case C.FRAGMENT_PROFILE_DETAIL:
-
+                tvTitle.setVisibility(View.VISIBLE);
                 tvTitle.setText(getResources().getString(R.string.profile));
                 fragment = new FragmentProfileDetail();
                 fragmentTransaction.replace(R.id.container, fragment);

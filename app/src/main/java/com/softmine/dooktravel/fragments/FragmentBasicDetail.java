@@ -147,6 +147,7 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
             validation.addtoList(edPassword);
             validation.addtoList(edConfirmPassword);
         }
+
     }
 
 

@@ -96,6 +96,8 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.back_arrow));
+        setTitle(R.string.professional_detail);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
