@@ -26,6 +26,8 @@ public class C {
     public static final String TAG_FRAGMENT_BASIC_DETAIL = "basic_detail";
 
     public static final String BASE_URL = "http://www.kenlabs.co/dook/apis/?device=phone&api=";
+    public static final String IMAGE_BASE_URL = "http://www.kenlabs.co/dook/user_profile/";
+
     public static final String LOGIN_METHOD = "login";
 
 
@@ -54,6 +56,12 @@ public class C {
     public static final String FORGOT_METHOD = "forgotpassword";
     public static final int FRAGMENT_CHANGE_PASSWORD = 9;
     public static final String TAG_FRAGMENT_CHANGE_PASSWORD ="change_password" ;
+    public static final String IS_SEARCH_RESULT ="is_search_result" ;
+    public static final java.lang.String DATE_FORMAT ="dd/MM/yyyy" ;
+    public static final String DESIRED_FORMAT = "yyyy/MM/dd";
+    public static final String SERVER_DATE_FORMAT = "yyyy-MM-dd";
+
+
 
 
     public static  boolean isloggedIn =false ;

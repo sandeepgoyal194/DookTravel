@@ -1,14 +1,17 @@
 package com.softmine.dooktravel.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.softmine.dooktravel.ActivityHome;
 import com.softmine.dooktravel.R;
-import com.softmine.dooktravel.pojos.ProfileListMembers;
+import com.softmine.dooktravel.pojos.Profile;
+import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.Utils;
 
 import java.util.List;
@@ -21,7 +24,7 @@ public class AdapterSearchResult extends RecyclerView
         .Adapter<AdapterSearchResult
         .DataObjectHolder> {
     private static String LOG_TAG = "MyRecyclerViewAdapter";
-    private List<ProfileListMembers> mDataset;
+    private List<Profile> mDataset;
     private static ClickListener mClickListener;
     static Context context;
     public static class DataObjectHolder extends RecyclerView.ViewHolder
@@ -47,13 +50,13 @@ public class AdapterSearchResult extends RecyclerView
         public void onClick(View v) {
             mClickListener.onItemClick(getAdapterPosition(), v);
         }
-    }
 
-    public void setOnItemClickListener(ClickListener mClickListener) {
-        this.mClickListener = mClickListener;
-    }
 
-    public AdapterSearchResult(List<ProfileListMembers> myDataset, Context context) {
+        public void setOnItemClickListener(ClickListener mClick) {
+            mClickListener = mClick;
+        }
+    }
+    public AdapterSearchResult(List<Profile> myDataset, Context context) {
         mDataset = myDataset;
         this.context=context;
     }
@@ -72,11 +75,21 @@ public class AdapterSearchResult extends RecyclerView
     public void onBindViewHolder(DataObjectHolder holder, int position) {
         holder.tvName.setText(mDataset.get(position).getFirstName()+" "+mDataset.get(position).getLastName());
         holder.tvCompany.setText(mDataset.get(position).getOrganization());
-        holder.tvAddress.setText(mDataset.get(position).getStateName()+mDataset.get(position).getCountryName());
+        holder.tvAddress.setText(mDataset.get(position).getStateName()+", "+mDataset.get(position).getCountryName());
+        holder.setOnItemClickListener(new ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
 
+                Bundle bundle=new Bundle();
+                bundle.putSerializable(C.DATA,mDataset.get(position));
+                bundle.putBoolean(C.IS_SEARCH_RESULT,true);
+                ((ActivityHome)context).fragmnetLoader(C.FRAGMENT_PROFILE_DETAIL,bundle);
+
+            }
+        });
     }
 
-    public void addItem(ProfileListMembers dataObj, int index) {
+    public void addItem(Profile dataObj, int index) {
         mDataset.add(index, dataObj);
         notifyItemInserted(index);
     }

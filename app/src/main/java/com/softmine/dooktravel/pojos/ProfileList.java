@@ -20,7 +20,7 @@ public class ProfileList implements Serializable{
     private String message;
     @SerializedName("member")
     @Expose
-    private List<ProfileListMembers> member = null;
+    private List<Profile> member = null;
 
     /**
      * No args constructor for use in serialization
@@ -35,7 +35,7 @@ public class ProfileList implements Serializable{
      * @param message
      * @param error
      */
-    public ProfileList(Boolean error, String message, List<ProfileListMembers> member) {
+    public ProfileList(Boolean error, String message, List<Profile> member) {
         super();
         this.error = error;
         this.message = message;
@@ -58,11 +58,11 @@ public class ProfileList implements Serializable{
         this.message = message;
     }
 
-    public List<ProfileListMembers> getMember() {
+    public List<Profile> getMember() {
         return member;
     }
 
-    public void setMember(List<ProfileListMembers> member) {
+    public void setMember(List<Profile> member) {
         this.member = member;
     }
 }

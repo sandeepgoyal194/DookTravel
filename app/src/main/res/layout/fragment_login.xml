@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg"
+    android:background="@drawable/background"
     tools:context="com.softmine.dooktravel.fragments.FragmentLogin">
 
     <LinearLayout
@@ -65,11 +65,13 @@
                     android:layout_marginBottom="10dp"
                     android:orientation="vertical">
 
-                    <android.support.design.widget.TextInputLayout
+                   <!-- <android.support.design.widget.TextInputLayout
                         android:id="@+id/ed_layout_username"
                         android:layout_width="match_parent"
-                        android:textColorHint="@color/black"
-                        android:layout_height="wrap_content">
+                        android:textColorHint="@color/grey"
+
+                        android:lines="1"
+                        android:layout_height="wrap_content">-->
 
                         <EditText
                             android:id="@+id/edUsername"
@@ -77,16 +79,20 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/username"
                             android:lines="1"
+                            android:textColorHint="@color/hint"
+                            android:singleLine="true"
                             android:inputType="textEmailAddress"
-                            android:textColor="@color/grey2"
+                            android:textColor="@color/pilot"
                             android:textSize="14sp" />
-                    </android.support.design.widget.TextInputLayout>
+                    <!--</android.support.design.widget.TextInputLayout>-->
 
-                    <android.support.design.widget.TextInputLayout
+                   <!-- <android.support.design.widget.TextInputLayout
                         android:id="@+id/ed_layout_password"
                         android:layout_width="match_parent"
-                        android:textColorHint="@color/black"
-                        android:layout_height="wrap_content">
+                        android:textColorHint="@color/grey"
+
+                        android:lines="1"
+                        android:layout_height="wrap_content">-->
 
                         <EditText
                             android:id="@+id/edPassword"
@@ -94,11 +100,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:hint="@string/password"
-                            android:textColor="@color/grey2"
+                            android:textColor="@color/pilot"
                             android:lines="1"
+                            android:textColorHint="@color/hint"
+                            android:singleLine="true"
                             android:inputType="textPassword"
                             android:textSize="14sp" />
-                    </android.support.design.widget.TextInputLayout>
+                   <!-- </android.support.design.widget.TextInputLayout>-->
 
 
                     <TextView
@@ -108,7 +116,7 @@
                         android:layout_gravity="right"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="10dp"
                         android:textColor="@color/grey2"
                         android:text="@string/tv_forgot_password"
                         android:textSize="14sp" />
@@ -119,7 +127,7 @@
                         android:layout_height="45dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="15dp"
                         android:background="@drawable/button_green"
                         android:text="@string/logIn"
                         android:textSize="16sp"
@@ -148,13 +156,19 @@
                          />
                 </LinearLayout>
             </LinearLayout>
-
+            <ImageView
+                android:layout_marginRight="30dp"
+                android:layout_above="@+id/ll"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/bus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center_horizontal">
 
                 <TextView

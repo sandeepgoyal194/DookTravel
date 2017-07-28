@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.softmine.dooktravel.R;
@@ -187,14 +186,14 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
     void getCountryList(){
         action=C.COUNTRY_METHOD;
         ServiceConnection serviceConnection=new ServiceConnection();
-        serviceConnection.makeJsonObjectRequest(C.COUNTRY_METHOD,null,FragmentSearchResult.this);
+        serviceConnection.serviceRequest(C.COUNTRY_METHOD,null,FragmentSearchResult.this);
     }
     View.OnClickListener mGoClickListner = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
 
             if(validation.validateAllEditText()){
-                if(isAllValid()){
+                    Utils.hideSoftKeyboard(getActivity());
                     profileListRequest.setMemberId(SharedPreference.getInstance(getActivity()).getString(C.MEMBER_ID));
                     profileListRequest.setToken(SharedPreference.getInstance(getActivity()).getString(C.TOKEN));
                     profileListRequest.setKeyword(etKeyword.getEditText().getText().toString());
@@ -209,8 +208,6 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-                }
             }
 
         }
@@ -219,16 +216,18 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
     boolean isAllValid(){
 
         if(spnCountry.getSelectedItem().toString().equals(C.SELECT)){
-            Toast.makeText(getActivity(),R.string.select_country,Toast.LENGTH_LONG).show();
+            Utils.showToast(getActivity(),getString(R.string.select_country));
+
             return false;
         }
 
         else if(spnState.getSelectedItem().toString().equals(C.SELECT)){
-            Toast.makeText(getActivity(),R.string.select_state,Toast.LENGTH_LONG).show();
+
+            Utils.showToast(getActivity(),getString(R.string.select_state));
             return false;
         }
         else if(spnCategory.getSelectedItem().toString().equals(C.SELECT)){
-            Toast.makeText(getActivity(),R.string.select_catogary,Toast.LENGTH_LONG).show();
+            Utils.showToast(getActivity(),getString(R.string.select_catogary));
             return false;
         }
         return true;
@@ -335,7 +334,7 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
                 recyclerView.setAdapter(adapterSearchResult);
             }
             else {
-                Toast.makeText(getActivity(),profileList.getMessage(),Toast.LENGTH_LONG).show();
+                Utils.showToast(getActivity(),profileList.getMessage());
             }
         }
     }

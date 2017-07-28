@@ -165,5 +165,42 @@ public class ServiceConnection {
             e.printStackTrace();
         }
     }
+    public void serviceRequest(final  String method,JSONObject jsonBody, final CompleteListener completeListener) {
 
+        try {
+//            Log.e("DEBUG","REQUEST="+jsonBody.toString());
+
+            String REGISTER_URL= C.BASE_URL+method;
+
+            JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                    REGISTER_URL,jsonBody,new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+
+
+                    Log.e(TAG, response.toString());
+                    completeListener.done(response.toString());
+
+                }
+            }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, "Error: " + error.getMessage());
+
+
+                }
+
+            });
+
+            // Adding request to request queue
+            // AppController.getInstance().addToRequestQueue(jsonObjReq);
+            RequestQueue requestQueue = Volley.newRequestQueue(completeListener.getApplicationsContext());
+            requestQueue.add(jsonObjReq);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

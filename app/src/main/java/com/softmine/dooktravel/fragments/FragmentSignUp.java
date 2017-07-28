@@ -16,7 +16,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -123,7 +122,7 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
             @Override
             public void onCancel() {
                 Log.e("DEBUG","Login Cancelled");
-                Toast.makeText(getActivity(),R.string.login_cancled, Toast.LENGTH_LONG).show();
+                Utils.showToast(getActivity(),getString(R.string.login_cancled));
             }
 
             @Override
@@ -153,7 +152,7 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getActivity(),"Email ID required",Toast.LENGTH_LONG).show();
+                    Utils.showToast(getActivity(),getString(R.string.email_required));
                 }
             }
         });

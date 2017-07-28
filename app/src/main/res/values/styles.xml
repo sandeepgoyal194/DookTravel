@@ -6,9 +6,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimaryDark</item>
-        <item name="colorControlNormal">@color/black</item>
+        <item name="colorControlNormal">@color/pilot</item>
         <item name="colorControlActivated">@color/pilot</item>
         <item name="colorControlHighlight">@color/pilot</item>
+        <item name="android:textColorHint">@color/pilot</item>
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"

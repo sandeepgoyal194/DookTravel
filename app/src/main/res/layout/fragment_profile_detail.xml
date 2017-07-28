@@ -10,7 +10,7 @@
         android:background="@color/grey"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:src="@drawable/man" />
+         />
     <!-- TODO: Update blank fragment layout -->
 
     <ScrollView
@@ -45,7 +45,7 @@
                     android:id="@+id/ed_layout_firstName"
                     android:layout_width="match_parent"
                     android:textColor="@color/black"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/hint"
                     android:layout_height="wrap_content">
 
                     <EditText
@@ -54,6 +54,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/first_name"
                         android:lines="1"
+                        android:focusable="false"
                         android:textColor="@color/pilot"
                         android:textSize="14sp" />
                 </android.support.design.widget.TextInputLayout>
@@ -61,7 +62,7 @@
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ed_layout_MiddleName"
                     android:layout_width="match_parent"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/hint"
 
                     android:layout_height="wrap_content">
 
@@ -73,14 +74,14 @@
                         android:hint="@string/middle_name"
                         android:lines="1"
                         android:textColor="@color/pilot"
-
+                        android:focusable="false"
                         android:textSize="14sp" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ed_layout_LastName"
                     android:layout_width="match_parent"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/hint"
                     android:layout_height="wrap_content">
 
 
@@ -90,6 +91,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:hint="@string/last_name"
+                        android:focusable="false"
 
                         android:lines="1"
                         android:textColor="@color/pilot"
@@ -101,7 +103,7 @@
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ed_layout_address"
                     android:layout_width="match_parent"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/hint"
                     android:layout_height="wrap_content">
 
 
@@ -111,9 +113,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:hint="@string/address"
-                        android:textColor="@color/pilot"
-
                         android:lines="1"
+                        android:focusable="false"
+
+                        android:textColor="@color/pilot"
                         android:textSize="14sp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -121,10 +124,20 @@
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ed_layout_email"
                     android:layout_width="match_parent"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/hint"
 
                     android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/edEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:hint="@string/email"
+                        android:textColor="@color/pilot"
+                        android:lines="1"
+                        android:focusable="false"
 
+                        android:textSize="14sp" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -133,7 +146,7 @@
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ed_layout_contact"
                     android:layout_width="match_parent"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/hint"
                     android:layout_height="wrap_content">
 
 
@@ -143,6 +156,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:hint="@string/contact"
+                        android:focusable="false"
 
                         android:lines="1"
                         android:textColor="@color/pilot"
@@ -152,7 +166,7 @@
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ed_layout_skype"
                     android:layout_width="match_parent"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/hint"
                     android:layout_height="wrap_content">
 
 
@@ -162,6 +176,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:hint="@string/skype"
+                        android:focusable="false"
 
                         android:lines="1"
                         android:textColor="@color/pilot"
@@ -182,7 +197,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:hint="@string/description"
-
+                        android:focusable="false"
                         android:lines="1"
                         android:textColor="@color/pilot"
 

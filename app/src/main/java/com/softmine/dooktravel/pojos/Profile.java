@@ -41,6 +41,10 @@ public class Profile implements Serializable {
     @SerializedName("profile_pic")
     @Expose
     private String profilePic;
+
+    @SerializedName("profile_picname")
+    @Expose
+    private String profilePicname;
     @SerializedName("gender")
     @Expose
     private String gender;
@@ -89,7 +93,6 @@ public class Profile implements Serializable {
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public Profile() {
     }
@@ -118,6 +121,7 @@ public class Profile implements Serializable {
      * @param zipCode
      * @param stateName
      * @param profilePic
+     * @param profilePicname
      * @param gender
      * @param memberId
      * @param firstName
@@ -125,7 +129,7 @@ public class Profile implements Serializable {
      */
 
 
-    public Profile(String memberId, String emailId, String token, String phone, String categoryId, String categoryName, String firstName, String middleName, String lastName, String profilePic, String gender, String dateOfBirth, String maritalStatus, String organization, String workingSince, String address, String countryId, String countryName, String stateId, String stateName, String city, String cityName, String zipCode, String skype, String about) {
+    public Profile(String memberId, String emailId, String token, String phone, String categoryId, String categoryName, String firstName, String middleName, String lastName, String profilePic, String profilePicname, String gender, String dateOfBirth, String maritalStatus, String organization, String workingSince, String address, String countryId, String countryName, String stateId, String stateName, String city, String cityName, String zipCode, String skype, String about) {
         this.memberId = memberId;
         this.emailId = emailId;
         this.token = token;
@@ -136,6 +140,7 @@ public class Profile implements Serializable {
         this.middleName = middleName;
         this.lastName = lastName;
         this.profilePic = profilePic;
+        this.profilePicname = profilePicname;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.maritalStatus = maritalStatus;
@@ -152,6 +157,7 @@ public class Profile implements Serializable {
         this.skype = skype;
         this.about = about;
     }
+
 
     public String getMemberId() {
         return memberId;
@@ -231,6 +237,14 @@ public class Profile implements Serializable {
 
     public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
+    }
+
+    public String getProfilePicname() {
+        return profilePicname;
+    }
+
+    public void setProfilePicname(String profilePicname) {
+        this.profilePicname = profilePicname;
     }
 
     public String getGender() {

@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -25,11 +26,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.softmine.dooktravel.ActivityHome;
-import com.softmine.dooktravel.MainActivity;
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.pojos.Profile;
 import com.softmine.dooktravel.pojos.ProfileDetail;
@@ -48,8 +46,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -70,15 +66,54 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
     private int year;
     private int month;
     private int day;
-    List<Profile> profile;
+   Profile profile;
     ProfileDetail profileDetail ;
     ProfileDetail profileDtl;
     private int PICK_IMAGE_REQUEST = 1;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(Build.VERSION.SDK_INT>=21){
+            getActivity().getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            getActivity().getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
+        profileDetail = new ProfileDetail();
+        if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)){
+            C.isloggedIn=true;
+            Bundle bundle = this.getArguments();
+            if (bundle != null) {
+                profile = (Profile) bundle.getSerializable(C.DATA);
+            }
+        }
+        else {
+            C.isloggedIn=false;
+            Bundle bundle = this.getArguments();
+            if (bundle != null) {
+
+                profileDtl = (ProfileDetail) bundle.getSerializable(C.DATA);
+            }
+        }
+
+    }
+
+    public FragmentBasicDetail() {
+        // Required empty public constructor
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_fragment_basic_detail, container, false);
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        dateFormatter = new SimpleDateFormat(C.DATE_FORMAT);
         tvbasicDetail=(TextView)view.findViewById(R.id.tvBasicDetail);
         tvGender=(TextView)view.findViewById(R.id.tvGender);
 
@@ -141,7 +176,8 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
             tvUpload.setText(R.string.edit);
             edPassword.getEditText().setVisibility(View.GONE);
             edConfirmPassword.getEditText().setVisibility(View.GONE);
-            getProfileDetail();
+          //  getProfileDetail();
+            showDetails(profile);
         }
         else {
             validation.addtoList(edPassword);
@@ -180,7 +216,15 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
                 // Log.d(TAG, String.valueOf(bitmap));
                 imgProfile.setImageBitmap(bitmap);
                 String profileImage= Utils.getBase64Image(bitmap);
-                profileDetail.setPicture(profileImage);
+
+                if(C.isloggedIn) {
+                   profile.setProfilePic(profileImage);
+                    profile.setProfilePicname(Utils.getCurrentTimeStamp()+".jpg");
+                }
+                else {
+                    profileDetail.setPicture(profileImage);
+                    profileDetail.setPicturename(Utils.getCurrentTimeStamp()+".jpg");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -210,7 +254,7 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
                         }
 
                         profileDetail.setPassword(edPassword.getEditText().getText().toString());
-                        profileDetail.setDob(tvDob.getText().toString());
+                        profileDetail.setDob(Utils.getFormattedDate(spnDateOfBirth.getText().toString(),C.DATE_FORMAT,C.DESIRED_FORMAT));
                         profileDetail.setEmail(profileDtl.getEmail());
                         profileDetail.setSocialid(profileDtl.getSocialid());
                         profileDetail.setMarital(spnMaritalStatus.getSelectedItem().toString());
@@ -222,24 +266,20 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
                     }
                     else {
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable(C.PROFILE_METHOD, profile.get(0));
-                        profile.get(0).setFirstName(edFirstName.getEditText().getText().toString());
-                        profile.get(0).setMiddleName(edMiddleName.getEditText().getText().toString());
-                        profile.get(0).setLastName(edLastName.getEditText().getText().toString());
-                        profile.get(0).setMaritalStatus(spnMaritalStatus.getSelectedItem().toString());
+                        profile.setFirstName(edFirstName.getEditText().getText().toString());
+                        profile.setMiddleName(edMiddleName.getEditText().getText().toString());
+                        profile.setLastName(edLastName.getEditText().getText().toString());
+                        profile.setMaritalStatus(spnMaritalStatus.getSelectedItem().toString());
 
                         if(spnGender.getSelectedItem().toString().equalsIgnoreCase("Male")){
-                            profile.get(0).setGender("m");
+                            profile.setGender("m");
                         }
                         else {
-                            profile.get(0).setGender("f");
+                            profile.setGender("f");
                         }
-                        profile.get(0).setDateOfBirth(spnDateOfBirth.getText().toString());
-                        profile.get(0).setToken(SharedPreference.getInstance(getActivity()).getString(C.TOKEN));
-
-                        Log.e("Marital status=",spnMaritalStatus.getSelectedItem().toString());
-                        Log.e("spnGender status=",spnGender.getSelectedItem().toString());
-                        Log.e("edMiddleName=",edMiddleName.getEditText().getText().toString());
+                        profile.setDateOfBirth(Utils.getFormattedDate(spnDateOfBirth.getText().toString(),C.DATE_FORMAT,C.DESIRED_FORMAT));
+                        profile.setToken(SharedPreference.getInstance(getActivity()).getString(C.TOKEN));
+                        bundle.putSerializable(C.PROFILE_METHOD, profile);
                         Intent i = new Intent(getContext(),FragmentProfessionalDetail.class);
                         i.putExtra("details",bundle);
                         startActivity(i);
@@ -256,53 +296,20 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
             return false;
         }
         else if(spnGender.getSelectedItem().toString().equals(C.SELECT)){
-            Toast.makeText(getActivity(),R.string.select_gender,Toast.LENGTH_LONG).show();
+            Utils.showToast(getActivity(),getString(R.string.select_gender));
             return false;
         }
        else if(tvDob.getText().toString().equals("")){
-            Toast.makeText(getActivity(),R.string.enter_dob,Toast.LENGTH_LONG).show();
+            Utils.showToast(getActivity(),getString(R.string.enter_dob));
+
             return false;
         }
        else if(spnMaritalStatus.getSelectedItem().toString().equals(C.SELECT)){
-            Toast.makeText(getActivity(),R.string.selectMarital_status,Toast.LENGTH_LONG).show();
+            Utils.showToast(getActivity(),getString(R.string.selectMarital_status));
             return false;
         }
 
         return true;
-    }
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if(Build.VERSION.SDK_INT>=21){
-            getActivity().getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            getActivity().getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
-        profileDetail = new ProfileDetail();
-        if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)){
-            C.isloggedIn=true;
-        }
-        else {
-            Bundle bundle = this.getArguments();
-            if (bundle != null) {
-
-                    profileDtl = (ProfileDetail) bundle.getSerializable(C.DATA);
-            }
-        }
-
-    }
-
-    public FragmentBasicDetail() {
-        // Required empty public constructor
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fragment_basic_detail, container, false);
     }
 
 
@@ -330,27 +337,8 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
         Gson gson = new Gson();
         ProfileStatus profileStatus= gson.fromJson(response,ProfileStatus.class);
         if(!profileStatus.getError()){
-            profile=profileStatus.getMember();
-            edFirstName.getEditText().setText(profile.get(0).getFirstName());
-            edMiddleName.getEditText().setText(profile.get(0).getMiddleName());
-            edLastName.getEditText().setText(profile.get(0).getLastName());
-            if(profile.get(0).getGender().equalsIgnoreCase("m")){
-                spnGender.setSelection(1);
-            }
-            else {
-                spnGender.setSelection(2);
-            }
-            if(profile.get(0).getMaritalStatus().equalsIgnoreCase("single")){
-                spnMaritalStatus.setSelection(1);
-            }
-            else {
-                spnMaritalStatus.setSelection(2);
-            }
-            spnDateOfBirth.setText(profile.get(0).getDateOfBirth());
-            if(profile.get(0).getProfilePic()!=null && !profile.get(0).getProfilePic().equals("")) {
-               // imgProfile.setImageBitmap(Utils.getImageBitmapFromByte64(profile.get(0).getProfilePic()));
-                //TODO Image Display
-            }
+         //   profile=profileStatus.getMember();
+           // showDetails(profile.get(0));
         }
         else{
             getDailogConfirm(profileStatus.getMessage(),"");
@@ -359,6 +347,34 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
     }
 
 
+    void showDetails(Profile profile){
+        edFirstName.getEditText().setText(profile.getFirstName());
+        edMiddleName.getEditText().setText(profile.getMiddleName());
+        edLastName.getEditText().setText(profile.getLastName());
+        if(profile.getGender().equalsIgnoreCase("m")){
+            spnGender.setSelection(1);
+        }
+        else {
+            spnGender.setSelection(2);
+        }
+        if(profile.getMaritalStatus().equalsIgnoreCase("single")){
+            spnMaritalStatus.setSelection(1);
+        }
+        else {
+            spnMaritalStatus.setSelection(2);
+        }
+        spnDateOfBirth.setText(Utils.getFormattedDate(profile.getDateOfBirth(),C.SERVER_DATE_FORMAT,C.DATE_FORMAT));
+        if(profile.getProfilePic()!=null && !profile.getProfilePic().equals("")) {
+
+
+
+            Utils.displayImage(getActivity(),C.IMAGE_BASE_URL+profile.getProfilePic(),imgProfile);
+            //TODO Image Display
+            profile.setProfilePicname(profile.getProfilePic());
+           new AsyncGettingBitmapFromUrl().execute();
+            // imgProfile.setImageBitmap(Utils.getImageBitmapFromByte64(profile.get(0).getProfilePic()));
+        }
+    }
 
     @Override
     public Context getApplicationsContext() {
@@ -401,6 +417,35 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
             dialog.show();
         } catch (Exception e) {
             e.printStackTrace();
+
         }
     }
+    private class AsyncGettingBitmapFromUrl extends AsyncTask<Void, Void, Bitmap> {
+
+
+
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            return Utils.getBitmapFromUrl(C.IMAGE_BASE_URL+profile.getProfilePic());
+
+            /*try {
+                URL url = new URL(C.IMAGE_BASE_URL+profile.getProfilePic());
+                Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                return image;
+            } catch(IOException e) {
+                System.out.println(e);
+            }
+            return null;*/
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+
+           if(bitmap!=null)
+            profile.setProfilePic(Utils.getBase64Image(bitmap));
+
+        }
+    }
+
 }

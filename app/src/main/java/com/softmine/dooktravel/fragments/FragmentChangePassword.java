@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.serviceconnection.CompleteListener;
@@ -66,8 +65,7 @@ public class FragmentChangePassword extends Fragment implements CompleteListener
                     if(isValid()){
                         //TODO hit API
 
-
-                        Toast.makeText(getActivity(),"Under development",Toast.LENGTH_LONG).show();
+                        Utils.showToast(getActivity(),"Under development");
                     }
                 }
         }

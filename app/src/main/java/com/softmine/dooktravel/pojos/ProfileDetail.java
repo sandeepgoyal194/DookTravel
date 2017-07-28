@@ -38,6 +38,9 @@ public class ProfileDetail implements Serializable{
     @SerializedName("picture")
     @Expose
     private String picture;
+    @SerializedName("picturename")
+    @Expose
+    private String picturename;
     @SerializedName("gender")
     @Expose
     private String gender;
@@ -106,6 +109,7 @@ public class ProfileDetail implements Serializable{
      * @param secondaryEmail
      * @param cityid
      * @param picture
+     * @param picturename
      * @param socialid
      * @param organization
      * @param categoryid
@@ -118,8 +122,7 @@ public class ProfileDetail implements Serializable{
      * @param skype
      * @param marital
      */
-    public ProfileDetail(String email, String socialid, String phone, String password, String categoryid, String firstname, String middlename, String lastname, String picture, String gender, String dob, String marital, String organization, String working, String address, String countryid, String stateid, String cityid, String zip, String skype, String secondaryEmail, String mobile1, String mobile2, String about) {
-        super();
+    public ProfileDetail(String email, String socialid, String phone, String password, String categoryid, String firstname, String middlename, String lastname, String picture, String picturename, String gender, String dob, String marital, String organization, String working, String address, String countryid, String stateid, String cityid, String zip, String skype, String secondaryEmail, String mobile1, String mobile2, String about) {
         this.email = email;
         this.socialid = socialid;
         this.phone = phone;
@@ -129,6 +132,7 @@ public class ProfileDetail implements Serializable{
         this.middlename = middlename;
         this.lastname = lastname;
         this.picture = picture;
+        this.picturename = picturename;
         this.gender = gender;
         this.dob = dob;
         this.marital = marital;
@@ -216,6 +220,14 @@ public class ProfileDetail implements Serializable{
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public String getPicturename() {
+        return picturename;
+    }
+
+    public void setPicturename(String picturename) {
+        this.picturename = picturename;
     }
 
     public String getGender() {

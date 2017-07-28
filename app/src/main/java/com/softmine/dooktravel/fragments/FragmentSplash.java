@@ -10,12 +10,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.softmine.dooktravel.ActivityHome;
 import com.softmine.dooktravel.MainActivity;
@@ -51,6 +51,8 @@ public class FragmentSplash extends Fragment {
                 @Override
                 public void run() {
 
+
+                    Log.e("DEBUG","ggg");
                     if (isStoragePermissionGranted()) {
                         if (util.isInternetOn(getActivity())) {
                             if (!SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {

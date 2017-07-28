@@ -12,6 +12,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -48,7 +50,6 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,7 +58,8 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
     String action;
     ProfileDetail profileDetail;
     Button btnSubmit;
-    TextView tvProfesstionalDetail, tvCategory, tvWorkingHour, tvWorkingSince, tvCurrentAdd, tvCountry, tvCity, tvProvince, tvAboutMe, tvPostal;
+    TextView tvProfesstionalDetail, tvCategory, tvWorkingHour, tvWorkingSince,
+            tvCurrentAdd, tvCountry, tvCity, tvProvince, tvAboutMe, tvPostal,tvTextCount;
     ValidateEditText etOraginization, etDesignation, etAddress, etAboutMe, etZipCode;
     Spinner spnCategory, spnCountry, spnCity, spnProvince;
     CountryList countryList;
@@ -82,6 +84,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Bundle bundle = getIntent().getBundleExtra("details");
         setContentView(R.layout.fragment_fragment_professional_detail);
         if (bundle != null) {
@@ -136,7 +139,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
         etAddress = new ValidateEditText((EditText) view.findViewById(R.id.edAddress), getActivity(), flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
         etAboutMe = new ValidateEditText((EditText) view.findViewById(R.id.edAboutMe), getActivity(), flags);
-
+        tvTextCount=(TextView)view.findViewById(R.id.tvTextCount);
         spnCategory = (Spinner) view.findViewById(R.id.spinner_category);
 
         spnCategory.setOnItemSelectedListener(mOnCategorySelectedListner);
@@ -156,6 +159,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
         tvCurrentAdd.setTypeface(Utils.getRegularTypeFace(getActivity()));
         tvCountry.setTypeface(Utils.getLightTypeFace(getActivity()));
         tvCity.setTypeface(Utils.getLightTypeFace(getActivity()));
+        tvTextCount.setTypeface(Utils.getRegularTypeFace(getActivity()));
         tvProvince.setTypeface(Utils.getLightTypeFace(getActivity()));
         etZipCode.getEditText().setTypeface(Utils.getLightTypeFace(getActivity()));
         tvAboutMe.setTypeface(Utils.getRegularTypeFace(getActivity()));
@@ -166,12 +170,12 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
         etDesignation.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
         etAddress.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
         etAboutMe.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
-
+        etAboutMe.getEditText().addTextChangedListener(mTextChangeListner);
         Calendar newCalendar = Calendar.getInstance();
         year = newCalendar.get(Calendar.YEAR);
         month = newCalendar.get(Calendar.MONTH);
         day = newCalendar.get(Calendar.DAY_OF_MONTH);
-        dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        dateFormatter = new SimpleDateFormat(C.DATE_FORMAT);
         DatePickerDialog = new DatePickerDialog(getActivity(), new android.app.DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int y, int monthOfYear, int dayOfMonth) {
@@ -191,13 +195,32 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
             etZipCode.getEditText().setText(profile.getZipCode());
             etAddress.getEditText().setText(profile.getAddress());
             etAboutMe.getEditText().setText(profile.getAbout());
-            tvWorkingSince.setText(profile.getWorkingSince());
+           // tvWorkingSince.setText(Utils.getFormattedDate( profile.getWorkingSince(),"yyyy/MM/dd","dd/MM/yyyy"));
+            tvWorkingSince.setText(Utils.getFormattedDate(profile.getWorkingSince(),C.SERVER_DATE_FORMAT,C.DATE_FORMAT));
+
+
         }
         getCategoryList();
 
     }
+    TextWatcher mTextChangeListner=new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+        }
 
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()<=250)
+                tvTextCount.setText("" + s.length() + "/" + "250");
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
     AdapterView.OnItemSelectedListener mOnCategorySelectedListner = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -300,13 +323,14 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
             if (C.isloggedIn) {
                 //    Toast.makeText(getActivity(),"Under development",Toast.LENGTH_LONG).show();
                 profile.setOrganization(etOraginization.getEditText().getText().toString());
-                profile.setWorkingSince(tvWorkingSince.getText().toString());
+                profile.setWorkingSince(Utils.getFormattedDate(tvWorkingSince.getText().toString(),C.DATE_FORMAT,C.DESIRED_FORMAT));
                 profile.setZipCode(etZipCode.getEditText().getText().toString());
                 profile.setAddress(etAddress.getEditText().getText().toString());
                 profile.setAbout(etAboutMe.getEditText().getText().toString());
 
                 Gson gson = new Gson();
                 String obj = gson.toJson(profile);
+                Log.e("DEBUG","profile="+obj);
                 try {
                     action = C.UPDATE_PROFILE_METHOD;
                     JSONObject jsonObject = new JSONObject(obj);
@@ -317,13 +341,16 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
                 }
             } else {
                 profileDetail.setOrganization(etOraginization.getEditText().getText().toString());
-                profileDetail.setWorking(tvWorkingSince.getText().toString());
+                profileDetail.setWorking(Utils.getFormattedDate(tvWorkingSince.getText().toString(),C.DATE_FORMAT,C.DESIRED_FORMAT));
                 profileDetail.setAddress(etAddress.getEditText().getText().toString());
                 profileDetail.setAbout(etAboutMe.getEditText().getText().toString());
                 profileDetail.setZip(etZipCode.getEditText().getText().toString());
                 Gson gson = new Gson();
                 String obj = gson.toJson(profileDetail);
+
+
                 try {
+                    Log.e("DEBUG","profile="+obj);
                     JSONObject jsonObject = new JSONObject(obj);
                     action = C.REGISTER_COUNTINUE_METHOD;
                     ServiceConnection serviceConnection = new ServiceConnection();
@@ -463,7 +490,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
             Gson gson = new Gson();
             ProfileStatus profileStatus = gson.fromJson(response, ProfileStatus.class);
             if (!profileStatus.getError()) {
-                getDailogConfirm(profileStatus.getMessage(), "");
+                getDailogConfirm(profileStatus.getMessage(), "2");
 
             } else {
                 getDailogConfirm(profileStatus.getMessage(), "");
@@ -474,7 +501,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
     void getCountryList() {
         action = C.COUNTRY_METHOD;
         ServiceConnection serviceConnection = new ServiceConnection();
-        serviceConnection.makeJsonObjectRequest(C.COUNTRY_METHOD, null, FragmentProfessionalDetail.this);
+        serviceConnection.serviceRequest(C.COUNTRY_METHOD, null, FragmentProfessionalDetail.this);
     }
 
     void getStateList(String countryId) {
@@ -490,7 +517,12 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
             e.printStackTrace();
         }
         ServiceConnection serviceConnection = new ServiceConnection();
-        serviceConnection.makeJsonObjectRequest(C.STATE_METHOD, jsonBody, FragmentProfessionalDetail.this);
+        if(C.isloggedIn) {
+            serviceConnection.serviceRequest(C.STATE_METHOD, jsonBody, FragmentProfessionalDetail.this);
+        }
+        else{
+            serviceConnection.makeJsonObjectRequest(C.STATE_METHOD, jsonBody, FragmentProfessionalDetail.this);
+        }
 
     }
 
@@ -506,7 +538,12 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
             e.printStackTrace();
         }
         ServiceConnection serviceConnection = new ServiceConnection();
-        serviceConnection.makeJsonObjectRequest(C.CITY_METHOD, jsonBody, FragmentProfessionalDetail.this);
+        if(C.isloggedIn) {
+            serviceConnection.serviceRequest(C.CITY_METHOD, jsonBody, FragmentProfessionalDetail.this);
+        }
+        else{
+            serviceConnection.makeJsonObjectRequest(C.CITY_METHOD, jsonBody, FragmentProfessionalDetail.this);
+        }
 
     }
 
@@ -561,6 +598,11 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
                             ServiceConnection serviceConnection = new ServiceConnection();
                             serviceConnection.makeJsonObjectRequest(C.LOGIN_METHOD, jsonBody, FragmentProfessionalDetail.this);
                         }
+                    }
+                    else if(titleText.equals("2")){
+                        Intent intent=new Intent(getActivity(), ActivityHome.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                     }
                 }
             });

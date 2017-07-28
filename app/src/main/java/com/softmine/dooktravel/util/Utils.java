@@ -9,14 +9,22 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Base64;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.pojos.SideMenuItem;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by gaurav.garg on 30-06-2017.
@@ -27,6 +35,7 @@ public class Utils {
     ProgressDialog progressDialog=null;
     public static ArrayList<SideMenuItem> getSideMenuList() {
         ArrayList<SideMenuItem> sideMenuItems = new ArrayList<SideMenuItem>();
+        sideMenuItems.add(new SideMenuItem(R.string.home, R.drawable.ic_menu_camera));
         sideMenuItems.add(new SideMenuItem(R.string.update_profile, R.drawable.ic_menu_camera));
         sideMenuItems.add(new SideMenuItem(R.string.change_password, R.drawable.ic_menu_camera));
         sideMenuItems.add(new SideMenuItem(R.string.logout, R.drawable.ic_menu_camera));
@@ -86,10 +95,66 @@ public class Utils {
         return null;
     }
 
-    public  void displayImage(Context context, String imageUrl, ImageView imageView){
+    public static Bitmap getBitmapFromUrl(String u){
+        try {
+            URL url = new URL(u);
+            Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            return image;
+        } catch(IOException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    public static void displayImage(Context context, String imageUrl, ImageView imageView){
         Picasso.with(context)
                 .load(imageUrl)
-                                         // optional
+                .resize(375,375)
+                   .placeholder(R.drawable.placeholder_man)
+                .error(R.drawable.placeholder_man)
                 .into(imageView);
     }
+
+    public  static String getFormattedDate(String date, String dateFormat, String DesiredFormat){
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        Date testDate = null;
+        try {
+            testDate = sdf.parse(date);
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat(DesiredFormat);
+        String newFormat = formatter.format(testDate);
+        return newFormat;
+    }
+
+    public static String getCurrentTimeStamp(){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
+        Date date=new Date();
+        String timeStamp = formatter.format(date);
+        return timeStamp;
+    }
+
+    public  static void showToast(Context context,String msg){
+
+        Toast toast=Toast.makeText(context,msg,Toast.LENGTH_LONG);
+        ViewGroup group = (ViewGroup) toast.getView();
+        TextView messageTextView = (TextView) group.getChildAt(0);
+        messageTextView.setTypeface(getRegularTypeFace(context));
+        messageTextView.setTextSize(14);
+        toast.show();
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        try {
+            InputMethodManager inputMethodManager =
+                    (InputMethodManager) activity.getSystemService(
+                            Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(
+                    activity.getCurrentFocus().getWindowToken(), 0);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 }

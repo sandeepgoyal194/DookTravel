@@ -29,9 +29,10 @@ import com.softmine.dooktravel.adapter.AdapterSideMenu;
 import com.softmine.dooktravel.fragments.FragmentBasicDetail;
 import com.softmine.dooktravel.fragments.FragmentChangePassword;
 import com.softmine.dooktravel.fragments.FragmentContactDetail;
-import com.softmine.dooktravel.fragments.FragmentProfessionalDetail;
 import com.softmine.dooktravel.fragments.FragmentProfileDetail;
 import com.softmine.dooktravel.fragments.FragmentSearchResult;
+import com.softmine.dooktravel.pojos.Profile;
+import com.softmine.dooktravel.pojos.ProfileStatus;
 import com.softmine.dooktravel.pojos.RegisterStatus;
 import com.softmine.dooktravel.serviceconnection.CompleteListener;
 import com.softmine.dooktravel.serviceconnection.ServiceConnection;
@@ -42,6 +43,10 @@ import com.softmine.dooktravel.util.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ActivityHome extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,CompleteListener {
     private AdapterSideMenu adapterSideMenu;
@@ -49,7 +54,10 @@ public class ActivityHome extends AppCompatActivity
     private Fragment fragment;
     TextView tvTitle;
     ImageView imgTitle;
-    int mSelectedPos=-1;
+    int mSelectedPos=0;
+    CircleImageView circleImageView;
+    String action;
+    List<Profile> profile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +72,7 @@ public class ActivityHome extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+        circleImageView=(CircleImageView)findViewById(R.id.profile_image);
         tvTitle=(TextView)findViewById(R.id.tvTitle);
         imgTitle=(ImageView)findViewById(R.id.imgLogo);
         tvTitle.setTypeface(Utils.getRegularTypeFace(this));
@@ -85,21 +93,30 @@ public class ActivityHome extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
-
-                if(position==0 && mSelectedPos!=position){
+                if(position==0&& mSelectedPos!=position){
                     mSelectedPos=position;
-                    fragmnetLoader(C.FRAGMENT_BASIC_DETAIL,null);
+                    fragmnetLoader(C.FRAGMENT_SEARCH_RESULT,null);
                 }
-                else if(position==1 && mSelectedPos!=position){
+               else if(position==1 && mSelectedPos!=position){
+                    mSelectedPos=position;
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable(C.DATA,profile.get(0));
+                    bundle.putBoolean(C.IS_SEARCH_RESULT,false);
+                    if(profile!=null && profile.size()>0) {
+                        fragmnetLoader(C.FRAGMENT_BASIC_DETAIL, bundle);
+                    }
+                }
+                else if(position==2&& mSelectedPos!=position){
                     mSelectedPos=position;
                     fragmnetLoader(C.FRAGMENT_CHANGE_PASSWORD,null);
                 }
-                else if(position==2&&mSelectedPos!=position){
+                else if(position==3&&mSelectedPos!=position){
                     mSelectedPos=position;
                     getDailogConfirm("Are you sure you want to logout?","");
                 }
             }
         });
+        getProfileDetail();
     }
     void getDailogConfirm(String dataText, String titleText) {
         try {
@@ -114,7 +131,7 @@ public class ActivityHome extends AppCompatActivity
             TextView titleTextTv = (TextView) dialog.findViewById(R.id.dialog_title_text);
             TextView cancelTv = (TextView) dialog.findViewById(R.id.dialog_cancel_text);
             TextView okTextTv = (TextView) dialog.findViewById(R.id.dialog_ok_text);
-
+            titleTextTv.setTypeface(Utils.getRegularTypeFace(ActivityHome.this));
             cancelTv.setVisibility(View.VISIBLE);
             dataTextTv.setText(dataText);
             titleTextTv.setText(titleText);
@@ -156,8 +173,29 @@ public class ActivityHome extends AppCompatActivity
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            action=C.LOGOUT;
             ServiceConnection serviceConnection = new ServiceConnection();
             serviceConnection.makeJsonObjectRequest(C.LOGOUT, jsonBody, ActivityHome.this);
+        }
+    }
+
+    void getProfileDetail(){
+
+        if(SharedPreference.getInstance(this).getBoolean(C.IS_LOGIN)) {
+            JSONObject jsonBody = new JSONObject();
+            try {
+             /*   jsonBody.put(C.EMAIL, "pradeep.bansal@techmobia.com");
+                jsonBody.put(C.PASSWORD, "abc123");
+                jsonBody.put(C.SOCAIL_ID, "");*/
+                jsonBody.put(C.MEMBER_ID, SharedPreference.getInstance(this).getString(C.MEMBER_ID));
+                jsonBody.put(C.TOKEN, SharedPreference.getInstance(this).getString(C.TOKEN));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            action=C.PROFILE_METHOD;
+            ServiceConnection serviceConnection = new ServiceConnection();
+            serviceConnection.serviceRequest(C.PROFILE_METHOD, jsonBody, ActivityHome.this);
         }
     }
     @Override
@@ -182,27 +220,29 @@ public class ActivityHome extends AppCompatActivity
                 if(fragmentTag.equals(C.TAG_FRAGMENT_BASIC_DETAIL)){
                     tvTitle.setText(getResources().getString(R.string.basic_details));
                 }
-                else if(fragmentTag.equals(C.TAG_FRAGMENT_PROFESSIONAL_DETAIL)){
-                    tvTitle.setText(getResources().getString(R.string.profile));
-                }
-                else if(fragmentTag.equals(C.TAG_FRAGMENT_PROFILE_DETAIL)){
-                    tvTitle.setText(getResources().getString(R.string.profile));
-                }
+              /*  else if(fragmentTag.equals(C.TAG_FRAGMENT_PROFESSIONAL_DETAIL)){
+                    tvTitle.setText(getResources().getString(profile));
+                }*/
+                /*else if(fragmentTag.equals(C.TAG_FRAGMENT_PROFILE_DETAIL)){
+                    tvTitle.setText(getResources().getString(profile));
+                }*/
                 else if(fragmentTag.equals(C.TAG_FRAGMENT_SEARCH_RESULT)){
-                    tvTitle.setText(getResources().getString(R.string.logo));
+                    imgTitle.setVisibility(View.GONE);
+                    tvTitle.setVisibility(View.VISIBLE);
+                    tvTitle.setText(getResources().getString(R.string.search_result));
 
                 }
-                else if(fragmentTag.equals(C.TAG_FRAGMENT_CONTACT_DETAIL)){
-                    tvTitle.setText(getResources().getString(R.string.profile));
-                }
+               /* else if(fragmentTag.equals(C.TAG_FRAGMENT_CONTACT_DETAIL)){
+                    tvTitle.setText(getResources().getString(profile));
+                }*/
 
 
             } else {
-                if(fragment instanceof FragmentBasicDetail){
-                    imgTitle.setVisibility(View.VISIBLE);
-                    tvTitle.setText(getResources().getString(R.string.logo));
-                    tvTitle.setVisibility(View.GONE);
-                    mSelectedPos=-1;
+                if(fragment instanceof FragmentBasicDetail || fragment instanceof FragmentChangePassword || fragment instanceof FragmentProfileDetail ){
+                    imgTitle.setVisibility(View.GONE);
+                    tvTitle.setVisibility(View.VISIBLE);
+                    tvTitle.setText(getResources().getString(R.string.search_result));
+                    mSelectedPos=0;
                 }
                 super.onBackPressed();
 
@@ -225,32 +265,34 @@ public class ActivityHome extends AppCompatActivity
                 break;
             case C.FRAGMENT_PROFILE_DETAIL:
                 tvTitle.setVisibility(View.VISIBLE);
+                imgTitle.setVisibility(View.GONE);
                 tvTitle.setText(getResources().getString(R.string.profile));
                 fragment = new FragmentProfileDetail();
-                fragmentTransaction.replace(R.id.container, fragment);
+                fragmentTransaction.add(R.id.container, fragment);
                 fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PROFILE_DETAIL);
                 break;
 
             case C.FRAGMENT_SEARCH_RESULT:
-                imgTitle.setVisibility(View.VISIBLE);
-                tvTitle.setText(getResources().getString(R.string.logo));
-                tvTitle.setVisibility(View.GONE);
+                getSupportFragmentManager().popBackStack(0,FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                imgTitle.setVisibility(View.GONE);
+                tvTitle.setText(getResources().getString(R.string.search_result));
+                tvTitle.setVisibility(View.VISIBLE);
                 fragment = new FragmentSearchResult();
                 fragmentTransaction.replace(R.id.container, fragment);
                // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_SEARCH_RESULT);
                 break;
 
             case C.FRAGMENT_CONTACT_DETAIL:
-                tvTitle.setText(getResources().getString(R.string.profile));
+//                tvTitle.setText(getResources().getString(profile));
                 fragment = new FragmentContactDetail();
                 fragmentTransaction.replace(R.id.container, fragment);
                 fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_CONTACT_DETAIL);
                 break;
 
             case C.FRAGMENT_CHANGE_PASSWORD:
-                imgTitle.setVisibility(View.VISIBLE);
-                tvTitle.setText(getResources().getString(R.string.logo));
-                tvTitle.setVisibility(View.GONE);
+                imgTitle.setVisibility(View.GONE);
+                tvTitle.setText(getResources().getString(R.string.change_password));
+                tvTitle.setVisibility(View.VISIBLE);
                 fragment = new FragmentChangePassword();
                 fragmentTransaction.add(R.id.container, fragment);
                 fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_CHANGE_PASSWORD);
@@ -292,18 +334,36 @@ public class ActivityHome extends AppCompatActivity
 
     @Override
     public void done(String response) {
-        Log.e(ActivityHome.class.getName(),"RESPONSE=="+response);
-        Gson gson = new Gson();
-        RegisterStatus registerStatus= gson.fromJson(response,RegisterStatus.class);
-        if(!registerStatus.getError()){
-            SharedPreference.getInstance(ActivityHome.this).setBoolean(C.IS_LOGIN,false);
-            SharedPreference.getInstance(ActivityHome.this).clearData();
-            Intent intent = new Intent(ActivityHome.this,MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+        Log.e(ActivityHome.class.getName(), "RESPONSE==" + response);
+        if(action.equals(C.LOGOUT)) {
+
+            Gson gson = new Gson();
+            RegisterStatus registerStatus = gson.fromJson(response, RegisterStatus.class);
+            if (!registerStatus.getError()) {
+                SharedPreference.getInstance(ActivityHome.this).setBoolean(C.IS_LOGIN, false);
+                C.isloggedIn = false;
+                SharedPreference.getInstance(ActivityHome.this).clearData();
+                Intent intent = new Intent(ActivityHome.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            } else {
+                getDailog(registerStatus.getMessage(), "");
+            }
         }
-        else {
-            getDailog(registerStatus.getMessage(),"");
+        else if(action.equals(C.PROFILE_METHOD)) {
+            Gson gson = new Gson();
+            ProfileStatus profileStatus = gson.fromJson(response, ProfileStatus.class);
+            if (!profileStatus.getError()) {
+                 profile = profileStatus.getMember();
+                if(profile.get(0).getProfilePic()!=null && !profile.get(0).getProfilePic().equals("")) {
+                    Utils.displayImage(this, C.IMAGE_BASE_URL + profile.get(0).getProfilePic(), circleImageView);
+                }
+                //TODO Image Display
+                // imgProfile.setImageBitmap(Utils.getImageBitmapFromByte64(profile.get(0).getProfilePic()));
+            } else {
+                getDailogConfirm(profileStatus.getMessage(), "");
+            }
+
         }
     }
 
