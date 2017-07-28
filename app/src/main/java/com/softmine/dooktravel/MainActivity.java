@@ -15,10 +15,11 @@ import com.softmine.dooktravel.fragments.FragmentBasicDetail;
 import com.softmine.dooktravel.fragments.FragmentContactDetail;
 import com.softmine.dooktravel.fragments.FragmentForgotPassword;
 import com.softmine.dooktravel.fragments.FragmentLogin;
-import com.softmine.dooktravel.fragments.FragmentProfessionalDetail;
 import com.softmine.dooktravel.fragments.FragmentSignUp;
 import com.softmine.dooktravel.fragments.FragmentSplash;
 import com.softmine.dooktravel.util.C;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private TextView tvTitle;
@@ -88,6 +89,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    private Fragment getVisibleFragment() {
+        FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment != null && fragment.isVisible())
+                return fragment;
+        }
+        return null;
+    }
 
     @Override
     public void onBackPressed() {
@@ -113,8 +123,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(fragment instanceof FragmentLogin || fragment instanceof FragmentSignUp ){
-            fragment.onActivityResult(requestCode, resultCode, data);
+        try {
+            fragment=getVisibleFragment();
+            if (fragment instanceof FragmentLogin || fragment instanceof FragmentSignUp ) {
+                fragment.onActivityResult(requestCode, resultCode, data);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         super.onActivityResult(requestCode, resultCode, data);
 

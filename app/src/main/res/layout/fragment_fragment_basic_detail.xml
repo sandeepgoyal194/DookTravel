@@ -228,6 +228,7 @@
                             android:background="@color/white"
                             android:gravity="center"
                             android:textSize="14sp"
+                            android:lines="1"
                             android:hint="@string/date_of_birth"
                             android:textColor="@color/black"
                             android:textColorHint="@color/hint" />

@@ -61,11 +61,12 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
     View viewUploadImage;
     Spinner spnMaritalStatus,spnGender;
     int flags;
-    Validations validation = new Validations();
+    Validations validation ;
     private SimpleDateFormat dateFormatter;
     private int year;
     private int month;
     private int day;
+    Utils util;
    Profile profile;
     ProfileDetail profileDetail ;
     ProfileDetail profileDtl;
@@ -113,6 +114,8 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        validation = new Validations();
+        util=new Utils();
         dateFormatter = new SimpleDateFormat(C.DATE_FORMAT);
         tvbasicDetail=(TextView)view.findViewById(R.id.tvBasicDetail);
         tvGender=(TextView)view.findViewById(R.id.tvGender);
@@ -238,51 +241,55 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
         public void onClick(View v) {
             if(validation.validateAllEditText()) {
                 if(isAllValid()) {
-                    if(!SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
+                    if(util.isInternetOn(getActivity())) {
 
-                        profileDetail.setFirstname(edFirstName.getEditText().getText().toString());
-                        profileDetail.setMiddlename(edMiddleName.getEditText().getText().toString());
-                        profileDetail.setLastname(edLastName.getEditText().getText().toString());
-                        profileDetail.setGender(spnGender.getSelectedItem().toString());
-                        if(spnGender.getSelectedItem().toString().equalsIgnoreCase("Male")){
-                            profileDetail.setGender("m");
+                        if (!SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
 
+                            profileDetail.setFirstname(edFirstName.getEditText().getText().toString());
+                            profileDetail.setMiddlename(edMiddleName.getEditText().getText().toString());
+                            profileDetail.setLastname(edLastName.getEditText().getText().toString());
+                            profileDetail.setGender(spnGender.getSelectedItem().toString());
+                            if (spnGender.getSelectedItem().toString().equalsIgnoreCase("Male")) {
+                                profileDetail.setGender("m");
+
+                            } else {
+                                profileDetail.setGender("f");
+
+                            }
+
+                            profileDetail.setPassword(edPassword.getEditText().getText().toString());
+                            profileDetail.setDob(Utils.getFormattedDate(spnDateOfBirth.getText().toString(), C.DATE_FORMAT, C.DESIRED_FORMAT));
+                            profileDetail.setEmail(profileDtl.getEmail());
+                            profileDetail.setSocialid(profileDtl.getSocialid());
+                            profileDetail.setMarital(spnMaritalStatus.getSelectedItem().toString());
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(C.DATA, profileDetail);
+                            Intent i = new Intent(getContext(), FragmentProfessionalDetail.class);
+                            i.putExtra("details", bundle);
+                            startActivity(i);
+                        } else {
+                            Bundle bundle = new Bundle();
+                            profile.setFirstName(edFirstName.getEditText().getText().toString());
+                            profile.setMiddleName(edMiddleName.getEditText().getText().toString());
+                            profile.setLastName(edLastName.getEditText().getText().toString());
+                            profile.setMaritalStatus(spnMaritalStatus.getSelectedItem().toString());
+
+                            if (spnGender.getSelectedItem().toString().equalsIgnoreCase("Male")) {
+                                profile.setGender("m");
+                            } else {
+                                profile.setGender("f");
+                            }
+                            profile.setDateOfBirth(Utils.getFormattedDate(spnDateOfBirth.getText().toString(), C.DATE_FORMAT, C.DESIRED_FORMAT));
+                            profile.setToken(SharedPreference.getInstance(getActivity()).getString(C.TOKEN));
+                            bundle.putSerializable(C.PROFILE_METHOD, profile);
+                            Intent i = new Intent(getContext(), FragmentProfessionalDetail.class);
+                            i.putExtra("details", bundle);
+                            startActivity(i);
                         }
-                        else {
-                            profileDetail.setGender("f");
-
-                        }
-
-                        profileDetail.setPassword(edPassword.getEditText().getText().toString());
-                        profileDetail.setDob(Utils.getFormattedDate(spnDateOfBirth.getText().toString(),C.DATE_FORMAT,C.DESIRED_FORMAT));
-                        profileDetail.setEmail(profileDtl.getEmail());
-                        profileDetail.setSocialid(profileDtl.getSocialid());
-                        profileDetail.setMarital(spnMaritalStatus.getSelectedItem().toString());
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable(C.DATA, profileDetail);
-                        Intent i = new Intent(getContext(),FragmentProfessionalDetail.class);
-                        i.putExtra("details",bundle);
-                        startActivity(i);
                     }
                     else {
-                        Bundle bundle = new Bundle();
-                        profile.setFirstName(edFirstName.getEditText().getText().toString());
-                        profile.setMiddleName(edMiddleName.getEditText().getText().toString());
-                        profile.setLastName(edLastName.getEditText().getText().toString());
-                        profile.setMaritalStatus(spnMaritalStatus.getSelectedItem().toString());
-
-                        if(spnGender.getSelectedItem().toString().equalsIgnoreCase("Male")){
-                            profile.setGender("m");
-                        }
-                        else {
-                            profile.setGender("f");
-                        }
-                        profile.setDateOfBirth(Utils.getFormattedDate(spnDateOfBirth.getText().toString(),C.DATE_FORMAT,C.DESIRED_FORMAT));
-                        profile.setToken(SharedPreference.getInstance(getActivity()).getString(C.TOKEN));
-                        bundle.putSerializable(C.PROFILE_METHOD, profile);
-                        Intent i = new Intent(getContext(),FragmentProfessionalDetail.class);
-                        i.putExtra("details",bundle);
-                        startActivity(i);
+                        getDailogConfirm(getString(R.string.internet_issue)
+                                , "Internet Issue");
                     }
                 }
             }

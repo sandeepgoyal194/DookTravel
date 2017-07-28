@@ -1,7 +1,9 @@
 package com.softmine.dooktravel.fragments;
 
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -53,7 +56,7 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
     Button btnGo;
     int flags;
     String action;
-    Validations validation = new Validations();
+    Validations validation ;
     TextView tvSearchResult;
     LinearLayoutManager mLayoutManager;
     ValidateEditText etKeyword;
@@ -62,6 +65,7 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
     StateList stateList;
     int mCountryPos=-1,mStatePos=-1,mCategoryPos=-1;
     ProfileListRequest profileListRequest;
+    Utils utils;
     public FragmentSearchResult() {
         // Required empty public constructor
     }
@@ -77,6 +81,8 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        validation = new Validations();
+        utils=new Utils();
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -194,20 +200,26 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
 
             if(validation.validateAllEditText()){
                     Utils.hideSoftKeyboard(getActivity());
+                if(utils.isInternetOn(getActivity())) {
                     profileListRequest.setMemberId(SharedPreference.getInstance(getActivity()).getString(C.MEMBER_ID));
                     profileListRequest.setToken(SharedPreference.getInstance(getActivity()).getString(C.TOKEN));
                     profileListRequest.setKeyword(etKeyword.getEditText().getText().toString());
 
                     Gson gson = new Gson();
-                    String obj=  gson.toJson(profileListRequest);
+                    String obj = gson.toJson(profileListRequest);
                     try {
-                        action=C.PROFILE_LIST_METHOD;
-                        JSONObject jsonObject=new JSONObject(obj);
+                        action = C.PROFILE_LIST_METHOD;
+                        JSONObject jsonObject = new JSONObject(obj);
                         ServiceConnection serviceConnection = new ServiceConnection();
                         serviceConnection.makeJsonObjectRequest(C.PROFILE_LIST_METHOD, jsonObject, FragmentSearchResult.this);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }
+                else {
+                    getDailogConfirm(getString(R.string.internet_issue)
+                            , "Internet Issue");
+                }
             }
 
         }
@@ -338,7 +350,43 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
             }
         }
     }
+    void getDailogConfirm(String dataText, String titleText) {
+        try {
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            //tell the Dialog to use the dialog.xml as it's layout description
+            dialog.setContentView(R.layout.dialog_with_two_button);
+            // dialog.setTitle("Android Custom Dialog Box");
+            dialog.setCancelable(false);
+            TextView dataTextTv = (TextView) dialog.findViewById(R.id.dialog_data_text);
+            TextView titleTextTv = (TextView) dialog.findViewById(R.id.dialog_title_text);
+            TextView cancelTv = (TextView) dialog.findViewById(R.id.dialog_cancel_text);
+            TextView okTextTv = (TextView) dialog.findViewById(R.id.dialog_ok_text);
 
+            cancelTv.setVisibility(View.GONE);
+            dataTextTv.setText(dataText);
+            titleTextTv.setText(titleText);
+
+            cancelTv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            okTextTv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public Context getApplicationsContext() {
         return getActivity();

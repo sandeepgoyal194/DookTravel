@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -42,17 +43,23 @@ public class FragmentSplash extends Fragment {
         return inflater.inflate(R.layout.fragment_splash, container, false);
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        util=new Utils();
+    }
 
     @Override
     public void onResume() {
         super.onResume();
-        util=new Utils();
+
+        try {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
 
 
-                    Log.e("DEBUG","ggg");
+                    Log.e("DEBUG", "ggg");
                     if (isStoragePermissionGranted()) {
                         if (util.isInternetOn(getActivity())) {
                             if (!SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
@@ -62,18 +69,19 @@ public class FragmentSplash extends Fragment {
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                             }
-                        }
-                        else {
-                            getDailogConfirm("No network connectivity - This App requires an internet connection. Please enable the same to proceed"
+                        } else {
+                            getDailogConfirm(getString(R.string.internet_issue)
                                     , "Internet Issue");
                         }
-                    }
-                    else {
+                    } else {
                         requestPermissionForStorage();
                     }
                 }
             }, C.SPLASH_LOADER_TIME);
-
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
     private void requestPermissionForStorage() {
 

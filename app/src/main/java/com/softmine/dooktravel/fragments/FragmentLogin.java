@@ -48,11 +48,12 @@ import org.json.JSONObject;
  */
 public class FragmentLogin extends Fragment implements CompleteListener{
     int flags;
-    Validations validation = new Validations();
+    Validations validation ;
     TextView tvSignUp,tvforgotPassword,tvDontHaveAccount;
     Button btnLogin,btnFacebook;
     LoginButton loginButton;
     CallbackManager callbackManager;
+    Utils util;
     ValidateEditText etUsername,etPassword;
     public FragmentLogin() {
         // Required empty public constructor
@@ -62,6 +63,7 @@ public class FragmentLogin extends Fragment implements CompleteListener{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         FacebookSdk.sdkInitialize(getApplicationsContext());
 
     }
@@ -87,7 +89,8 @@ public class FragmentLogin extends Fragment implements CompleteListener{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        validation = new Validations();
+        util=new Utils();
         tvSignUp=(TextView)view.findViewById(R.id.tv_sign_up);
         tvSignUp.setOnClickListener(tvSignUpClickListner);
         btnLogin=(Button)view.findViewById(R.id.btnLogin);
@@ -177,7 +180,13 @@ public class FragmentLogin extends Fragment implements CompleteListener{
     View.OnClickListener mButtonClickListner=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-         loginButton.performClick();
+            if(util.isInternetOn(getActivity())) {
+                loginButton.performClick();
+            }
+            else {
+                getDailogConfirm(getString(R.string.internet_issue)
+                        , "Internet Issue");
+            }
         }
     };
     @Override
@@ -210,18 +219,23 @@ public class FragmentLogin extends Fragment implements CompleteListener{
             startActivity(intent);*/
             if(validation.validateAllEditText()) {
 
+                if(util.isInternetOn(getActivity())) {
+                    JSONObject jsonBody = new JSONObject();
+                    try {
+                        jsonBody.put(C.EMAIL, etUsername.getEditText().getText().toString());
+                        jsonBody.put(C.PASSWORD, etPassword.getEditText().getText().toString());
+                        jsonBody.put(C.SOCAIL_ID, "");
 
-                JSONObject jsonBody = new JSONObject();
-                try {
-                    jsonBody.put(C.EMAIL, etUsername.getEditText().getText().toString());
-                    jsonBody.put(C.PASSWORD, etPassword.getEditText().getText().toString());
-                    jsonBody.put(C.SOCAIL_ID, "");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    ServiceConnection serviceConnection = new ServiceConnection();
+                    serviceConnection.makeJsonObjectRequest(C.LOGIN_METHOD, jsonBody, FragmentLogin.this);
                 }
-                ServiceConnection serviceConnection = new ServiceConnection();
-                serviceConnection.makeJsonObjectRequest(C.LOGIN_METHOD, jsonBody, FragmentLogin.this);
+                else {
+                    getDailogConfirm(getString(R.string.internet_issue)
+                            , "Internet Issue");
+                }
             }
         }
     };

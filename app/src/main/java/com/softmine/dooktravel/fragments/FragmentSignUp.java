@@ -54,7 +54,8 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
     String email="",socailId="";
     LoginButton loginButton;
     CallbackManager callbackManager;
-    Validations validation = new Validations();
+    Validations validation ;
+    Utils utils;
     public FragmentSignUp() {
         // Required empty public constructor
     }
@@ -85,6 +86,8 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        validation = new Validations();
+        utils  = new Utils();
         tvLogin=(TextView)view.findViewById(R.id.tv_login);
         tvLogin.setOnClickListener(tvLoginCLickListner);
         tvAlreadyAccount=(TextView)view.findViewById(R.id.tv_already_have_account);
@@ -95,7 +98,13 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
         btnFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginButton.performClick();
+                if(utils.isInternetOn(getActivity())) {
+                    loginButton.performClick();
+                }
+                else {
+                    getDailogConfirm(getString(R.string.internet_issue)
+                            , "Internet Issue");
+                }
             }
         });
         btnSignUp.setOnClickListener(mSignUpClickLisnter);
@@ -134,7 +143,7 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // super.onActivityResult(requestCode, resultCode, data);
+         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode,resultCode,data);
     }
 
@@ -190,22 +199,27 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
             serviceConnection.sendToServer(C.SIGNUP_METHOD,params,FragmentSignUp.this);*/
 
             if(validation.validateAllEditText()) {
-
-                JSONObject jsonBody = new JSONObject();
-                try {
+                if (utils.isInternetOn(getActivity())) {
+                    JSONObject jsonBody = new JSONObject();
+                    try {
              /*   jsonBody.put(C.EMAIL, "pradeep.bansal@techmobia.com");
                 jsonBody.put(C.PASSWORD, "abc123");
                 jsonBody.put(C.SOCAIL_ID, "");*/
-                    email=etUserName.getEditText().getText().toString();
-                    socailId="";
-                    jsonBody.put(C.EMAIL,email);
-                    jsonBody.put(C.SOCAIL_ID, "");
+                        email = etUserName.getEditText().getText().toString();
+                        socailId = "";
+                        jsonBody.put(C.EMAIL, email);
+                        jsonBody.put(C.SOCAIL_ID, "");
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    ServiceConnection serviceConnection = new ServiceConnection();
+                    serviceConnection.makeJsonObjectRequest(C.SIGNUP_METHOD, jsonBody, FragmentSignUp.this);
                 }
-                ServiceConnection serviceConnection = new ServiceConnection();
-                serviceConnection.makeJsonObjectRequest(C.SIGNUP_METHOD, jsonBody, FragmentSignUp.this);
+                else {
+                    getDailogConfirm(getString(R.string.internet_issue)
+                            , "Internet Issue");
+                }
             }
            // serviceConnection.getResponse(FragmentSignUp.this);
         }

@@ -67,8 +67,8 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
     CityList cityList;
     CategoryList categoryList;
     int flags;
-    Validations validation = new Validations();
-
+    Validations validation ;
+    Utils utils;
     private SimpleDateFormat dateFormatter;
     private int year;
     private int month;
@@ -110,6 +110,8 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
     }
 
     public void onViewCreated(Activity view, @Nullable Bundle savedInstanceState) {
+        validation = new Validations();
+        utils=new Utils();
         btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
         btnSubmit.setOnClickListener(mBtnSubmitCLickLisner);
         tvProfesstionalDetail = (TextView) view.findViewById(R.id.tvProfessionalDetail);
@@ -320,45 +322,51 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
         public void onClick(View v) {
             // ((ActivityHome)getActivity()).fragmnetLoader(C.FRAGMENT_SEARCH_RESULT,null);
             // Map<String,String> params = new HashMap<String, String>();
-            if (C.isloggedIn) {
-                //    Toast.makeText(getActivity(),"Under development",Toast.LENGTH_LONG).show();
-                profile.setOrganization(etOraginization.getEditText().getText().toString());
-                profile.setWorkingSince(Utils.getFormattedDate(tvWorkingSince.getText().toString(),C.DATE_FORMAT,C.DESIRED_FORMAT));
-                profile.setZipCode(etZipCode.getEditText().getText().toString());
-                profile.setAddress(etAddress.getEditText().getText().toString());
-                profile.setAbout(etAboutMe.getEditText().getText().toString());
+            if(utils.isInternetOn(FragmentProfessionalDetail.this)) {
+                if (C.isloggedIn) {
+                    //    Toast.makeText(getActivity(),"Under development",Toast.LENGTH_LONG).show();
+                    profile.setOrganization(etOraginization.getEditText().getText().toString());
+                    profile.setWorkingSince(Utils.getFormattedDate(tvWorkingSince.getText().toString(), C.DATE_FORMAT, C.DESIRED_FORMAT));
+                    profile.setZipCode(etZipCode.getEditText().getText().toString());
+                    profile.setAddress(etAddress.getEditText().getText().toString());
+                    profile.setAbout(etAboutMe.getEditText().getText().toString());
 
-                Gson gson = new Gson();
-                String obj = gson.toJson(profile);
-                Log.e("DEBUG","profile="+obj);
-                try {
-                    action = C.UPDATE_PROFILE_METHOD;
-                    JSONObject jsonObject = new JSONObject(obj);
-                    ServiceConnection serviceConnection = new ServiceConnection();
-                    serviceConnection.makeJsonObjectRequest(C.UPDATE_PROFILE_METHOD, jsonObject, FragmentProfessionalDetail.this);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Gson gson = new Gson();
+                    String obj = gson.toJson(profile);
+                    Log.e("DEBUG", "profile=" + obj);
+                    try {
+                        action = C.UPDATE_PROFILE_METHOD;
+                        JSONObject jsonObject = new JSONObject(obj);
+                        ServiceConnection serviceConnection = new ServiceConnection();
+                        serviceConnection.makeJsonObjectRequest(C.UPDATE_PROFILE_METHOD, jsonObject, FragmentProfessionalDetail.this);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    profileDetail.setOrganization(etOraginization.getEditText().getText().toString());
+                    profileDetail.setWorking(Utils.getFormattedDate(tvWorkingSince.getText().toString(), C.DATE_FORMAT, C.DESIRED_FORMAT));
+                    profileDetail.setAddress(etAddress.getEditText().getText().toString());
+                    profileDetail.setAbout(etAboutMe.getEditText().getText().toString());
+                    profileDetail.setZip(etZipCode.getEditText().getText().toString());
+                    Gson gson = new Gson();
+                    String obj = gson.toJson(profileDetail);
+
+
+                    try {
+                        Log.e("DEBUG", "profile=" + obj);
+                        JSONObject jsonObject = new JSONObject(obj);
+                        action = C.REGISTER_COUNTINUE_METHOD;
+                        ServiceConnection serviceConnection = new ServiceConnection();
+                        serviceConnection.makeJsonObjectRequest(C.REGISTER_COUNTINUE_METHOD, jsonObject, FragmentProfessionalDetail.this);
+                        //     Toast.makeText(getActivity(),"Under development",Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            } else {
-                profileDetail.setOrganization(etOraginization.getEditText().getText().toString());
-                profileDetail.setWorking(Utils.getFormattedDate(tvWorkingSince.getText().toString(),C.DATE_FORMAT,C.DESIRED_FORMAT));
-                profileDetail.setAddress(etAddress.getEditText().getText().toString());
-                profileDetail.setAbout(etAboutMe.getEditText().getText().toString());
-                profileDetail.setZip(etZipCode.getEditText().getText().toString());
-                Gson gson = new Gson();
-                String obj = gson.toJson(profileDetail);
-
-
-                try {
-                    Log.e("DEBUG","profile="+obj);
-                    JSONObject jsonObject = new JSONObject(obj);
-                    action = C.REGISTER_COUNTINUE_METHOD;
-                    ServiceConnection serviceConnection = new ServiceConnection();
-                    serviceConnection.makeJsonObjectRequest(C.REGISTER_COUNTINUE_METHOD, jsonObject, FragmentProfessionalDetail.this);
-                    //     Toast.makeText(getActivity(),"Under development",Toast.LENGTH_LONG).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            }
+            else {
+                getDailogConfirm(getString(R.string.internet_issue)
+                        , "Internet Issue");
             }
         }
     };

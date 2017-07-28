@@ -37,7 +37,8 @@ public class FragmentForgotPassword extends Fragment implements CompleteListener
     ValidateEditText etEmail;
     Button btnSubmit;
     TextView tvForgotPassword;
-    Validations validation = new Validations();
+    Validations validation;
+    Utils utils;
     public FragmentForgotPassword() {
         // Required empty public constructor
     }
@@ -53,6 +54,8 @@ public class FragmentForgotPassword extends Fragment implements CompleteListener
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        validation = new Validations();
+        utils=new Utils();
         flags = 0 | Validations.FLAG_NOT_EMPTY;
         etEmail=new ValidateEditText((EditText)view.findViewById(R.id.edEmail),getActivity(),flags);
         tvForgotPassword=(TextView)view.findViewById(R.id.tvForgotPassword) ;
@@ -67,20 +70,62 @@ public class FragmentForgotPassword extends Fragment implements CompleteListener
     View.OnClickListener mSubmitClickListner=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(validation.validateAllEditText()){
-                JSONObject jsonBody = new JSONObject();
-                try {
-                    jsonBody.put(C.EMAIL_FORGOT_PASSWORD, etEmail.getEditText().getText().toString());
+            if(validation.validateAllEditText()) {
+                if (utils.isInternetOn(getActivity())) {
+                    JSONObject jsonBody = new JSONObject();
+                    try {
+                        jsonBody.put(C.EMAIL_FORGOT_PASSWORD, etEmail.getEditText().getText().toString());
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    ServiceConnection serviceConnection = new ServiceConnection();
+                    serviceConnection.makeJsonObjectRequest(C.FORGOT_METHOD, jsonBody, FragmentForgotPassword.this);
                 }
-                ServiceConnection serviceConnection = new ServiceConnection();
-                serviceConnection.makeJsonObjectRequest(C.FORGOT_METHOD, jsonBody, FragmentForgotPassword.this);
+                else {
+                    getDailogConfirm(getString(R.string.internet_issue)
+                            , "Internet Issue");
+                }
             }
         }
     };
+    void getDailogConfirm(String dataText, String titleText) {
+        try {
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            //tell the Dialog to use the dialog.xml as it's layout description
+            dialog.setContentView(R.layout.dialog_with_two_button);
+            // dialog.setTitle("Android Custom Dialog Box");
+            dialog.setCancelable(false);
+            TextView dataTextTv = (TextView) dialog.findViewById(R.id.dialog_data_text);
+            TextView titleTextTv = (TextView) dialog.findViewById(R.id.dialog_title_text);
+            TextView cancelTv = (TextView) dialog.findViewById(R.id.dialog_cancel_text);
+            TextView okTextTv = (TextView) dialog.findViewById(R.id.dialog_ok_text);
 
+            cancelTv.setVisibility(View.GONE);
+            dataTextTv.setText(dataText);
+            titleTextTv.setText(titleText);
+
+            cancelTv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            okTextTv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public void done(String response) {
         Log.e(FragmentForgotPassword.class.getName(),"RESPONSE=="+response);

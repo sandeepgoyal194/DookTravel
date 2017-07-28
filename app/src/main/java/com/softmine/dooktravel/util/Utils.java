@@ -43,11 +43,16 @@ public class Utils {
         return sideMenuItems;
     }
     public static boolean isInternetOn(Activity activity) {
-        ConnectivityManager cm = (ConnectivityManager) activity
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            return true;
+        try {
+            ConnectivityManager cm = (ConnectivityManager) activity
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+                return true;
+            }
+        }
+        catch (Exception e){
+            return false;
         }
         return false;
     }
