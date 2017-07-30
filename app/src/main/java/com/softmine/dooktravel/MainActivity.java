@@ -36,7 +36,19 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         tvTitle = (TextView) findViewById(R.id.tvTitle);
-        fragmnetLoader(C.FRAGMENT_SPLASH,null);
+        Bundle bundle = getIntent().getExtras();
+
+        if(bundle !=null)
+        {
+            int screen = bundle.getInt(C.SCREEN);
+            fragmnetLoader(screen,null);
+            // DO SOMETHING HERE
+        }
+        else
+        {
+            fragmnetLoader(C.FRAGMENT_SPLASH,null);
+        }
+
     }
 
 

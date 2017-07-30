@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/tvName"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="@color/blue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
                 android:textStyle="bold"/>
 
             <TextView
-                android:textSize="12sp"
+                android:textSize="14sp"
 
                 android:textColor="@color/black"
                 android:id="@+id/tvCompany"
@@ -43,7 +43,7 @@
                 android:layout_marginTop="5dp"/>
 
             <TextView
-                android:textSize="12sp"
+                android:textSize="14sp"
 
                 android:textColor="@color/black"
                 android:id="@+id/tvAddress"

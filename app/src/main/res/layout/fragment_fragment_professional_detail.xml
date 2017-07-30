@@ -125,7 +125,7 @@
                             <Spinner
                                 android:id="@+id/spinner_category"
                                 style="@style/SpinnerTheme"
-                                android:layout_width="120dp"
+                                android:layout_width="105dp"
                                 android:layout_height="40dp"
                                 android:layout_marginTop="2dp"
                                 android:entries="@array/category" />
@@ -151,15 +151,16 @@
 
                             <TextView
                                 android:id="@+id/tv_working_since"
-                                android:layout_width="120dp"
+                                android:layout_width="105dp"
                                 android:layout_height="40dp"
-                                android:textSize="14sp"
                                 android:layout_gravity="right|end"
                                 android:layout_marginTop="2dp"
                                 android:background="@drawable/view_back_border"
                                 android:gravity="center"
+                                android:singleLine="true"
                                 android:hint="@string/working_since"
-                                android:textColor="@color/black" />
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
                         </LinearLayout>
                     </RelativeLayout>
 
@@ -225,7 +226,7 @@
                             <Spinner
                                 android:id="@+id/spinner_country"
                                 style="@style/SpinnerTheme"
-                                android:layout_width="120dp"
+                                android:layout_width="105dp"
                                 android:layout_height="40dp"
                                 android:layout_marginTop="2dp"
                                 android:entries="@array/category" />
@@ -251,7 +252,7 @@
                             <Spinner
                                 android:id="@+id/spinner_city"
                                 style="@style/SpinnerTheme"
-                                android:layout_width="120dp"
+                                android:layout_width="105dp"
                                 android:layout_height="40dp"
                                 android:layout_marginTop="2dp"
                                 android:entries="@array/category"
@@ -285,7 +286,7 @@
                             <Spinner
                                 android:id="@+id/spinner_province"
                                 style="@style/SpinnerTheme"
-                                android:layout_width="120dp"
+                                android:layout_width="105dp"
                                 android:layout_height="40dp"
                                 android:layout_marginTop="2dp"
                                 android:entries="@array/category" />
@@ -310,7 +311,7 @@
 
                             <EditText
                                 android:id="@+id/et_Postal"
-                                android:layout_width="120dp"
+                                android:layout_width="105dp"
                                 android:layout_height="40dp"
                                 android:lines="1"
                                 android:textSize="14sp"

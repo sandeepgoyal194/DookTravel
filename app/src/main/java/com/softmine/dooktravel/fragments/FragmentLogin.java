@@ -202,7 +202,7 @@ public class FragmentLogin extends Fragment implements CompleteListener{
              /*   jsonBody.put(C.EMAIL, "pradeep.bansal@techmobia.com");
                 jsonBody.put(C.PASSWORD, "abc123");
                 jsonBody.put(C.SOCAIL_ID, "");*/
-            jsonBody.put(C.EMAIL, email);
+            jsonBody.put(C.EMAIL, "");
             jsonBody.put(C.PASSWORD, "");
             jsonBody.put(C.SOCAIL_ID,token);
 

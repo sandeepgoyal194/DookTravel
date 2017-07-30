@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.softmine.dooktravel.ActivityHome;
+import com.softmine.dooktravel.MainActivity;
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.pojos.CategoryList;
 import com.softmine.dooktravel.pojos.CityList;
@@ -492,7 +493,12 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
         } else if (action.equals(C.REGISTER_COUNTINUE_METHOD)) {
             Gson gson = new Gson();
             RegisterStatus registerStatus = gson.fromJson(response, RegisterStatus.class);
-            getDailogConfirm(registerStatus.getMessage(), "1");
+            if(!registerStatus.getError()) {
+                getDailogConfirm(registerStatus.getMessage(), "1");
+            }
+            else {
+                getDailogConfirm(registerStatus.getMessage(),"");
+            }
 
         } else if (action.equals(C.UPDATE_PROFILE_METHOD)) {
             Gson gson = new Gson();
@@ -590,7 +596,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
                 public void onClick(View v) {
                     dialog.dismiss();
                     if (titleText.equals("1")) {
-                        if (validation.validateAllEditText()) {
+                      /*  if (validation.validateAllEditText()) {
 
 
                             JSONObject jsonBody = new JSONObject();
@@ -605,7 +611,11 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
                             action = C.LOGIN_METHOD;
                             ServiceConnection serviceConnection = new ServiceConnection();
                             serviceConnection.makeJsonObjectRequest(C.LOGIN_METHOD, jsonBody, FragmentProfessionalDetail.this);
-                        }
+                        }*/
+                        Intent intent=new Intent(getActivity(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.putExtra(C.SCREEN,C.FRAGMENT_LOGIN);
+                        startActivity(intent);
                     }
                     else if(titleText.equals("2")){
                         Intent intent=new Intent(getActivity(), ActivityHome.class);

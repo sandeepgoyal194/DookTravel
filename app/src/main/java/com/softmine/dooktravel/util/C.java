@@ -60,8 +60,8 @@ public class C {
     public static final java.lang.String DATE_FORMAT ="dd/MM/yyyy" ;
     public static final String DESIRED_FORMAT = "yyyy/MM/dd";
     public static final String SERVER_DATE_FORMAT = "yyyy-MM-dd";
-
-
+    public static final String SCREEN = "screen";
+    public static final String CHANGE_PASSWORD_METHOD ="changepassword" ;
 
 
     public static  boolean isloggedIn =false ;

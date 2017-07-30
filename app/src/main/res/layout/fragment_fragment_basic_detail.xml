@@ -8,12 +8,19 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-       >
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
     <RelativeLayout
-        android:id="@+id/rl_image"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/rl_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
     <ImageView
+
         android:id="@+id/imgProfile"
         android:layout_width="match_parent"
         android:layout_height="170dp"
@@ -30,13 +37,13 @@
             android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
+        </RelativeLayout>
     <!-- TODO: Update blank fragment layout -->
 
 
 
         <LinearLayout
-            android:layout_below="@id/imgProfile"
+            android:layout_below="@id/rl_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
@@ -123,7 +130,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:hint="@string/last_name"
-                        android:imeOptions="actionDone"
                         android:lines="1"
                         android:textColorHint="@color/hint"
                         android:singleLine="true"
@@ -173,6 +179,34 @@
                         android:singleLine="true"
                         android:textColor="@color/pilot"
                         android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/edContact"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:hint="@string/contact"
+                    android:textColorHint="@color/hint"
+                    android:lines="1"
+                    android:singleLine="true"
+
+                    android:maxLength="10"
+                    android:inputType="number"
+                    android:textColor="@color/pilot"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/edSkype"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:hint="@string/skype"
+                    android:textColorHint="@color/hint"
+                    android:lines="1"
+                    android:textColor="@color/pilot"
+                    android:singleLine="true"
+
+                    android:textSize="14sp" />
               <!--  </android.support.design.widget.TextInputLayout>
 -->
                 <RelativeLayout
@@ -199,7 +233,7 @@
                         <Spinner
                             android:id="@+id/spinner_gender"
                             style="@style/SpinnerTheme"
-                            android:layout_width="120dp"
+                            android:layout_width="105dp"
                             android:layout_height="40dp"
                             android:layout_marginTop="2dp"
                             android:entries="@array/gender" />
@@ -222,13 +256,14 @@
 
                         <TextView
                             android:id="@+id/spinner_dob"
-                            android:layout_width="120dp"
+                            android:layout_width="105dp"
                             android:layout_height="40dp"
                             android:layout_marginTop="2dp"
                             android:background="@color/white"
                             android:gravity="center"
                             android:textSize="14sp"
                             android:lines="1"
+                            android:singleLine="true"
                             android:hint="@string/date_of_birth"
                             android:textColor="@color/black"
                             android:textColorHint="@color/hint" />
@@ -258,7 +293,7 @@
                         <Spinner
                             android:id="@+id/spinner_marital_status"
                             style="@style/SpinnerTheme"
-                            android:layout_width="120dp"
+                            android:layout_width="105dp"
                             android:layout_height="40dp"
                             android:layout_marginBottom="80dp"
                             android:layout_marginTop="2dp"

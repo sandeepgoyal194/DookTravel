@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.pojos.Profile;
@@ -23,8 +24,10 @@ import com.softmine.dooktravel.util.Utils;
  */
 public class FragmentProfileDetail extends Fragment {
 
-
-    EditText etFirstName,etMiddleName,etLastName,etAddress,etContact,etSkype,etDescription,etEmail;
+    TextView tvGender,tvDob,tvMaritalStatus,spnDateOfBirth, tvCategory, tvWorkingHour, tvWorkingSince,
+             tvCountry, tvCity, tvProvince, tvPostal;
+    EditText etFirstName,etMiddleName,etLastName,etAddress,etContact,etSkype,etDescription,etEmail,etOraginization, etDesignation,etZipCode;
+    TextView spnMaritalStatus,spnGender,spnCategory, spnCountry, spnCity, spnProvince;
     ImageView imgProfile;
     Profile profile;
     public FragmentProfileDetail() {
@@ -68,14 +71,37 @@ public class FragmentProfileDetail extends Fragment {
         etLastName=(EditText)view.findViewById(R.id.edlastName);
 
         etAddress=(EditText)view.findViewById(R.id.edAddress);
+        tvGender=(TextView)view.findViewById(R.id.tvGender);
 
+        tvDob=(TextView)view.findViewById(R.id.tvdateOfBirth);
+        spnDateOfBirth=(TextView)view.findViewById(R.id.spinner_dob);
+        tvMaritalStatus=(TextView)view.findViewById(R.id.tvMaritalStatus);
+        spnMaritalStatus=(TextView)view.findViewById(R.id.spinner_marital_status);
+        spnGender=(TextView)view.findViewById(R.id.spinner_gender);
+        tvPostal = (TextView) view.findViewById(R.id.et_Postal);
 
         etContact=(EditText)view.findViewById(R.id.edContact);
 
         etSkype=(EditText)view.findViewById(R.id.edSkype);
 
         etDescription=(EditText)view.findViewById(R.id.edDescription);
+        etZipCode = (EditText) view.findViewById(R.id.et_Postal);
 
+        tvCategory = (TextView) view.findViewById(R.id.tvCategory);
+        tvWorkingHour = (TextView) view.findViewById(R.id.tvWorkingHour);
+        tvCountry = (TextView) view.findViewById(R.id.tvCountry);
+        tvCity = (TextView) view.findViewById(R.id.tvCity);
+        tvProvince = (TextView) view.findViewById(R.id.tvProvince);
+        tvWorkingSince = (TextView) view.findViewById(R.id.tv_working_since);
+
+        spnCategory = (TextView) view.findViewById(R.id.spinner_category);
+
+        spnCountry = (TextView) view.findViewById(R.id.spinner_country);
+        spnCity = (TextView) view.findViewById(R.id.spinner_city);
+        spnProvince = (TextView) view.findViewById(R.id.spinner_province);
+        etOraginization = (EditText) view.findViewById(R.id.edOrganization);
+
+        etDesignation = (EditText) view.findViewById(R.id.edDesignation);
         etFirstName.setTypeface(Utils.getRegularTypeFace(getActivity()));
         etMiddleName.setTypeface(Utils.getRegularTypeFace(getActivity()));
         etLastName.setTypeface(Utils.getRegularTypeFace(getActivity()));
@@ -84,6 +110,25 @@ public class FragmentProfileDetail extends Fragment {
         etContact.setTypeface(Utils.getRegularTypeFace(getActivity()));
         etSkype.setTypeface(Utils.getRegularTypeFace(getActivity()));
         etDescription.setTypeface(Utils.getRegularTypeFace(getActivity()));
+        tvGender.setTypeface(Utils.getLightTypeFace(getActivity()));
+        tvDob.setTypeface(Utils.getLightTypeFace(getActivity()));
+        spnDateOfBirth.setTypeface(Utils.getRegularTypeFace(getActivity()));
+        tvMaritalStatus.setTypeface(Utils.getLightTypeFace(getActivity()));
+
+
+
+        tvCategory.setTypeface(Utils.getLightTypeFace(getActivity()));
+        tvWorkingHour.setTypeface(Utils.getLightTypeFace(getActivity()));
+        tvCountry.setTypeface(Utils.getLightTypeFace(getActivity()));
+        tvCity.setTypeface(Utils.getLightTypeFace(getActivity()));
+        tvProvince.setTypeface(Utils.getLightTypeFace(getActivity()));
+        tvWorkingSince.setTypeface(Utils.getRegularTypeFace(getActivity()));
+        tvPostal.setTypeface(Utils.getRegularTypeFace(getActivity()));
+
+        etOraginization.setTypeface(Utils.getRegularTypeFace(getActivity()));
+        etDesignation.setTypeface(Utils.getRegularTypeFace(getActivity()));
+        etAddress.setTypeface(Utils.getRegularTypeFace(getActivity()));
+        etZipCode.setTypeface(Utils.getRegularTypeFace(getActivity()));
 
         showDetail();
 
@@ -102,5 +147,20 @@ public class FragmentProfileDetail extends Fragment {
             Utils.displayImage(getActivity(),C.IMAGE_BASE_URL+profile.getProfilePic(),imgProfile);
 
         }
+        if(profile.getGender().equalsIgnoreCase("m")||profile.getGender().equalsIgnoreCase("Male") ){
+            spnGender.setText("Male");
+        }
+        else {
+            spnGender.setText("Female");
+        }
+        spnDateOfBirth.setText(Utils.getFormattedDate(profile.getDateOfBirth(),C.SERVER_DATE_FORMAT,C.DATE_FORMAT));
+        spnMaritalStatus.setText(profile.getMaritalStatus());
+        etZipCode.setText(profile.getZipCode());
+        etOraginization.setText(profile.getOrganization());
+        spnCountry.setText(profile.getCountryName());
+        spnProvince.setText(profile.getStateName());
+        spnCity.setText(profile.getCityName());
+        tvWorkingSince.setText(Utils.getFormattedDate(profile.getWorkingSince(),C.SERVER_DATE_FORMAT,C.DATE_FORMAT));
+        spnCategory.setText(profile.getCategoryName());
     }
 }

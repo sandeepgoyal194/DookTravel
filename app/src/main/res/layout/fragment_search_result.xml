@@ -77,7 +77,7 @@
 
                     style="@style/SpinnerTheme"
                     android:id="@+id/spinner_country"
-                    android:layout_width="120dp"
+                    android:layout_width="105dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="2dp"
                     android:entries="@array/country"
@@ -100,7 +100,7 @@
 
                 <Spinner
                     android:id="@+id/spinner_state"
-                    android:layout_width="120dp"
+                    android:layout_width="105dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="2dp"
                     android:hint="@string/dob"
@@ -129,7 +129,7 @@
 
                 <Spinner
                     android:id="@+id/spinner_filter_category"
-                    android:layout_width="120dp"
+                    android:layout_width="105dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="15dp"
                     style="@style/SpinnerTheme"

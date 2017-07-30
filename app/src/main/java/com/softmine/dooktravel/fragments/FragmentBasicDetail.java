@@ -1,19 +1,26 @@
 package com.softmine.dooktravel.fragments;
 
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,11 +50,14 @@ import com.softmine.dooktravel.validations.Validations;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import static android.app.Activity.RESULT_OK;
+import static android.app.Activity.RESULT_CANCELED;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,7 +65,7 @@ import static android.app.Activity.RESULT_OK;
 public class FragmentBasicDetail extends Fragment implements CompleteListener{
     private DatePickerDialog DatePickerDialog;
     TextView tvbasicDetail,tvGender,tvDob,tvMaritalStatus,spnDateOfBirth,tvUpload;
-    ValidateEditText edFirstName,edMiddleName,edLastName,edPassword,edConfirmPassword;
+    ValidateEditText edFirstName,edMiddleName,edLastName,edPassword,edConfirmPassword,edSkypeID,edPhone;
     Button btnNext;
     ImageView imgProfile;
     View viewUploadImage;
@@ -70,6 +80,9 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
    Profile profile;
     ProfileDetail profileDetail ;
     ProfileDetail profileDtl;
+    private int GALLERY = 1, CAMERA = 2;
+    private static final String IMAGE_DIRECTORY = "/dooktravel";
+
     private int PICK_IMAGE_REQUEST = 1;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -139,6 +152,12 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
         edPassword=new ValidateEditText((EditText)view.findViewById(R.id.edPassword),getActivity(),flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
         edConfirmPassword=new ValidateEditText((EditText)view.findViewById(R.id.edConfirmPassword),getActivity(),flags);
+        flags = 0 | Validations.FLAG_NOT_EMPTY;
+        edSkypeID=new ValidateEditText((EditText)view.findViewById(R.id.edSkype),getActivity(),flags);
+        flags = 0 | Validations.FLAG_NOT_EMPTY;
+        flags = flags | Validations.TYPE_MOBILE;
+        edPhone=new ValidateEditText((EditText)view.findViewById(R.id.edContact),getActivity(),flags);
+
         btnNext=(Button) view.findViewById(R.id.btnNext);
         spnMaritalStatus=(Spinner)view.findViewById(R.id.spinner_marital_status);
         spnGender=(Spinner)view.findViewById(R.id.spinner_gender);
@@ -159,6 +178,7 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
 
         validation.addtoList(edLastName);
         validation.addtoList(edFirstName);
+        validation.addtoList(edPhone);
         Calendar newCalendar = Calendar.getInstance();
         year  = newCalendar.get(Calendar.YEAR);
         month = newCalendar.get(Calendar.MONTH);
@@ -194,10 +214,47 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
     View.OnClickListener mUploadImageClickListner=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            chooseImage();
+            if(isCameraPermissionGranted()) {
+                showPictureDialog();
+            }
+            else {
+                requestPermissionForCamera();
+            }
         }
     };
 
+    private void showPictureDialog(){
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(getActivity());
+        pictureDialog.setTitle("Select Action");
+        String[] pictureDialogItems = {
+                "Select photo from gallery",
+                "Capture photo from camera" };
+        pictureDialog.setItems(pictureDialogItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                choosePhotoFromGallary();
+                                break;
+                            case 1:
+                                takePhotoFromCamera();
+                                break;
+                        }
+                    }
+                });
+        pictureDialog.show();
+    }
+    public void choosePhotoFromGallary() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(galleryIntent, GALLERY);
+    }
+    private void takePhotoFromCamera() {
+        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, CAMERA);
+    }
     void chooseImage(){
         Intent intent = new Intent();
 // Show only images, no videos or anything else
@@ -210,7 +267,52 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
+        if (requestCode == GALLERY) {
+            if (data != null) {
+                Uri contentURI = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
+                 //   String path = saveImage(bitmap);
+                    bitmap= Utils.scaleDown(bitmap, 400, true);
+                    imgProfile.setImageBitmap(bitmap);
+                    String profileImage= Utils.getBase64Image(bitmap);
+                    if(C.isloggedIn) {
+                        profile.setProfilePic(profileImage);
+                        profile.setProfilePicname(Utils.getCurrentTimeStamp()+".jpg");
+                    }
+                    else {
+                        profileDetail.setPicture(profileImage);
+                        profileDetail.setPicturename(Utils.getCurrentTimeStamp()+".jpg");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                }
+            }
+
+        } else if (requestCode == CAMERA) {
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            bitmap= Utils.scaleDown(bitmap, 300, true);
+            imgProfile.setImageBitmap(bitmap);
+            String profileImage= Utils.getBase64Image(bitmap);
+            if(C.isloggedIn) {
+                profile.setProfilePic(profileImage);
+                profile.setProfilePicname(Utils.getCurrentTimeStamp()+".jpg");
+            }
+            else {
+                profileDetail.setPicture(profileImage);
+                profileDetail.setPicturename(Utils.getCurrentTimeStamp()+".jpg");
+            }
+         //   saveImage(thumbnail);
+
+        }
+
+        /*if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             Uri uri = data.getData();
 
@@ -231,10 +333,37 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
+    public String saveImage(Bitmap myBitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        File wallpaperDirectory = new File(
+                Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
+        // have the object build the directory structure, if needed.
+        if (!wallpaperDirectory.exists()) {
+            wallpaperDirectory.mkdirs();
+        }
 
+        try {
+            File f = new File(wallpaperDirectory, Calendar.getInstance()
+                    .getTimeInMillis() + ".jpg");
+            f.createNewFile();
+            FileOutputStream fo = new FileOutputStream(f);
+            fo.write(bytes.toByteArray());
+            MediaScannerConnection.scanFile(getActivity(),
+                    new String[]{f.getPath()},
+                    new String[]{"image/jpeg"}, null);
+            fo.close();
+            Log.d("TAG", "File Saved::--->" + f.getAbsolutePath());
+
+            return f.getAbsolutePath();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return "";
+    }
 
     View.OnClickListener mNextClickListner=new View.OnClickListener() {
         @Override
@@ -249,14 +378,16 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
                             profileDetail.setMiddlename(edMiddleName.getEditText().getText().toString());
                             profileDetail.setLastname(edLastName.getEditText().getText().toString());
                             profileDetail.setGender(spnGender.getSelectedItem().toString());
-                            if (spnGender.getSelectedItem().toString().equalsIgnoreCase("Male")) {
-                                profileDetail.setGender("m");
+                            profileDetail.setSkype(edSkypeID.getEditText().getText().toString());
+                            profileDetail.setPhone(edPhone.getEditText().getText().toString());
+                           /* if (spnGender.getSelectedItem().toString().equalsIgnoreCase("Male")) {
+                                profileDetail.setGender("Male");
 
                             } else {
-                                profileDetail.setGender("f");
+                                profileDetail.setGender("Female");
 
-                            }
-
+                            }*/
+                            profileDetail.setGender(spnGender.getSelectedItem().toString());
                             profileDetail.setPassword(edPassword.getEditText().getText().toString());
                             profileDetail.setDob(Utils.getFormattedDate(spnDateOfBirth.getText().toString(), C.DATE_FORMAT, C.DESIRED_FORMAT));
                             profileDetail.setEmail(profileDtl.getEmail());
@@ -273,12 +404,15 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
                             profile.setMiddleName(edMiddleName.getEditText().getText().toString());
                             profile.setLastName(edLastName.getEditText().getText().toString());
                             profile.setMaritalStatus(spnMaritalStatus.getSelectedItem().toString());
-
-                            if (spnGender.getSelectedItem().toString().equalsIgnoreCase("Male")) {
-                                profile.setGender("m");
+                            profile.setSkype(edSkypeID.getEditText().getText().toString());
+                            profile.setPhone(edPhone.getEditText().getText().toString());
+                           /* if (spnGender.getSelectedItem().toString().equalsIgnoreCase("Male")) {
+                                profile.setGender("Male");
                             } else {
-                                profile.setGender("f");
-                            }
+                                profile.setGender("Female");
+                            }*/
+                            profile.setGender(spnGender.getSelectedItem().toString());
+
                             profile.setDateOfBirth(Utils.getFormattedDate(spnDateOfBirth.getText().toString(), C.DATE_FORMAT, C.DESIRED_FORMAT));
                             profile.setToken(SharedPreference.getInstance(getActivity()).getString(C.TOKEN));
                             bundle.putSerializable(C.PROFILE_METHOD, profile);
@@ -355,31 +489,35 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
 
 
     void showDetails(Profile profile){
-        edFirstName.getEditText().setText(profile.getFirstName());
-        edMiddleName.getEditText().setText(profile.getMiddleName());
-        edLastName.getEditText().setText(profile.getLastName());
-        if(profile.getGender().equalsIgnoreCase("m")){
-            spnGender.setSelection(1);
-        }
-        else {
-            spnGender.setSelection(2);
-        }
-        if(profile.getMaritalStatus().equalsIgnoreCase("single")){
-            spnMaritalStatus.setSelection(1);
-        }
-        else {
-            spnMaritalStatus.setSelection(2);
-        }
-        spnDateOfBirth.setText(Utils.getFormattedDate(profile.getDateOfBirth(),C.SERVER_DATE_FORMAT,C.DATE_FORMAT));
-        if(profile.getProfilePic()!=null && !profile.getProfilePic().equals("")) {
+        try {
+            edFirstName.getEditText().setText(profile.getFirstName());
+            edMiddleName.getEditText().setText(profile.getMiddleName());
+            edLastName.getEditText().setText(profile.getLastName());
+            edPhone.getEditText().setText(profile.getPhone());
+            edSkypeID.getEditText().setText(profile.getSkype());
+            if (profile.getGender().equalsIgnoreCase("m") || profile.getGender().equalsIgnoreCase("male")) {
+                spnGender.setSelection(1);
+            } else {
+                spnGender.setSelection(2);
+            }
+            if (profile.getMaritalStatus().equalsIgnoreCase("single")) {
+                spnMaritalStatus.setSelection(1);
+            } else {
+                spnMaritalStatus.setSelection(2);
+            }
+            spnDateOfBirth.setText(Utils.getFormattedDate(profile.getDateOfBirth(), C.SERVER_DATE_FORMAT, C.DATE_FORMAT));
+            if (profile.getProfilePic() != null && !profile.getProfilePic().equals("")) {
 
 
-
-            Utils.displayImage(getActivity(),C.IMAGE_BASE_URL+profile.getProfilePic(),imgProfile);
-            //TODO Image Display
-            profile.setProfilePicname(profile.getProfilePic());
-           new AsyncGettingBitmapFromUrl().execute();
-            // imgProfile.setImageBitmap(Utils.getImageBitmapFromByte64(profile.get(0).getProfilePic()));
+                Utils.displayImage(getActivity(), C.IMAGE_BASE_URL + profile.getProfilePic(), imgProfile);
+                //TODO Image Display
+                profile.setProfilePicname(profile.getProfilePic());
+                new AsyncGettingBitmapFromUrl().execute();
+                // imgProfile.setImageBitmap(Utils.getImageBitmapFromByte64(profile.get(0).getProfilePic()));
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -454,5 +592,37 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
 
         }
     }
+    public  boolean isCameraPermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (getActivity().checkSelfPermission(Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_GRANTED) {
 
+                return true;
+            } else {
+
+
+                // ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+
+            return true;
+        }
+
+
+    }
+
+    private void requestPermissionForCamera(){
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.CAMERA)){
+            //     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},Utils.PERMISSION_REQUEST_CODE);
+            getDailogConfirm("Please allow camera permission in App Settings for additional functionality.", "4");
+            //  Toast.makeText(getActivity(),"GPS permission allows us to access location data. Please allow in App Settings for additional functionality.",Toast.LENGTH_LONG).show();
+
+        } else {
+
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, 2);
+        }
+    }
 }

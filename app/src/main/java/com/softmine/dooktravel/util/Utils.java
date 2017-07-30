@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -133,10 +134,12 @@ public class Utils {
     }
 
     public static String getCurrentTimeStamp(){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
+       /* SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
         Date date=new Date();
         String timeStamp = formatter.format(date);
-        return timeStamp;
+        return timeStamp;*/
+       return String.valueOf(Calendar.getInstance()
+                .getTimeInMillis());
     }
 
     public  static void showToast(Context context,String msg){
@@ -148,7 +151,18 @@ public class Utils {
         messageTextView.setTextSize(14);
         toast.show();
     }
+    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
+                                   boolean filter) {
+        float ratio = Math.min(
+                (float) maxImageSize / realImage.getWidth(),
+                (float) maxImageSize / realImage.getHeight());
+        int width = Math.round((float) ratio * realImage.getWidth());
+        int height = Math.round((float) ratio * realImage.getHeight());
 
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                height, filter);
+        return newBitmap;
+    }
     public static void hideSoftKeyboard(Activity activity) {
         try {
             InputMethodManager inputMethodManager =

@@ -14,9 +14,11 @@
     <!-- TODO: Update blank fragment layout -->
 
     <ScrollView
-        android:layout_below="@id/imgProfile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imgProfile"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
 
@@ -142,10 +144,325 @@
                 </android.support.design.widget.TextInputLayout>
 
 
+                <RelativeLayout
+                    android:layout_marginTop="5dp"
 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvGender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/gender"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/spinner_gender"
+                            style="@style/SpinnerTheme"
+                            android:layout_width="105dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="2dp"
+                            android:entries="@array/gender" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvdateOfBirth"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/date_of_birth"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/spinner_dob"
+                            android:layout_width="105dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="2dp"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:textSize="14sp"
+                            android:lines="1"
+                            android:singleLine="true"
+                            android:hint="@string/dob"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/hint" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvMaritalStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/marital_status"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/spinner_marital_status"
+                            style="@style/SpinnerTheme"
+                            android:layout_width="105dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="2dp"
+                            android:entries="@array/marital_status" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvPostalCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:lines="1"
+                            android:text="@string/zip"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/et_Postal"
+                            android:layout_width="105dp"
+                            android:layout_height="40dp"
+                            android:lines="1"
+                            android:textSize="14sp"
+                            android:hint="@string/zip"
+                            android:layout_gravity="right|end"
+                            android:layout_marginTop="2dp"
+                            android:background="@drawable/view_back_border"
+                            android:textColorHint="@color/hint"
+                            android:gravity="center"
+                            android:singleLine="true"
+                            android:inputType="number"
+                            android:focusable="false"
+
+                            android:maxLength="6"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+
+                  <android.support.design.widget.TextInputLayout
+                                       android:id="@+id/ed_layout_organization"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="wrap_content"
+                      android:textColorHint="@color/hint"
+                      android:layout_marginTop="5dp"
+
+                      android:lines="1"
+                                       >
+
+                <EditText
+                    android:id="@+id/edOrganization"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/organization"
+                    android:lines="1"
+                    android:focusable="false"
+                    android:singleLine="true"
+                    android:textColor="@color/pilot"
+                    android:textSize="14sp" />
+                   </android.support.design.widget.TextInputLayout>
+
+                 <android.support.design.widget.TextInputLayout
+                     android:id="@+id/ed_layout_designation"
+                     android:layout_width="match_parent"
+                     android:textColorHint="@color/hint"
+
+                     android:layout_height="wrap_content"
+                     android:lines="1"
+
+                     >
+
+                <EditText
+                    android:id="@+id/edDesignation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:layout_marginTop="5dp"
+                    android:hint="@string/designation"
+                    android:lines="1"
+                    android:visibility="gone"
+                    android:focusable="false"
+                    android:textColor="@color/pilot"
+                    android:textSize="14sp" />
+                   </android.support.design.widget.TextInputLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvCountry"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/country"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/spinner_country"
+                            style="@style/SpinnerTheme"
+                            android:layout_width="105dp"
+                            android:layout_height="40dp"
+                            android:singleLine="true"
+
+                            android:layout_marginTop="2dp"
+                            android:entries="@array/category" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvCity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/city"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/spinner_city"
+                            style="@style/SpinnerTheme"
+                            android:layout_width="105dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="2dp"
+                            android:entries="@array/category"
+                            android:gravity="center"
+                            android:hint="@string/dob" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvProvince"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/province"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/spinner_province"
+                            style="@style/SpinnerTheme"
+                            android:layout_width="105dp"
+                            android:layout_height="40dp"
+                            android:singleLine="true"
+
+                            android:layout_marginTop="2dp"
+                            android:entries="@array/category" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_marginTop="5dp"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvWorkingHour"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/working_since"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tv_working_since"
+                            android:layout_width="105dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="right|end"
+                            android:layout_marginTop="2dp"
+                            android:background="@drawable/view_back_border"
+                            android:gravity="center"
+                            android:singleLine="true"
+                            android:hint="@string/working_since"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/category"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/spinner_category"
+                        style="@style/SpinnerTheme"
+                        android:layout_width="105dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="2dp"
+                        android:singleLine="true"
+                        android:entries="@array/category" />
+                </LinearLayout>
+                </RelativeLayout>
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ed_layout_contact"
                     android:layout_width="match_parent"
+                    android:layout_marginTop="5dp"
                     android:textColorHint="@color/hint"
                     android:layout_height="wrap_content">
 
@@ -187,7 +504,7 @@
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ed_layout_description"
                     android:layout_width="match_parent"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/hint"
                     android:layout_height="wrap_content">
 
 

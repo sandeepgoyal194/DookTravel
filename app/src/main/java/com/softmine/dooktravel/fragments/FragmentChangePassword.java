@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.softmine.dooktravel.R;
+import com.softmine.dooktravel.pojos.RegisterStatus;
 import com.softmine.dooktravel.serviceconnection.CompleteListener;
+import com.softmine.dooktravel.serviceconnection.ServiceConnection;
+import com.softmine.dooktravel.util.C;
+import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
 import com.softmine.dooktravel.validations.Validations;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +38,6 @@ public class FragmentChangePassword extends Fragment implements CompleteListener
     int flags;
     ValidateEditText etPassword,etConfirmPassword;
     Button btnSubmit;
-    TextView tvForgotPassword;
     Validations validation;
     Utils utils;
     public FragmentChangePassword() {
@@ -72,7 +80,21 @@ public class FragmentChangePassword extends Fragment implements CompleteListener
                         if(utils.isInternetOn(getActivity())) {
                             //TODO hit API
 
-                            Utils.showToast(getActivity(), "Under development");
+                            if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
+                                JSONObject jsonBody = new JSONObject();
+                                try {
+                                    jsonBody.put(C.MEMBER_ID, SharedPreference.getInstance(getActivity()).getString(C.MEMBER_ID));
+                                    jsonBody.put(C.TOKEN, SharedPreference.getInstance(getActivity()).getString(C.TOKEN));
+                                    jsonBody.put(C.PASSWORD,etPassword.getEditText().getText().toString());
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                ServiceConnection serviceConnection = new ServiceConnection();
+                                serviceConnection.makeJsonObjectRequest(C.CHANGE_PASSWORD_METHOD, jsonBody, FragmentChangePassword.this);
+                            }
+
+                          //  Utils.showToast(getActivity(), "Under development");
                         }
                         else {
                             getDailogConfirm(getString(R.string.internet_issue)
@@ -94,6 +116,17 @@ public class FragmentChangePassword extends Fragment implements CompleteListener
     @Override
     public void done(String response) {
         // TODO handle response
+        Log.e(FragmentChangePassword.class.getName(),"RESPONSE=="+response);
+        Gson gson = new Gson();
+        RegisterStatus registerStatus= gson.fromJson(response,RegisterStatus.class);
+        if(!registerStatus.getError()){
+
+            getDailogConfirm(registerStatus.getMessage(),"1");
+        }
+        else {
+            getDailogConfirm(registerStatus.getMessage(),"");
+        }
+
     }
 
     @Override
@@ -101,7 +134,10 @@ public class FragmentChangePassword extends Fragment implements CompleteListener
         return getActivity();
     }
 
-    void getDailogConfirm(String dataText, String titleText) {
+
+
+
+    void getDailogConfirm(String dataText, final String titleText) {
         try {
             final Dialog dialog = new Dialog(getActivity());
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -130,6 +166,10 @@ public class FragmentChangePassword extends Fragment implements CompleteListener
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
+                    if (titleText.equals("1")) {
+                        getActivity().onBackPressed();
+                    }
+
                 }
             });
 
