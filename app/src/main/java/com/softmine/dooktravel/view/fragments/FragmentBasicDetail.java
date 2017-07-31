@@ -1,4 +1,4 @@
-package com.softmine.dooktravel.fragments;
+package com.softmine.dooktravel.view.fragments;
 
 
 import android.Manifest;

@@ -1,4 +1,4 @@
-package com.softmine.dooktravel.fragments;
+package com.softmine.dooktravel.view.fragments;
 
 
 import android.app.Dialog;
@@ -22,6 +22,7 @@ import com.softmine.dooktravel.pojos.RegisterStatus;
 import com.softmine.dooktravel.serviceconnection.CompleteListener;
 import com.softmine.dooktravel.serviceconnection.ServiceConnection;
 import com.softmine.dooktravel.util.C;
+import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
 import com.softmine.dooktravel.validations.Validations;
@@ -32,14 +33,14 @@ import org.json.JSONObject;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentForgotPassword extends Fragment implements CompleteListener{
+public class FragmentChangePassword extends Fragment implements CompleteListener {
+
     int flags;
-    ValidateEditText etEmail;
+    ValidateEditText etPassword,etConfirmPassword;
     Button btnSubmit;
-    TextView tvForgotPassword;
     Validations validation;
     Utils utils;
-    public FragmentForgotPassword() {
+    public FragmentChangePassword() {
         // Required empty public constructor
     }
 
@@ -48,7 +49,7 @@ public class FragmentForgotPassword extends Fragment implements CompleteListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_forgot_password, container, false);
+        return inflater.inflate(R.layout.fragment_change_password, container, false);
     }
 
     @Override
@@ -57,86 +58,75 @@ public class FragmentForgotPassword extends Fragment implements CompleteListener
         validation = new Validations();
         utils=new Utils();
         flags = 0 | Validations.FLAG_NOT_EMPTY;
-        etEmail=new ValidateEditText((EditText)view.findViewById(R.id.edEmail),getActivity(),flags);
-        tvForgotPassword=(TextView)view.findViewById(R.id.tvForgotPassword) ;
+        etPassword=new ValidateEditText((EditText)view.findViewById(R.id.edPassword),getActivity(),flags);
+        flags = 0 | Validations.FLAG_NOT_EMPTY;
+        etConfirmPassword=new ValidateEditText((EditText)view.findViewById(R.id.edConfirmPassword),getActivity(),flags);
         btnSubmit=(Button)view.findViewById(R.id.btnSubmit);
 
-        etEmail.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
+
+        etPassword.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
+        etConfirmPassword.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
         btnSubmit.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
         btnSubmit.setOnClickListener(mSubmitClickListner);
-        validation.addtoList(etEmail);
+        validation.addtoList(etConfirmPassword);
+        validation.addtoList(etPassword);
     }
 
     View.OnClickListener mSubmitClickListner=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(validation.validateAllEditText()) {
-                if (utils.isInternetOn(getActivity())) {
-                    JSONObject jsonBody = new JSONObject();
-                    try {
-                        jsonBody.put(C.EMAIL_FORGOT_PASSWORD, etEmail.getEditText().getText().toString());
+                if(validation.validateAllEditText()){
+                    if(isValid()){
+                        if(utils.isInternetOn(getActivity())) {
+                            //TODO hit API
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                            if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
+                                JSONObject jsonBody = new JSONObject();
+                                try {
+                                    jsonBody.put(C.MEMBER_ID, SharedPreference.getInstance(getActivity()).getString(C.MEMBER_ID));
+                                    jsonBody.put(C.TOKEN, SharedPreference.getInstance(getActivity()).getString(C.TOKEN));
+                                    jsonBody.put(C.PASSWORD,etPassword.getEditText().getText().toString());
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                ServiceConnection serviceConnection = new ServiceConnection();
+                                serviceConnection.makeJsonObjectRequest(C.CHANGE_PASSWORD_METHOD, jsonBody, FragmentChangePassword.this);
+                            }
+
+                          //  Utils.showToast(getActivity(), "Under development");
+                        }
+                        else {
+                            getDailogConfirm(getString(R.string.internet_issue)
+                                    , "Internet Issue");
+                        }
                     }
-                    ServiceConnection serviceConnection = new ServiceConnection();
-                    serviceConnection.makeJsonObjectRequest(C.FORGOT_METHOD, jsonBody, FragmentForgotPassword.this);
                 }
-                else {
-                    getDailogConfirm(getString(R.string.internet_issue)
-                            , "Internet Issue");
-                }
-            }
         }
     };
-    void getDailogConfirm(String dataText, String titleText) {
-        try {
-            final Dialog dialog = new Dialog(getActivity());
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            //tell the Dialog to use the dialog.xml as it's layout description
-            dialog.setContentView(R.layout.dialog_with_two_button);
-            // dialog.setTitle("Android Custom Dialog Box");
-            dialog.setCancelable(false);
-            TextView dataTextTv = (TextView) dialog.findViewById(R.id.dialog_data_text);
-            TextView titleTextTv = (TextView) dialog.findViewById(R.id.dialog_title_text);
-            TextView cancelTv = (TextView) dialog.findViewById(R.id.dialog_cancel_text);
-            TextView okTextTv = (TextView) dialog.findViewById(R.id.dialog_ok_text);
 
-            cancelTv.setVisibility(View.GONE);
-            dataTextTv.setText(dataText);
-            titleTextTv.setText(titleText);
-
-            cancelTv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-
-            okTextTv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-
-            dialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+    boolean isValid(){
+        if( !etPassword.getEditText().getText().toString().equals(etConfirmPassword.getEditText().getText().toString())){
+            etConfirmPassword.getEditText().setError(getString(R.string.password_validate));
+            return false;
         }
+        return true;
     }
+
     @Override
     public void done(String response) {
-        Log.e(FragmentForgotPassword.class.getName(),"RESPONSE=="+response);
+        // TODO handle response
+        Log.e(FragmentChangePassword.class.getName(),"RESPONSE=="+response);
         Gson gson = new Gson();
         RegisterStatus registerStatus= gson.fromJson(response,RegisterStatus.class);
         if(!registerStatus.getError()){
-            getDailog(registerStatus.getMessage(),"1");
+
+            getDailogConfirm(registerStatus.getMessage(),"1");
         }
         else {
-            getDailog(registerStatus.getMessage(),"");
+            getDailogConfirm(registerStatus.getMessage(),"");
         }
+
     }
 
     @Override
@@ -145,7 +135,9 @@ public class FragmentForgotPassword extends Fragment implements CompleteListener
     }
 
 
-    void getDailog(String dataText, final String titleText) {
+
+
+    void getDailogConfirm(String dataText, final String titleText) {
         try {
             final Dialog dialog = new Dialog(getActivity());
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -174,10 +166,9 @@ public class FragmentForgotPassword extends Fragment implements CompleteListener
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
-                    if(titleText.equals("1")) {
-                       getActivity().onBackPressed();
+                    if (titleText.equals("1")) {
+                        getActivity().onBackPressed();
                     }
-
 
                 }
             });

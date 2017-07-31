@@ -1,8 +1,7 @@
-package com.softmine.dooktravel.fragments;
+package com.softmine.dooktravel.view.fragments;
 
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -28,17 +27,17 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
-import com.softmine.dooktravel.ActivityHome;
-import com.softmine.dooktravel.MainActivity;
 import com.softmine.dooktravel.R;
-import com.softmine.dooktravel.pojos.LoginStatus;
-import com.softmine.dooktravel.serviceconnection.CompleteListener;
-import com.softmine.dooktravel.serviceconnection.ServiceConnection;
+import com.softmine.dooktravel.model.LoginStatus;
+import com.softmine.dooktravel.presenter.FragmentLoginPresenterImpl;
+import com.softmine.dooktravel.presenter.IFragmentLoginPresenter;
 import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
 import com.softmine.dooktravel.validations.Validations;
+import com.softmine.dooktravel.view.ActivityHome;
+import com.softmine.dooktravel.view.MainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,14 +45,16 @@ import org.json.JSONObject;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentLogin extends Fragment implements CompleteListener{
+public class FragmentLogin extends Fragment implements IFragmentLoginView {
     int flags;
     Validations validation ;
     TextView tvSignUp,tvforgotPassword,tvDontHaveAccount;
     Button btnLogin,btnFacebook;
     LoginButton loginButton;
+    IFragmentLoginPresenter mPresenter;
     CallbackManager callbackManager;
     Utils util;
+
     ValidateEditText etUsername,etPassword;
     public FragmentLogin() {
         // Required empty public constructor
@@ -64,7 +65,7 @@ public class FragmentLogin extends Fragment implements CompleteListener{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FacebookSdk.sdkInitialize(getApplicationsContext());
+        FacebookSdk.sdkInitialize(getActivity());
 
     }
 
@@ -137,6 +138,8 @@ public class FragmentLogin extends Fragment implements CompleteListener{
                 Log.e("DEBUG","error"+error.toString());
             }
         });
+        mPresenter = new FragmentLoginPresenterImpl(this,getActivity());
+
     }
     public void requestData(){
         GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
@@ -195,13 +198,15 @@ public class FragmentLogin extends Fragment implements CompleteListener{
         callbackManager.onActivityResult(requestCode,resultCode,data);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy();
+    }
 
-    void userFacebookLogin(String token,String email){
+    void userFacebookLogin(String token, String email){
         JSONObject jsonBody = new JSONObject();
         try {
-             /*   jsonBody.put(C.EMAIL, "pradeep.bansal@techmobia.com");
-                jsonBody.put(C.PASSWORD, "abc123");
-                jsonBody.put(C.SOCAIL_ID, "");*/
             jsonBody.put(C.EMAIL, "");
             jsonBody.put(C.PASSWORD, "");
             jsonBody.put(C.SOCAIL_ID,token);
@@ -209,16 +214,14 @@ public class FragmentLogin extends Fragment implements CompleteListener{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ServiceConnection serviceConnection = new ServiceConnection();
-        serviceConnection.makeJsonObjectRequest(C.LOGIN_METHOD, jsonBody, FragmentLogin.this);
+        mPresenter.validateLogin(jsonBody);
+
     }
     View.OnClickListener mLoginButtonClickListner=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            /*Intent  intent=new Intent(getActivity(), ActivityHome.class);
-            startActivity(intent);*/
-            if(validation.validateAllEditText()) {
 
+            if(validation.validateAllEditText()) {
                 if(util.isInternetOn(getActivity())) {
                     JSONObject jsonBody = new JSONObject();
                     try {
@@ -229,8 +232,7 @@ public class FragmentLogin extends Fragment implements CompleteListener{
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    ServiceConnection serviceConnection = new ServiceConnection();
-                    serviceConnection.makeJsonObjectRequest(C.LOGIN_METHOD, jsonBody, FragmentLogin.this);
+                    mPresenter.validateLogin(jsonBody);
                 }
                 else {
                     getDailogConfirm(getString(R.string.internet_issue)
@@ -246,10 +248,16 @@ public class FragmentLogin extends Fragment implements CompleteListener{
         }
     };
 
+
+
+
+
+
+
     @Override
-    public void done(String response) {
+    public void getLoginResponseSuccess(String response) {
         Log.e(FragmentLogin.class.getName(),"RESPONSE=="+response);
-       // Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
+        // Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
 
         Gson gson = new Gson();
         LoginStatus loginStatus= gson.fromJson(response,LoginStatus.class);
@@ -265,14 +273,22 @@ public class FragmentLogin extends Fragment implements CompleteListener{
         else{
             getDailogConfirm(loginStatus.getMessage(),"");
         }
+    }
+
+    @Override
+    public void getLoginResponseError(String response) {
 
     }
 
     @Override
-    public Context getApplicationsContext() {
-        return getActivity();
+    public void showProgress() {
+        util.showDialog(C.MSG,getActivity());
     }
 
+    @Override
+    public void hideProgress() {
+        util.hideDialog();
+    }
 
     void getDailogConfirm(String dataText, String titleText) {
         try {

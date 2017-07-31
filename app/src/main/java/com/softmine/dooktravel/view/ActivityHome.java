@@ -1,4 +1,4 @@
-package com.softmine.dooktravel;
+package com.softmine.dooktravel.view;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -25,12 +25,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.adapter.AdapterSideMenu;
-import com.softmine.dooktravel.fragments.FragmentBasicDetail;
-import com.softmine.dooktravel.fragments.FragmentChangePassword;
-import com.softmine.dooktravel.fragments.FragmentContactDetail;
-import com.softmine.dooktravel.fragments.FragmentProfileDetail;
-import com.softmine.dooktravel.fragments.FragmentSearchResult;
 import com.softmine.dooktravel.pojos.Profile;
 import com.softmine.dooktravel.pojos.ProfileStatus;
 import com.softmine.dooktravel.pojos.RegisterStatus;
@@ -39,6 +35,11 @@ import com.softmine.dooktravel.serviceconnection.ServiceConnection;
 import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
+import com.softmine.dooktravel.view.fragments.FragmentBasicDetail;
+import com.softmine.dooktravel.view.fragments.FragmentChangePassword;
+import com.softmine.dooktravel.view.fragments.FragmentContactDetail;
+import com.softmine.dooktravel.view.fragments.FragmentProfileDetail;
+import com.softmine.dooktravel.view.fragments.FragmentSearchResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -238,7 +239,7 @@ public class ActivityHome extends AppCompatActivity
 
 
             } else {
-                if(fragment instanceof FragmentBasicDetail || fragment instanceof FragmentChangePassword || fragment instanceof FragmentProfileDetail ){
+                if(fragment instanceof FragmentBasicDetail || fragment instanceof FragmentChangePassword || fragment instanceof FragmentProfileDetail){
                     imgTitle.setVisibility(View.GONE);
                     tvTitle.setVisibility(View.VISIBLE);
                     tvTitle.setText(getResources().getString(R.string.search_result));

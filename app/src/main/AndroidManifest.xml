@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan">
@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ActivityHome"
+            android:name=".view.ActivityHome"
             android:label="@string/title_activity_home"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -39,7 +39,7 @@
             />
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
-        <activity android:name=".fragments.FragmentProfessionalDetail"
+        <activity android:name=".view.fragments.FragmentProfessionalDetail"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan"/>
     </application>

@@ -1,4 +1,4 @@
-package com.softmine.dooktravel.fragments;
+package com.softmine.dooktravel.view.fragments;
 
 
 import android.os.Bundle;
@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.softmine.dooktravel.ActivityHome;
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.pojos.Profile;
 import com.softmine.dooktravel.pojos.ProfileDetail;
@@ -20,6 +19,7 @@ import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
 import com.softmine.dooktravel.validations.Validations;
+import com.softmine.dooktravel.view.ActivityHome;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -1,4 +1,4 @@
-package com.softmine.dooktravel.fragments;
+package com.softmine.dooktravel.view.fragments;
 
 
 import android.app.Dialog;
@@ -18,8 +18,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 
-import com.softmine.dooktravel.ActivityHome;
-import com.softmine.dooktravel.MainActivity;
+import com.softmine.dooktravel.view.ActivityHome;
+import com.softmine.dooktravel.view.MainActivity;
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.SharedPreference;

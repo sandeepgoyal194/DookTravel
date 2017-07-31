@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/white"
-    tools:context="com.softmine.dooktravel.fragments.FragmentBasicDetail">
+    tools:context=".view.fragments.FragmentBasicDetail">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.softmine.dooktravel.ActivityHome;
+import com.softmine.dooktravel.view.ActivityHome;
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.pojos.Profile;
 import com.softmine.dooktravel.util.C;

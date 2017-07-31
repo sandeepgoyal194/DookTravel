@@ -1,4 +1,4 @@
-package com.softmine.dooktravel.fragments;
+package com.softmine.dooktravel.view.fragments;
 
 
 import android.app.Dialog;
@@ -28,7 +28,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
-import com.softmine.dooktravel.MainActivity;
+import com.softmine.dooktravel.view.MainActivity;
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.pojos.ProfileDetail;
 import com.softmine.dooktravel.pojos.RegisterStatus;

@@ -1,4 +1,4 @@
-package com.softmine.dooktravel;
+package com.softmine.dooktravel.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +11,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.softmine.dooktravel.fragments.FragmentBasicDetail;
-import com.softmine.dooktravel.fragments.FragmentContactDetail;
-import com.softmine.dooktravel.fragments.FragmentForgotPassword;
-import com.softmine.dooktravel.fragments.FragmentLogin;
-import com.softmine.dooktravel.fragments.FragmentSignUp;
-import com.softmine.dooktravel.fragments.FragmentSplash;
+import com.softmine.dooktravel.R;
+import com.softmine.dooktravel.view.fragments.FragmentBasicDetail;
+import com.softmine.dooktravel.view.fragments.FragmentContactDetail;
+import com.softmine.dooktravel.view.fragments.FragmentForgotPassword;
+import com.softmine.dooktravel.view.fragments.FragmentLogin;
+import com.softmine.dooktravel.view.fragments.FragmentSignUp;
+import com.softmine.dooktravel.view.fragments.FragmentSplash;
 import com.softmine.dooktravel.util.C;
 
 import java.util.List;

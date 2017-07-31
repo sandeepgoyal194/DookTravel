@@ -1,4 +1,4 @@
-package com.softmine.dooktravel.fragments;
+package com.softmine.dooktravel.view.fragments;
 
 
 import android.app.Activity;
@@ -26,13 +26,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.softmine.dooktravel.ActivityHome;
-import com.softmine.dooktravel.MainActivity;
+import com.softmine.dooktravel.view.ActivityHome;
+import com.softmine.dooktravel.view.MainActivity;
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.pojos.CategoryList;
 import com.softmine.dooktravel.pojos.CityList;
 import com.softmine.dooktravel.pojos.CountryList;
-import com.softmine.dooktravel.pojos.LoginStatus;
+import com.softmine.dooktravel.model.LoginStatus;
 import com.softmine.dooktravel.pojos.Profile;
 import com.softmine.dooktravel.pojos.ProfileDetail;
 import com.softmine.dooktravel.pojos.ProfileStatus;
