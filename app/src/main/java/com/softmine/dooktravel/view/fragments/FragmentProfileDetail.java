@@ -135,9 +135,16 @@ public class FragmentProfileDetail extends Fragment {
     }
 
     void showDetail(){
-        etFirstName.setText(profile.getFirstName());
-        etLastName.setText(profile.getLastName());
-        etMiddleName.setText(profile.getMiddleName());
+        String name=profile.getFirstName();
+        if(profile.getMiddleName()!=null&& profile.getMiddleName().length()>0){
+            name=name+" "+profile.getMiddleName();
+        }
+        if(profile.getLastName()!=null && profile.getLastName().length()>0){
+            name=name+" "+profile.getLastName();
+        }
+        etFirstName.setText(name);
+      //  etLastName.setText(profile.getLastName());
+      //  etMiddleName.setText(profile.getMiddleName());
         etAddress.setText(profile.getAddress());
         etContact.setText(profile.getPhone());
         etDescription.setText(profile.getAbout());

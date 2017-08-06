@@ -73,7 +73,7 @@
     <string name="select_gender">Please select your gender</string>
 
     <string-array name="gender">
-        <item>Select</item>
+        <item>Gender</item>
         <item>Male</item>
         <item>Female</item>
 
@@ -81,24 +81,24 @@
 
 
     <string-array name="marital_status">
-        <item>Select</item>
+        <item>Marital Status</item>
         <item>Single</item>
         <item>Married</item>
 
     </string-array>
     <string-array name="category">
-        <item>Select</item>
+        <item>Category</item>
 
 
     </string-array>
     <string-array name="country">
-        <item>Select</item>
+        <item>Country</item>
         <item>India</item>
 
     </string-array>
 
     <string-array name="state">
-        <item>Select</item>
+        <item>State</item>
         <item>Delhi</item>
 
     </string-array>
@@ -115,4 +115,6 @@
     <string name="home">HOME</string>
     <string name="email_required">Email ID required</string>
     <string name="internet_issue">No network connectivity - This App requires an internet connection. Please enable the same to proceed</string>
+    <string name="EMAIL">EMAIL</string>
+    <string name="name">Name</string>
 </resources>

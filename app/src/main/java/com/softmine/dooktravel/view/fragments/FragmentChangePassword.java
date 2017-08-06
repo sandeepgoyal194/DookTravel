@@ -26,6 +26,7 @@ import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
 import com.softmine.dooktravel.validations.Validations;
+import com.softmine.dooktravel.view.ActivityHome;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +45,13 @@ public class FragmentChangePassword extends Fragment implements CompleteListener
         // Required empty public constructor
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        ActivityHome.tvEdit.setVisibility(View.GONE);
+
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

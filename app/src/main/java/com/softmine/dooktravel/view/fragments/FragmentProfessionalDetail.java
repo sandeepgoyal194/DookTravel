@@ -74,6 +74,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
     private int year;
     private int month;
     private int day;
+    boolean isEditProfile=false;
     private DatePickerDialog DatePickerDialog;
     Profile profile;
     int mCountryPos = 0, mCityPos = 0, mStatePos = 0, mCategoryPos = 0;
@@ -91,6 +92,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
         if (bundle != null) {
             if (C.isloggedIn) {
                 profile = (Profile) bundle.getSerializable(C.PROFILE_METHOD);
+                isEditProfile=bundle.getBoolean(C.IS_EDIT_PROFILE);
             } else {
                 profileDetail = (ProfileDetail) bundle.getSerializable(C.DATA);
             }
@@ -109,6 +111,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
             }
         });
     }
+
 
     public void onViewCreated(Activity view, @Nullable Bundle savedInstanceState) {
         validation = new Validations();
@@ -200,11 +203,32 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
             etAboutMe.getEditText().setText(profile.getAbout());
            // tvWorkingSince.setText(Utils.getFormattedDate( profile.getWorkingSince(),"yyyy/MM/dd","dd/MM/yyyy"));
             tvWorkingSince.setText(Utils.getFormattedDate(profile.getWorkingSince(),C.SERVER_DATE_FORMAT,C.DATE_FORMAT));
-
+            if(!isEditProfile){
+                disableViews();
+            }
 
         }
         getCategoryList();
 
+    }
+
+
+    void  disableViews(){
+        etOraginization.getEditText().setFocusable(false);
+        etDesignation.getEditText().setFocusable(false);
+        spnCategory.setFocusable(false);
+        spnCategory.setClickable(false);
+        tvWorkingSince.setClickable(false);
+        spnCountry.setClickable(false);
+        spnCountry.setFocusable(false);
+        spnCity.setClickable(false);
+        spnCity.setFocusable(false);
+        spnProvince.setFocusable(false);
+        spnProvince.setClickable(false);
+        etZipCode.getEditText().setFocusable(false);
+        etAddress.getEditText().setFocusable(false);
+        etAboutMe.getEditText().setFocusable(false);
+        btnSubmit.setVisibility(View.GONE);
     }
     TextWatcher mTextChangeListner=new TextWatcher() {
         @Override
@@ -397,7 +421,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
             categoryList = gson.fromJson(response, CategoryList.class);
             if (!categoryList.getError()) {
                 String[] catArr = new String[categoryList.getCategory().size() + 1];
-                catArr[0] = C.SELECT;
+                catArr[0] = C.SELECT_CATEGORY;
                 for (int i = 0; i < categoryList.getCategory().size(); i++) {
 
                     catArr[i + 1] = String.valueOf(categoryList.getCategory().get(i).getCategoryName());
@@ -420,7 +444,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
             countryList = gson.fromJson(response, CountryList.class);
             if (!countryList.getError()) {
                 String[] countArr = new String[countryList.getCountry().size() + 1];
-                countArr[0] = C.SELECT;
+                countArr[0] = C.SELECT_COUNTRY;
                 for (int i = 0; i < countryList.getCountry().size(); i++) {
                     countArr[i + 1] = String.valueOf(countryList.getCountry().get(i).getName());
                 }
@@ -436,7 +460,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
 
             } else {
                 String[] countArr = new String[1];
-                countArr[0] = C.SELECT;
+                countArr[0] = C.SELECT_COUNTRY;
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
                 spnCountry.setAdapter(spinnerArrayAdapter);
                 spinnerArrayAdapter.notifyDataSetChanged();
@@ -447,7 +471,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
             stateList = gson.fromJson(response, StateList.class);
             if (!stateList.getError()) {
                 String[] stateArr = new String[stateList.getState().size() + 1];
-                stateArr[0] = C.SELECT;
+                stateArr[0] = C.SELECT_STATE;
                 for (int i = 0; i < stateList.getState().size(); i++) {
                     stateArr[i + 1] = String.valueOf(stateList.getState().get(i).getName());
                 }
@@ -461,7 +485,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
                 }
             } else {
                 String[] stateArr = new String[1];
-                stateArr[0] = C.SELECT;
+                stateArr[0] = C.SELECT_STATE;
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
                 spnProvince.setAdapter(spinnerArrayAdapter);
                 spinnerArrayAdapter.notifyDataSetChanged();
@@ -472,7 +496,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
             cityList = gson.fromJson(response, CityList.class);
             if (!cityList.getError()) {
                 String[] cityArr = new String[cityList.getCity().size() + 1];
-                cityArr[0] = C.SELECT;
+                cityArr[0] = C.SELECT_CITY;
                 for (int i = 0; i < cityList.getCity().size(); i++) {
                     cityArr[i + 1] = String.valueOf(cityList.getCity().get(i).getName());
                 }
@@ -485,7 +509,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
                 }
             } else {
                 String[] cityArr = new String[1];
-                cityArr[0] = C.SELECT;
+                cityArr[0] = C.SELECT_CITY;
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, cityArr); //selected item will look like a spinner set from XML
                 spnCity.setAdapter(spinnerArrayAdapter);
                 spinnerArrayAdapter.notifyDataSetChanged();
@@ -620,6 +644,11 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
                     else if(titleText.equals("2")){
                         Intent intent=new Intent(getActivity(), ActivityHome.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        Bundle mBundle = new Bundle();
+                        mBundle.putBoolean(C.IS_EDIT_PROFILE,false);
+                        mBundle.putBoolean(C.ADD_TO_BACK,false);
+                        intent.putExtra(C.SCREEN,C.FRAGMENT_BASIC_DETAIL);
+                        intent.putExtras(mBundle);
                         startActivity(intent);
                     }
                 }

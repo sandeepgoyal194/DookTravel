@@ -46,6 +46,7 @@ import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
 import com.softmine.dooktravel.validations.Validations;
+import com.softmine.dooktravel.view.ActivityHome;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,7 +78,8 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
     private int month;
     private int day;
     Utils util;
-   Profile profile;
+    Profile profile;
+    boolean isEditProfile=false;
     ProfileDetail profileDetail ;
     ProfileDetail profileDtl;
     private int GALLERY = 1, CAMERA = 2;
@@ -98,7 +100,8 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
             C.isloggedIn=true;
             Bundle bundle = this.getArguments();
             if (bundle != null) {
-                profile = (Profile) bundle.getSerializable(C.DATA);
+              //  profile = (Profile) bundle.getSerializable(C.DATA);
+                isEditProfile=bundle.getBoolean(C.IS_EDIT_PROFILE);
             }
         }
         else {
@@ -199,18 +202,52 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
             tvUpload.setText(R.string.edit);
             edPassword.getEditText().setVisibility(View.GONE);
             edConfirmPassword.getEditText().setVisibility(View.GONE);
-          //  getProfileDetail();
-            showDetails(profile);
+            getProfileDetail();
+            if(!isEditProfile){
+                disableViews();
+            }
+            //showDetails(profile);
         }
         else {
             validation.addtoList(edPassword);
             validation.addtoList(edConfirmPassword);
+        }
+        try {
+            if (C.isloggedIn) {
+                if (!isEditProfile) {
+                    ActivityHome.tvEdit.setVisibility(View.VISIBLE);
+                } else {
+                    ActivityHome.tvEdit.setVisibility(View.GONE);
+
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
 
     }
 
 
 
+    void disableViews(){
+        tvUpload.setVisibility(View.GONE);
+        viewUploadImage.setClickable(false);
+        edFirstName.getEditText().setFocusable(false);
+        edMiddleName.getEditText().setFocusable(false);
+        edLastName.getEditText().setFocusable(false);
+        edPassword.getEditText().setFocusable(false);
+        edConfirmPassword.getEditText().setFocusable(false);
+        edPhone.getEditText().setFocusable(false);
+        edSkypeID.getEditText().setFocusable(false);
+        spnGender.setFocusable(false);
+        spnGender.setClickable(false);
+        spnDateOfBirth.setFocusable(false);
+        spnDateOfBirth.setClickable(false);
+        spnMaritalStatus.setFocusable(false);
+        spnMaritalStatus.setClickable(false);
+
+    }
     View.OnClickListener mUploadImageClickListner=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -416,6 +453,8 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
                             profile.setDateOfBirth(Utils.getFormattedDate(spnDateOfBirth.getText().toString(), C.DATE_FORMAT, C.DESIRED_FORMAT));
                             profile.setToken(SharedPreference.getInstance(getActivity()).getString(C.TOKEN));
                             bundle.putSerializable(C.PROFILE_METHOD, profile);
+                            bundle.putSerializable(C.IS_EDIT_PROFILE, isEditProfile);
+
                             Intent i = new Intent(getContext(), FragmentProfessionalDetail.class);
                             i.putExtra("details", bundle);
                             startActivity(i);
@@ -436,7 +475,7 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
             edConfirmPassword.getEditText().setError(getString(R.string.password_validate));
             return false;
         }
-        else if(spnGender.getSelectedItem().toString().equals(C.SELECT)){
+        else if(spnGender.getSelectedItem().toString().equals(C.SELECT_GENDER)){
             Utils.showToast(getActivity(),getString(R.string.select_gender));
             return false;
         }
@@ -445,7 +484,7 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
 
             return false;
         }
-       else if(spnMaritalStatus.getSelectedItem().toString().equals(C.SELECT)){
+       else if(spnMaritalStatus.getSelectedItem().toString().equals(C.SELECT_MARITAL_STATUS)){
             Utils.showToast(getActivity(),getString(R.string.selectMarital_status));
             return false;
         }
@@ -478,8 +517,8 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
         Gson gson = new Gson();
         ProfileStatus profileStatus= gson.fromJson(response,ProfileStatus.class);
         if(!profileStatus.getError()){
-         //   profile=profileStatus.getMember();
-           // showDetails(profile.get(0));
+            profile=profileStatus.getMember().get(0);
+            showDetails(profile);
         }
         else{
             getDailogConfirm(profileStatus.getMessage(),"");
@@ -565,6 +604,13 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
 
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
     private class AsyncGettingBitmapFromUrl extends AsyncTask<Void, Void, Bitmap> {
 
 

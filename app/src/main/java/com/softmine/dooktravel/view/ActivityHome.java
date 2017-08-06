@@ -54,6 +54,7 @@ public class ActivityHome extends AppCompatActivity
     ListView listView;
     private Fragment fragment;
     TextView tvTitle;
+   public static TextView tvEdit;
     ImageView imgTitle;
     int mSelectedPos=0;
     CircleImageView circleImageView;
@@ -76,7 +77,10 @@ public class ActivityHome extends AppCompatActivity
         circleImageView=(CircleImageView)findViewById(R.id.profile_image);
         tvTitle=(TextView)findViewById(R.id.tvTitle);
         imgTitle=(ImageView)findViewById(R.id.imgLogo);
+        tvEdit=(TextView)findViewById(R.id.tvEdit);
+        tvEdit.setOnClickListener(mTvEditClickListner);
         tvTitle.setTypeface(Utils.getRegularTypeFace(this));
+        tvEdit.setTypeface(Utils.getRegularTypeFace(this));
         listView=(ListView) findViewById(R.id.lvMenuItem);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -88,7 +92,16 @@ public class ActivityHome extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         adapterSideMenu = new AdapterSideMenu(this, Utils.getSideMenuList());
         listView.setAdapter(adapterSideMenu);
-        fragmnetLoader(C.FRAGMENT_SEARCH_RESULT,null);
+
+        try {
+            Bundle bundle = getIntent().getExtras();
+            int screen = getIntent().getIntExtra(C.SCREEN, C.FRAGMENT_SEARCH_RESULT);
+            fragmnetLoader(screen, bundle);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            fragmnetLoader(C.FRAGMENT_SEARCH_RESULT, null);
+        }
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -102,16 +115,26 @@ public class ActivityHome extends AppCompatActivity
                     mSelectedPos=position;
                     Bundle bundle=new Bundle();
                     bundle.putSerializable(C.DATA,profile.get(0));
-                    bundle.putBoolean(C.IS_SEARCH_RESULT,false);
+                    bundle.putBoolean(C.ADD_TO_BACK,true);
+                    bundle.putBoolean(C.IS_EDIT_PROFILE,false);
                     if(profile!=null && profile.size()>0) {
                         fragmnetLoader(C.FRAGMENT_BASIC_DETAIL, bundle);
                     }
                 }
-                else if(position==2&& mSelectedPos!=position){
+                else if(position==2 && mSelectedPos!=position){
+                    mSelectedPos=position;
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable(C.DATA,profile.get(0));
+                    bundle.putBoolean(C.IS_EDIT_PROFILE,true);
+                    if(profile!=null && profile.size()>0) {
+                        fragmnetLoader(C.FRAGMENT_BASIC_DETAIL, bundle);
+                    }
+                }
+                else if(position==3&& mSelectedPos!=position){
                     mSelectedPos=position;
                     fragmnetLoader(C.FRAGMENT_CHANGE_PASSWORD,null);
                 }
-                else if(position==3&&mSelectedPos!=position){
+                else if(position==4&&mSelectedPos!=position){
                     mSelectedPos=position;
                     getDailogConfirm("Are you sure you want to logout?","");
                 }
@@ -161,6 +184,20 @@ public class ActivityHome extends AppCompatActivity
         }
     }
 
+
+    View.OnClickListener mTvEditClickListner=new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mSelectedPos=2;
+            Bundle bundle=new Bundle();
+            bundle.putSerializable(C.DATA,profile.get(0));
+            bundle.putBoolean(C.IS_EDIT_PROFILE,true);
+            bundle.putBoolean(C.ADD_TO_BACK,true);
+            if(profile!=null && profile.size()>0) {
+                fragmnetLoader(C.FRAGMENT_BASIC_DETAIL, bundle);
+            }
+        }
+    };
     void logout(){
         if(SharedPreference.getInstance(this).getBoolean(C.IS_LOGIN)) {
             JSONObject jsonBody = new JSONObject();
@@ -239,7 +276,7 @@ public class ActivityHome extends AppCompatActivity
 
 
             } else {
-                if(fragment instanceof FragmentBasicDetail || fragment instanceof FragmentChangePassword || fragment instanceof FragmentProfileDetail){
+                if(fragment instanceof FragmentProfileDetail){
                     imgTitle.setVisibility(View.GONE);
                     tvTitle.setVisibility(View.VISIBLE);
                     tvTitle.setText(getResources().getString(R.string.search_result));
@@ -257,12 +294,24 @@ public class ActivityHome extends AppCompatActivity
         imgTitle.setVisibility(View.GONE);
 
         switch (fragmentType) {
+
             case C.FRAGMENT_BASIC_DETAIL:
                 tvTitle.setVisibility(View.VISIBLE);
                 tvTitle.setText(getResources().getString(R.string.basic_details));
                 fragment = new FragmentBasicDetail();
-                fragmentTransaction.add(R.id.container, fragment);
-                 fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_BASIC_DETAIL);
+                fragmentTransaction.replace(R.id.container, fragment);
+                 if(bundle.getBoolean(C.ADD_TO_BACK)) {
+                     if(bundle.getBoolean(C.IS_EDIT_PROFILE)){
+                         mSelectedPos=2;
+                     }
+                     else {
+                         mSelectedPos=1;
+                     }
+                 //    fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_BASIC_DETAIL);
+                 }
+                 else {
+                     mSelectedPos=1;
+                 }
                 break;
             case C.FRAGMENT_PROFILE_DETAIL:
                 tvTitle.setVisibility(View.VISIBLE);
@@ -295,8 +344,8 @@ public class ActivityHome extends AppCompatActivity
                 tvTitle.setText(getResources().getString(R.string.change_password));
                 tvTitle.setVisibility(View.VISIBLE);
                 fragment = new FragmentChangePassword();
-                fragmentTransaction.add(R.id.container, fragment);
-                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_CHANGE_PASSWORD);
+                fragmentTransaction.replace(R.id.container, fragment);
+             //   fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_CHANGE_PASSWORD);
                 break;
         }
         fragment.setArguments(bundle);

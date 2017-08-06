@@ -77,7 +77,7 @@
                             android:id="@+id/edUsername"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/username"
+                            android:hint="@string/email_address"
                             android:lines="1"
                             android:textColorHint="@color/hint"
                             android:singleLine="true"

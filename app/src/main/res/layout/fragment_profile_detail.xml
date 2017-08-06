@@ -54,7 +54,7 @@
                         android:id="@+id/edFirstname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/first_name"
+                        android:hint="@string/name"
                         android:lines="1"
                         android:focusable="false"
                         android:textColor="@color/pilot"
@@ -65,6 +65,7 @@
                     android:id="@+id/ed_layout_MiddleName"
                     android:layout_width="match_parent"
                     android:textColorHint="@color/hint"
+                    android:visibility="gone"
 
                     android:layout_height="wrap_content">
 
@@ -83,6 +84,7 @@
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ed_layout_LastName"
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:textColorHint="@color/hint"
                     android:layout_height="wrap_content">
 

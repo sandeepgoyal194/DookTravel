@@ -37,6 +37,7 @@ import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
 import com.softmine.dooktravel.validations.Validations;
+import com.softmine.dooktravel.view.ActivityHome;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -118,7 +119,13 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
         validation.addtoList(etKeyword);
         getCategoryList();
     }
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        ActivityHome.tvEdit.setVisibility(View.GONE);
+
+    }
     AdapterView.OnItemSelectedListener mOnStateItemSelectedListner=new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -227,18 +234,18 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
 
     boolean isAllValid(){
 
-        if(spnCountry.getSelectedItem().toString().equals(C.SELECT)){
+        if(spnCountry.getSelectedItem().toString().equals(C.SELECT_COUNTRY)){
             Utils.showToast(getActivity(),getString(R.string.select_country));
 
             return false;
         }
 
-        else if(spnState.getSelectedItem().toString().equals(C.SELECT)){
+        else if(spnState.getSelectedItem().toString().equals(C.SELECT_STATE)){
 
             Utils.showToast(getActivity(),getString(R.string.select_state));
             return false;
         }
-        else if(spnCategory.getSelectedItem().toString().equals(C.SELECT)){
+        else if(spnCategory.getSelectedItem().toString().equals(C.SELECT_CATEGORY)){
             Utils.showToast(getActivity(),getString(R.string.select_catogary));
             return false;
         }
@@ -263,7 +270,7 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
             categoryList= gson.fromJson(response,CategoryList.class);
             if(!categoryList.getError()){
                 String[] catArr = new String[categoryList.getCategory().size()+1];
-                catArr[0] = C.SELECT;
+                catArr[0] = C.SELECT_CATEGORY;
                 for (int i=0;i<categoryList.getCategory().size();i++){
 
                     catArr[i+1] = String.valueOf(categoryList.getCategory().get(i).getCategoryName());
@@ -279,7 +286,7 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
             }
             else {
                 String[] countArr = new String[1];
-                countArr[0] = C.SELECT;
+                countArr[0] = C.SELECT_CATEGORY;
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
                 spnCategory.setAdapter(spinnerArrayAdapter);
                 spinnerArrayAdapter.notifyDataSetChanged();
@@ -292,7 +299,7 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
             countryList= gson.fromJson(response,CountryList.class);
             if(!countryList.getError()){
                 String[] countArr = new String[countryList.getCountry().size()+1];
-                countArr[0] = C.SELECT;
+                countArr[0] = C.SELECT_COUNTRY;
                 for (int i=0;i<countryList.getCountry().size();i++){
                     countArr[i+1] = String.valueOf(countryList.getCountry().get(i).getName());
                 }
@@ -306,7 +313,7 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
             }
             else {
                 String[] countArr = new String[1];
-                countArr[0] = C.SELECT;
+                countArr[0] = C.SELECT_COUNTRY;
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
                 spnCountry.setAdapter(spinnerArrayAdapter);
                 spinnerArrayAdapter.notifyDataSetChanged();
@@ -318,7 +325,7 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
             stateList= gson.fromJson(response,StateList.class);
             if(!stateList.getError()){
                 String[] stateArr = new String[stateList.getState().size()+1];
-                stateArr[0] = C.SELECT;
+                stateArr[0] = C.STATE_METHOD;
                 for (int i=0;i<stateList.getState().size();i++){
                     stateArr[i+1] = String.valueOf(stateList.getState().get(i).getName());
                 }
@@ -331,7 +338,7 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
             }
             else {
                 String[] stateArr = new String[1];
-                stateArr[0] = C.SELECT;
+                stateArr[0] = C.STATE_METHOD;
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
                 spnState.setAdapter(spinnerArrayAdapter);
                 spinnerArrayAdapter.notifyDataSetChanged();

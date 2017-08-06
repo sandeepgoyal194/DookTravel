@@ -44,6 +44,10 @@ public class C {
     public static final String STATE_ID = "state_id";
     public static final String CITY_METHOD ="city" ;
     public static final String SELECT ="Select" ;
+    public static final String SELECT_GENDER ="Gender" ;
+
+    public static final String SELECT_MARITAL_STATUS ="Marital Status" ;
+
     public static final String TOKEN = "token";
     public static final String MEMBER_ID ="member_id" ;
     public static final String PROFILE_METHOD ="profile" ;
@@ -62,6 +66,12 @@ public class C {
     public static final String SERVER_DATE_FORMAT = "yyyy-MM-dd";
     public static final String SCREEN = "screen";
     public static final String CHANGE_PASSWORD_METHOD ="changepassword" ;
+    public static final String SELECT_CATEGORY = "Category";
+    public static final String SELECT_COUNTRY ="Country" ;
+    public static final String SELECT_STATE ="State" ;
+    public static final String SELECT_CITY = "City";
+    public static final String IS_EDIT_PROFILE ="is_edit_profile" ;
+    public static final String ADD_TO_BACK = "addToBack";
 
 
     public static  boolean isloggedIn =false ;

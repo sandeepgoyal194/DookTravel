@@ -229,7 +229,7 @@
                                 android:layout_width="105dp"
                                 android:layout_height="40dp"
                                 android:layout_marginTop="2dp"
-                                android:entries="@array/category" />
+                                 />
                         </LinearLayout>
 
 
@@ -255,7 +255,7 @@
                                 android:layout_width="105dp"
                                 android:layout_height="40dp"
                                 android:layout_marginTop="2dp"
-                                android:entries="@array/category"
+
                                 android:gravity="center"
                                 android:hint="@string/dob" />
                         </LinearLayout>
@@ -289,7 +289,7 @@
                                 android:layout_width="105dp"
                                 android:layout_height="40dp"
                                 android:layout_marginTop="2dp"
-                                android:entries="@array/category" />
+                                />
                         </LinearLayout>
 
 

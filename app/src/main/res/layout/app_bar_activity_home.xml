@@ -32,7 +32,6 @@
                 android:gravity="center_horizontal"
                 android:paddingRight="60dp"
                 android:text=""
-                android:textAlignment="viewStart"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
             <ImageView
@@ -44,6 +43,16 @@
                 android:gravity="center_horizontal"
                 android:src="@mipmap/dook_logo"
                 />
+            <TextView
+                android:id="@+id/tvEdit"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:paddingRight="10dp"
+                android:text="@string/edit"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
         </RelativeLayout>
 </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
