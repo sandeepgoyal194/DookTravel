@@ -197,7 +197,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
 
         if (C.isloggedIn) {
             etOraginization.getEditText().setText(profile.getOrganization());
-            // etDesignation.getEditText().setText(profile.);
+            etDesignation.getEditText().setText(profile.getDesignation());
             etZipCode.getEditText().setText(profile.getZipCode());
             etAddress.getEditText().setText(profile.getAddress());
             etAboutMe.getEditText().setText(profile.getAbout());
@@ -216,13 +216,21 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
     void  disableViews(){
         etOraginization.getEditText().setFocusable(false);
         etDesignation.getEditText().setFocusable(false);
+        spnCategory.setBackgroundResource(R.drawable.view_back_border);
+
         spnCategory.setFocusable(false);
         spnCategory.setClickable(false);
         tvWorkingSince.setClickable(false);
+
+        spnCountry.setBackgroundResource(R.drawable.view_back_border);
         spnCountry.setClickable(false);
         spnCountry.setFocusable(false);
+
+        spnCity.setBackgroundResource(R.drawable.view_back_border);
         spnCity.setClickable(false);
         spnCity.setFocusable(false);
+
+        spnProvince.setBackgroundResource(R.drawable.view_back_border);
         spnProvince.setFocusable(false);
         spnProvince.setClickable(false);
         etZipCode.getEditText().setFocusable(false);
@@ -351,6 +359,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
                 if (C.isloggedIn) {
                     //    Toast.makeText(getActivity(),"Under development",Toast.LENGTH_LONG).show();
                     profile.setOrganization(etOraginization.getEditText().getText().toString());
+                    profile.setDesignation(etDesignation.getEditText().getText().toString());
                     profile.setWorkingSince(Utils.getFormattedDate(tvWorkingSince.getText().toString(), C.DATE_FORMAT, C.DESIRED_FORMAT));
                     profile.setZipCode(etZipCode.getEditText().getText().toString());
                     profile.setAddress(etAddress.getEditText().getText().toString());
@@ -369,6 +378,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
                     }
                 } else {
                     profileDetail.setOrganization(etOraginization.getEditText().getText().toString());
+                    profileDetail.setDesignation(etDesignation.getEditText().getText().toString());
                     profileDetail.setWorking(Utils.getFormattedDate(tvWorkingSince.getText().toString(), C.DATE_FORMAT, C.DESIRED_FORMAT));
                     profileDetail.setAddress(etAddress.getEditText().getText().toString());
                     profileDetail.setAbout(etAboutMe.getEditText().getText().toString());

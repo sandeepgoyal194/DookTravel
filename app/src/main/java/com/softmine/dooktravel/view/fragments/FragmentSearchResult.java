@@ -263,98 +263,96 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
 
     @Override
     public void done(String response) {
-        Log.e(FragmentSearchResult.class.getName(),"RESPONSE=="+response);
 
-        if(action.equals(C.CATEGORY_LIST_METHOD)){
-            Gson gson = new Gson();
-            categoryList= gson.fromJson(response,CategoryList.class);
-            if(!categoryList.getError()){
-                String[] catArr = new String[categoryList.getCategory().size()+1];
-                catArr[0] = C.SELECT_CATEGORY;
-                for (int i=0;i<categoryList.getCategory().size();i++){
+        try {
+            Log.e(FragmentSearchResult.class.getName(), "RESPONSE==" + response);
 
-                    catArr[i+1] = String.valueOf(categoryList.getCategory().get(i).getCategoryName());
+            if (action.equals(C.CATEGORY_LIST_METHOD)) {
+                Gson gson = new Gson();
+                categoryList = gson.fromJson(response, CategoryList.class);
+                if (!categoryList.getError()) {
+                    String[] catArr = new String[categoryList.getCategory().size() + 1];
+                    catArr[0] = C.SELECT_CATEGORY;
+                    for (int i = 0; i < categoryList.getCategory().size(); i++) {
+
+                        catArr[i + 1] = String.valueOf(categoryList.getCategory().get(i).getCategoryName());
+
+                    }
+
+                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, catArr); //selected item will look like a spinner set from XML
+
+                    spnCategory.setAdapter(spinnerArrayAdapter);
+                    spinnerArrayAdapter.notifyDataSetChanged();
+                    getCountryList();
+
+                } else {
+                    String[] countArr = new String[1];
+                    countArr[0] = C.SELECT_CATEGORY;
+                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
+                    spnCategory.setAdapter(spinnerArrayAdapter);
+                    spinnerArrayAdapter.notifyDataSetChanged();
 
                 }
+            } else if (action.equals(C.COUNTRY_METHOD)) {
+                Gson gson = new Gson();
+                countryList = gson.fromJson(response, CountryList.class);
+                if (!countryList.getError()) {
+                    String[] countArr = new String[countryList.getCountry().size() + 1];
+                    countArr[0] = C.SELECT_COUNTRY;
+                    for (int i = 0; i < countryList.getCountry().size(); i++) {
+                        countArr[i + 1] = String.valueOf(countryList.getCountry().get(i).getName());
+                    }
 
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, catArr); //selected item will look like a spinner set from XML
+                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
 
-                spnCategory.setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.notifyDataSetChanged();
-                getCountryList();
+                    spnCountry.setAdapter(spinnerArrayAdapter);
+                    spinnerArrayAdapter.notifyDataSetChanged();
 
-            }
-            else {
-                String[] countArr = new String[1];
-                countArr[0] = C.SELECT_CATEGORY;
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
-                spnCategory.setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.notifyDataSetChanged();
 
-            }
-        }
+                } else {
+                    String[] countArr = new String[1];
+                    countArr[0] = C.SELECT_COUNTRY;
+                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
+                    spnCountry.setAdapter(spinnerArrayAdapter);
+                    spinnerArrayAdapter.notifyDataSetChanged();
 
-        else   if(action.equals(C.COUNTRY_METHOD)){
-            Gson gson = new Gson();
-            countryList= gson.fromJson(response,CountryList.class);
-            if(!countryList.getError()){
-                String[] countArr = new String[countryList.getCountry().size()+1];
-                countArr[0] = C.SELECT_COUNTRY;
-                for (int i=0;i<countryList.getCountry().size();i++){
-                    countArr[i+1] = String.valueOf(countryList.getCountry().get(i).getName());
                 }
+            } else if (action.equals(C.STATE_METHOD)) {
+                Gson gson = new Gson();
+                stateList = gson.fromJson(response, StateList.class);
+                if (!stateList.getError()) {
+                    String[] stateArr = new String[stateList.getState().size() + 1];
+                    stateArr[0] = C.STATE_METHOD;
+                    for (int i = 0; i < stateList.getState().size(); i++) {
+                        stateArr[i + 1] = String.valueOf(stateList.getState().get(i).getName());
+                    }
 
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
 
-                spnCountry.setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.notifyDataSetChanged();
+                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
+                    spnState.setAdapter(spinnerArrayAdapter);
+                    spinnerArrayAdapter.notifyDataSetChanged();
 
+                } else {
+                    String[] stateArr = new String[1];
+                    stateArr[0] = C.STATE_METHOD;
+                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
+                    spnState.setAdapter(spinnerArrayAdapter);
+                    spinnerArrayAdapter.notifyDataSetChanged();
 
-            }
-            else {
-                String[] countArr = new String[1];
-                countArr[0] = C.SELECT_COUNTRY;
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
-                spnCountry.setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.notifyDataSetChanged();
-
-            }
-        }
-        else   if(action.equals(C.STATE_METHOD)){
-            Gson gson = new Gson();
-            stateList= gson.fromJson(response,StateList.class);
-            if(!stateList.getError()){
-                String[] stateArr = new String[stateList.getState().size()+1];
-                stateArr[0] = C.STATE_METHOD;
-                for (int i=0;i<stateList.getState().size();i++){
-                    stateArr[i+1] = String.valueOf(stateList.getState().get(i).getName());
                 }
-
-
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
-                spnState.setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.notifyDataSetChanged();
-
-            }
-            else {
-                String[] stateArr = new String[1];
-                stateArr[0] = C.STATE_METHOD;
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
-                spnState.setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.notifyDataSetChanged();
-
+            } else if (action.equals(C.PROFILE_LIST_METHOD)) {
+                Gson gson = new Gson();
+                ProfileList profileList = gson.fromJson(response, ProfileList.class);
+                if (!profileList.getError()) {
+                    adapterSearchResult = new AdapterSearchResult(profileList.getMember(), getActivity());
+                    recyclerView.setAdapter(adapterSearchResult);
+                } else {
+                    Utils.showToast(getActivity(), profileList.getMessage());
+                }
             }
         }
-        else if(action.equals(C.PROFILE_LIST_METHOD)){
-            Gson gson = new Gson();
-            ProfileList profileList= gson.fromJson(response,ProfileList.class);
-            if(!profileList.getError()){
-                adapterSearchResult = new AdapterSearchResult(profileList.getMember(),getActivity());
-                recyclerView.setAdapter(adapterSearchResult);
-            }
-            else {
-                Utils.showToast(getActivity(),profileList.getMessage());
-            }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
     void getDailogConfirm(String dataText, String titleText) {

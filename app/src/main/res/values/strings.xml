@@ -84,6 +84,10 @@
         <item>Marital Status</item>
         <item>Single</item>
         <item>Married</item>
+        <item>Widowed</item>
+        <item>Separated</item>
+        <item>Divorced</item>
+
 
     </string-array>
     <string-array name="category">

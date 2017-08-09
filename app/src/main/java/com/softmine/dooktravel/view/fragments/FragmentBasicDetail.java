@@ -241,9 +241,12 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
         edPhone.getEditText().setFocusable(false);
         edSkypeID.getEditText().setFocusable(false);
         spnGender.setFocusable(false);
+        spnGender.setBackgroundResource(R.drawable.view_back_border);
         spnGender.setClickable(false);
+        spnDateOfBirth.setBackgroundResource(R.drawable.view_back_border);
         spnDateOfBirth.setFocusable(false);
         spnDateOfBirth.setClickable(false);
+        spnMaritalStatus.setBackgroundResource(R.drawable.view_back_border);
         spnMaritalStatus.setFocusable(false);
         spnMaritalStatus.setClickable(false);
 
@@ -471,24 +474,22 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
 
 
     boolean isAllValid(){
-        if(!C.isloggedIn && !edPassword.getEditText().getText().toString().equals(edConfirmPassword.getEditText().getText().toString())){
-            edConfirmPassword.getEditText().setError(getString(R.string.password_validate));
-            return false;
-        }
-        else if(spnGender.getSelectedItem().toString().equals(C.SELECT_GENDER)){
-            Utils.showToast(getActivity(),getString(R.string.select_gender));
-            return false;
-        }
-       else if(tvDob.getText().toString().equals("")){
-            Utils.showToast(getActivity(),getString(R.string.enter_dob));
+        if(isEditProfile) {
+            if (!C.isloggedIn && !edPassword.getEditText().getText().toString().equals(edConfirmPassword.getEditText().getText().toString())) {
+                edConfirmPassword.getEditText().setError(getString(R.string.password_validate));
+                return false;
+            } else if (spnGender.getSelectedItem().toString().equals(C.SELECT_GENDER)) {
+                Utils.showToast(getActivity(), getString(R.string.select_gender));
+                return false;
+            } else if (tvDob.getText().toString().equals("")) {
+                Utils.showToast(getActivity(), getString(R.string.enter_dob));
 
-            return false;
+                return false;
+            } else if (spnMaritalStatus.getSelectedItem().toString().equals(C.SELECT_MARITAL_STATUS)) {
+                Utils.showToast(getActivity(), getString(R.string.selectMarital_status));
+                return false;
+            }
         }
-       else if(spnMaritalStatus.getSelectedItem().toString().equals(C.SELECT_MARITAL_STATUS)){
-            Utils.showToast(getActivity(),getString(R.string.selectMarital_status));
-            return false;
-        }
-
         return true;
     }
 
@@ -541,9 +542,19 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
             }
             if (profile.getMaritalStatus().equalsIgnoreCase("single")) {
                 spnMaritalStatus.setSelection(1);
-            } else {
+            } else if(profile.getMaritalStatus().equalsIgnoreCase("Married")) {
                 spnMaritalStatus.setSelection(2);
             }
+            else if(profile.getMaritalStatus().equalsIgnoreCase("Widowed")) {
+                spnMaritalStatus.setSelection(3);
+            }
+            else if(profile.getMaritalStatus().equalsIgnoreCase("Separated")) {
+                spnMaritalStatus.setSelection(4);
+            }
+            else if(profile.getMaritalStatus().equalsIgnoreCase("Divorced")) {
+                spnMaritalStatus.setSelection(5);
+            }
+
             spnDateOfBirth.setText(Utils.getFormattedDate(profile.getDateOfBirth(), C.SERVER_DATE_FORMAT, C.DATE_FORMAT));
             if (profile.getProfilePic() != null && !profile.getProfilePic().equals("")) {
 

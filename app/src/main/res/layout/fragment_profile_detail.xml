@@ -14,9 +14,10 @@
     <!-- TODO: Update blank fragment layout -->
 
     <ScrollView
+        android:layout_below="@id/imgProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imgProfile"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
@@ -168,9 +169,11 @@
 
                         <TextView
                             android:id="@+id/spinner_gender"
-                            style="@style/SpinnerTheme"
+                            android:background="@drawable/view_back_border"
                             android:layout_width="105dp"
                             android:layout_height="40dp"
+                            android:gravity="center"
+                            android:textColor="@color/black"
                             android:layout_marginTop="2dp"
                             android:entries="@array/gender" />
                     </LinearLayout>
@@ -196,12 +199,12 @@
                             android:layout_marginTop="2dp"
                             android:background="@color/white"
                             android:gravity="center"
-                            android:textSize="14sp"
+                            android:hint="@string/dob"
                             android:lines="1"
                             android:singleLine="true"
-                            android:hint="@string/dob"
                             android:textColor="@color/black"
-                            android:textColorHint="@color/hint" />
+                            android:textColorHint="@color/hint"
+                            android:textSize="14sp" />
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -226,10 +229,12 @@
 
                         <TextView
                             android:id="@+id/spinner_marital_status"
-                            style="@style/SpinnerTheme"
                             android:layout_width="105dp"
                             android:layout_height="40dp"
+                            android:gravity="center"
+                            android:textColor="@color/black"
                             android:layout_marginTop="2dp"
+                            android:background="@drawable/view_back_border"
                             android:entries="@array/marital_status" />
                     </LinearLayout>
                     <LinearLayout
@@ -309,7 +314,7 @@
                     android:layout_marginTop="5dp"
                     android:hint="@string/designation"
                     android:lines="1"
-                    android:visibility="gone"
+
                     android:focusable="false"
                     android:textColor="@color/pilot"
                     android:textSize="14sp" />
@@ -334,11 +339,12 @@
 
                         <TextView
                             android:id="@+id/spinner_country"
-                            style="@style/SpinnerTheme"
+                            android:background="@drawable/view_back_border"
                             android:layout_width="105dp"
                             android:layout_height="40dp"
                             android:singleLine="true"
-
+                            android:gravity="center"
+                            android:textColor="@color/black"
                             android:layout_marginTop="2dp"
                             android:entries="@array/category" />
                     </LinearLayout>
@@ -360,12 +366,15 @@
 
                         <TextView
                             android:id="@+id/spinner_city"
-                            style="@style/SpinnerTheme"
+                            android:background="@drawable/view_back_border"
                             android:layout_width="105dp"
                             android:layout_height="40dp"
                             android:layout_marginTop="2dp"
-                            android:entries="@array/category"
                             android:gravity="center"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:entries="@array/category"
+
                             android:hint="@string/dob" />
                     </LinearLayout>
                 </RelativeLayout>
@@ -392,13 +401,14 @@
 
                         <TextView
                             android:id="@+id/spinner_province"
-                            style="@style/SpinnerTheme"
+                            android:background="@drawable/view_back_border"
                             android:layout_width="105dp"
                             android:layout_height="40dp"
-                            android:singleLine="true"
-
+                            android:gravity="center"
+                            android:textColor="@color/black"
                             android:layout_marginTop="2dp"
-                            android:entries="@array/category" />
+                            android:entries="@array/category"
+                            android:singleLine="true" />
                     </LinearLayout>
 
 
@@ -453,10 +463,12 @@
 
                     <TextView
                         android:id="@+id/spinner_category"
-                        style="@style/SpinnerTheme"
+                        android:background="@drawable/view_back_border"
                         android:layout_width="105dp"
                         android:layout_height="40dp"
                         android:layout_marginTop="2dp"
+                        android:gravity="center"
+                        android:textColor="@color/black"
                         android:singleLine="true"
                         android:entries="@array/category" />
                 </LinearLayout>

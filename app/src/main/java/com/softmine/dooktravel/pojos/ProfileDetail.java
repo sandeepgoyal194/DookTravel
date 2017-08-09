@@ -53,6 +53,9 @@ public class ProfileDetail implements Serializable{
     @SerializedName("organization")
     @Expose
     private String organization;
+    @SerializedName("designation")
+    @Expose
+    private String designation;
     @SerializedName("working")
     @Expose
     private String working;
@@ -112,6 +115,7 @@ public class ProfileDetail implements Serializable{
      * @param picturename
      * @param socialid
      * @param organization
+     * @param designation
      * @param categoryid
      * @param address
      * @param email
@@ -122,7 +126,7 @@ public class ProfileDetail implements Serializable{
      * @param skype
      * @param marital
      */
-    public ProfileDetail(String email, String socialid, String phone, String password, String categoryid, String firstname, String middlename, String lastname, String picture, String picturename, String gender, String dob, String marital, String organization, String working, String address, String countryid, String stateid, String cityid, String zip, String skype, String secondaryEmail, String mobile1, String mobile2, String about) {
+    public ProfileDetail(String email, String socialid, String phone, String password, String categoryid, String firstname, String middlename, String lastname, String picture, String picturename, String gender, String dob, String marital, String organization, String designation, String working, String address, String countryid, String stateid, String cityid, String zip, String skype, String secondaryEmail, String mobile1, String mobile2, String about) {
         this.email = email;
         this.socialid = socialid;
         this.phone = phone;
@@ -137,6 +141,7 @@ public class ProfileDetail implements Serializable{
         this.dob = dob;
         this.marital = marital;
         this.organization = organization;
+        this.designation = designation;
         this.working = working;
         this.address = address;
         this.countryid = countryid;
@@ -260,6 +265,14 @@ public class ProfileDetail implements Serializable{
 
     public void setOrganization(String organization) {
         this.organization = organization;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
     }
 
     public String getWorking() {

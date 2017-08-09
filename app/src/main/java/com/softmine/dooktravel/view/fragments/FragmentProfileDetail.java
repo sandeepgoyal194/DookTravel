@@ -164,6 +164,7 @@ public class FragmentProfileDetail extends Fragment {
         spnMaritalStatus.setText(profile.getMaritalStatus());
         etZipCode.setText(profile.getZipCode());
         etOraginization.setText(profile.getOrganization());
+        etDesignation.setText(profile.getDesignation());
         spnCountry.setText(profile.getCountryName());
         spnProvince.setText(profile.getStateName());
         spnCity.setText(profile.getCityName());

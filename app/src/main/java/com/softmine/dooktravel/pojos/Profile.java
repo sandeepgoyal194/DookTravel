@@ -57,6 +57,9 @@ public class Profile implements Serializable {
     @SerializedName("organization")
     @Expose
     private String organization;
+    @SerializedName("designation")
+    @Expose
+    private String designation;
     @SerializedName("working_since")
     @Expose
     private String workingSince;
@@ -114,6 +117,7 @@ public class Profile implements Serializable {
      * @param workingSince
      * @param categoryName
      * @param organization
+     * @param designation
      * @param emailId
      * @param token
      * @param address
@@ -128,8 +132,7 @@ public class Profile implements Serializable {
      * @param skype
      */
 
-
-    public Profile(String memberId, String emailId, String token, String phone, String categoryId, String categoryName, String firstName, String middleName, String lastName, String profilePic, String profilePicname, String gender, String dateOfBirth, String maritalStatus, String organization, String workingSince, String address, String countryId, String countryName, String stateId, String stateName, String city, String cityName, String zipCode, String skype, String about) {
+    public Profile(String memberId, String emailId, String token, String phone, String categoryId, String categoryName, String firstName, String middleName, String lastName, String profilePic, String profilePicname, String gender, String dateOfBirth, String maritalStatus, String organization, String designation, String workingSince, String address, String countryId, String countryName, String stateId, String stateName, String city, String cityName, String zipCode, String skype, String about) {
         this.memberId = memberId;
         this.emailId = emailId;
         this.token = token;
@@ -145,6 +148,7 @@ public class Profile implements Serializable {
         this.dateOfBirth = dateOfBirth;
         this.maritalStatus = maritalStatus;
         this.organization = organization;
+        this.designation = designation;
         this.workingSince = workingSince;
         this.address = address;
         this.countryId = countryId;
@@ -157,7 +161,6 @@ public class Profile implements Serializable {
         this.skype = skype;
         this.about = about;
     }
-
 
     public String getMemberId() {
         return memberId;
@@ -277,6 +280,14 @@ public class Profile implements Serializable {
 
     public void setOrganization(String organization) {
         this.organization = organization;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
     }
 
     public String getWorkingSince() {
