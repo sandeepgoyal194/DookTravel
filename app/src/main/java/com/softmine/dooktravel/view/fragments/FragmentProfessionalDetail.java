@@ -114,101 +114,106 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
 
 
     public void onViewCreated(Activity view, @Nullable Bundle savedInstanceState) {
-        validation = new Validations();
-        utils=new Utils();
-        btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
-        btnSubmit.setOnClickListener(mBtnSubmitCLickLisner);
-        tvProfesstionalDetail = (TextView) view.findViewById(R.id.tvProfessionalDetail);
-        tvCategory = (TextView) view.findViewById(R.id.tvCategory);
-        tvWorkingHour = (TextView) view.findViewById(R.id.tvWorkingHour);
-        tvCurrentAdd = (TextView) view.findViewById(R.id.tvCurrentAddress);
-        tvCountry = (TextView) view.findViewById(R.id.tvCountry);
-        tvCity = (TextView) view.findViewById(R.id.tvCity);
-        tvProvince = (TextView) view.findViewById(R.id.tvProvince);
-        flags = 0 | Validations.FLAG_NOT_EMPTY;
-        flags = flags | Validations.TYPE_PINCODE;
-        etZipCode = new ValidateEditText((EditText) view.findViewById(R.id.et_Postal), getActivity(), flags);
-        tvAboutMe = (TextView) view.findViewById(R.id.tvAboutUs);
-        tvWorkingSince = (TextView) view.findViewById(R.id.tv_working_since);
-        tvWorkingSince.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog.show();
+        try {
+            validation = new Validations();
+            utils = new Utils();
+            btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
+            btnSubmit.setOnClickListener(mBtnSubmitCLickLisner);
+            tvProfesstionalDetail = (TextView) view.findViewById(R.id.tvProfessionalDetail);
+            tvCategory = (TextView) view.findViewById(R.id.tvCategory);
+            tvWorkingHour = (TextView) view.findViewById(R.id.tvWorkingHour);
+            tvCurrentAdd = (TextView) view.findViewById(R.id.tvCurrentAddress);
+            tvCountry = (TextView) view.findViewById(R.id.tvCountry);
+            tvCity = (TextView) view.findViewById(R.id.tvCity);
+            tvProvince = (TextView) view.findViewById(R.id.tvProvince);
+            flags = 0 | Validations.FLAG_NOT_EMPTY;
+            flags = flags | Validations.TYPE_PINCODE;
+            etZipCode = new ValidateEditText((EditText) view.findViewById(R.id.et_Postal), getActivity(), flags);
+            tvAboutMe = (TextView) view.findViewById(R.id.tvAboutUs);
+            tvWorkingSince = (TextView) view.findViewById(R.id.tv_working_since);
+            tvWorkingSince.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatePickerDialog.show();
+                }
+            });
+            tvPostal = (TextView) view.findViewById(R.id.et_Postal);
+            flags = 0 | Validations.FLAG_NOT_EMPTY;
+            etOraginization = new ValidateEditText((EditText) view.findViewById(R.id.edOrganization), getActivity(), flags);
+            flags = 0 | Validations.FLAG_NOT_EMPTY;
+            etDesignation = new ValidateEditText((EditText) view.findViewById(R.id.edDesignation), getActivity(), flags);
+            flags = 0 | Validations.FLAG_NOT_EMPTY;
+            etAddress = new ValidateEditText((EditText) view.findViewById(R.id.edAddress), getActivity(), flags);
+            flags = 0 | Validations.FLAG_NOT_EMPTY;
+            etAboutMe = new ValidateEditText((EditText) view.findViewById(R.id.edAboutMe), getActivity(), flags);
+            tvTextCount = (TextView) view.findViewById(R.id.tvTextCount);
+            spnCategory = (Spinner) view.findViewById(R.id.spinner_category);
+
+            spnCategory.setOnItemSelectedListener(mOnCategorySelectedListner);
+            spnCountry = (Spinner) view.findViewById(R.id.spinner_country);
+            spnCountry.setOnItemSelectedListener(mOnCountrySelectedListner);
+            spnCity = (Spinner) view.findViewById(R.id.spinner_city);
+            spnProvince = (Spinner) view.findViewById(R.id.spinner_province);
+            spnProvince.setOnItemSelectedListener(mOnStateItemSelectedListner);
+            spnCity.setOnItemSelectedListener(mOnCityItemSelectedListner);
+
+            btnSubmit.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
+
+            btnSubmit.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
+            tvProfesstionalDetail.setTypeface(Utils.getRegularTypeFace(getActivity()));
+            tvCategory.setTypeface(Utils.getLightTypeFace(getActivity()));
+            tvWorkingHour.setTypeface(Utils.getLightTypeFace(getActivity()));
+            tvCurrentAdd.setTypeface(Utils.getRegularTypeFace(getActivity()));
+            tvCountry.setTypeface(Utils.getLightTypeFace(getActivity()));
+            tvCity.setTypeface(Utils.getLightTypeFace(getActivity()));
+            tvTextCount.setTypeface(Utils.getRegularTypeFace(getActivity()));
+            tvProvince.setTypeface(Utils.getLightTypeFace(getActivity()));
+            etZipCode.getEditText().setTypeface(Utils.getLightTypeFace(getActivity()));
+            tvAboutMe.setTypeface(Utils.getRegularTypeFace(getActivity()));
+            tvWorkingSince.setTypeface(Utils.getRegularTypeFace(getActivity()));
+            tvPostal.setTypeface(Utils.getRegularTypeFace(getActivity()));
+
+            etOraginization.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
+            etDesignation.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
+            etAddress.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
+            etAboutMe.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
+            etAboutMe.getEditText().addTextChangedListener(mTextChangeListner);
+            Calendar newCalendar = Calendar.getInstance();
+            year = newCalendar.get(Calendar.YEAR);
+            month = newCalendar.get(Calendar.MONTH);
+            day = newCalendar.get(Calendar.DAY_OF_MONTH);
+            dateFormatter = new SimpleDateFormat(C.DATE_FORMAT);
+            DatePickerDialog = new DatePickerDialog(getActivity(), new android.app.DatePickerDialog.OnDateSetListener() {
+
+                public void onDateSet(DatePicker view, int y, int monthOfYear, int dayOfMonth) {
+                    year = y;
+                    month = monthOfYear;
+                    day = dayOfMonth;
+                    Calendar newDate = Calendar.getInstance();
+                    newDate.set(y, monthOfYear, dayOfMonth);
+                    tvWorkingSince.setText(dateFormatter.format(newDate.getTime()));
+                }
+
+            }, year, month, day);
+
+            if (C.isloggedIn) {
+                etOraginization.getEditText().setText(profile.getOrganization());
+                etDesignation.getEditText().setText(profile.getDesignation());
+                etZipCode.getEditText().setText(profile.getZipCode());
+                etAddress.getEditText().setText(profile.getAddress());
+                etAboutMe.getEditText().setText(profile.getAbout());
+                // tvWorkingSince.setText(Utils.getFormattedDate( profile.getWorkingSince(),"yyyy/MM/dd","dd/MM/yyyy"));
+                tvWorkingSince.setText(Utils.getFormattedDate(profile.getWorkingSince(), C.SERVER_DATE_FORMAT, C.DATE_FORMAT));
+                if (!isEditProfile) {
+                    disableViews();
+                }
+
             }
-        });
-        tvPostal = (TextView) view.findViewById(R.id.et_Postal);
-        flags = 0 | Validations.FLAG_NOT_EMPTY;
-        etOraginization = new ValidateEditText((EditText) view.findViewById(R.id.edOrganization), getActivity(), flags);
-        flags = 0 | Validations.FLAG_NOT_EMPTY;
-        etDesignation = new ValidateEditText((EditText) view.findViewById(R.id.edDesignation), getActivity(), flags);
-        flags = 0 | Validations.FLAG_NOT_EMPTY;
-        etAddress = new ValidateEditText((EditText) view.findViewById(R.id.edAddress), getActivity(), flags);
-        flags = 0 | Validations.FLAG_NOT_EMPTY;
-        etAboutMe = new ValidateEditText((EditText) view.findViewById(R.id.edAboutMe), getActivity(), flags);
-        tvTextCount=(TextView)view.findViewById(R.id.tvTextCount);
-        spnCategory = (Spinner) view.findViewById(R.id.spinner_category);
-
-        spnCategory.setOnItemSelectedListener(mOnCategorySelectedListner);
-        spnCountry = (Spinner) view.findViewById(R.id.spinner_country);
-        spnCountry.setOnItemSelectedListener(mOnCountrySelectedListner);
-        spnCity = (Spinner) view.findViewById(R.id.spinner_city);
-        spnProvince = (Spinner) view.findViewById(R.id.spinner_province);
-        spnProvince.setOnItemSelectedListener(mOnStateItemSelectedListner);
-        spnCity.setOnItemSelectedListener(mOnCityItemSelectedListner);
-
-        btnSubmit.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
-
-        btnSubmit.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
-        tvProfesstionalDetail.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        tvCategory.setTypeface(Utils.getLightTypeFace(getActivity()));
-        tvWorkingHour.setTypeface(Utils.getLightTypeFace(getActivity()));
-        tvCurrentAdd.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        tvCountry.setTypeface(Utils.getLightTypeFace(getActivity()));
-        tvCity.setTypeface(Utils.getLightTypeFace(getActivity()));
-        tvTextCount.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        tvProvince.setTypeface(Utils.getLightTypeFace(getActivity()));
-        etZipCode.getEditText().setTypeface(Utils.getLightTypeFace(getActivity()));
-        tvAboutMe.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        tvWorkingSince.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        tvPostal.setTypeface(Utils.getRegularTypeFace(getActivity()));
-
-        etOraginization.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
-        etDesignation.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
-        etAddress.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
-        etAboutMe.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
-        etAboutMe.getEditText().addTextChangedListener(mTextChangeListner);
-        Calendar newCalendar = Calendar.getInstance();
-        year = newCalendar.get(Calendar.YEAR);
-        month = newCalendar.get(Calendar.MONTH);
-        day = newCalendar.get(Calendar.DAY_OF_MONTH);
-        dateFormatter = new SimpleDateFormat(C.DATE_FORMAT);
-        DatePickerDialog = new DatePickerDialog(getActivity(), new android.app.DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int y, int monthOfYear, int dayOfMonth) {
-                year = y;
-                month = monthOfYear;
-                day = dayOfMonth;
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(y, monthOfYear, dayOfMonth);
-                tvWorkingSince.setText(dateFormatter.format(newDate.getTime()));
-            }
-
-        }, year, month, day);
-
-        if (C.isloggedIn) {
-            etOraginization.getEditText().setText(profile.getOrganization());
-            etDesignation.getEditText().setText(profile.getDesignation());
-            etZipCode.getEditText().setText(profile.getZipCode());
-            etAddress.getEditText().setText(profile.getAddress());
-            etAboutMe.getEditText().setText(profile.getAbout());
-           // tvWorkingSince.setText(Utils.getFormattedDate( profile.getWorkingSince(),"yyyy/MM/dd","dd/MM/yyyy"));
-            tvWorkingSince.setText(Utils.getFormattedDate(profile.getWorkingSince(),C.SERVER_DATE_FORMAT,C.DATE_FORMAT));
-            if(!isEditProfile){
-                disableViews();
-            }
-
+            getCategoryList();
         }
-        getCategoryList();
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -388,7 +393,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
 
 
                     try {
-                        Log.e("DEBUG", "profile=" + obj);
+                        Log.e("DEBUG", "profileDetail=" + obj);
                         JSONObject jsonObject = new JSONObject(obj);
                         action = C.REGISTER_COUNTINUE_METHOD;
                         ServiceConnection serviceConnection = new ServiceConnection();
