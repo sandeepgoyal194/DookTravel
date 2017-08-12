@@ -11,7 +11,11 @@
         <item name="colorControlHighlight">@color/pilot</item>
         <item name="android:textColorHint">@color/pilot</item>
     </style>
-
+    <style name="EditText.profile" parent="Widget.AppCompat.EditText">
+        <item name="colorAccent">@color/pilot</item>
+        <item name="colorControlNormal">@color/pilot</item>
+        <item name="colorControlActivated">@color/pilot</item>
+    </style>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"
 
         >

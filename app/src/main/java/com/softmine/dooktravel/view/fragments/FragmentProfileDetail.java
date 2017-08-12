@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.pojos.Profile;
@@ -24,10 +23,10 @@ import com.softmine.dooktravel.util.Utils;
  */
 public class FragmentProfileDetail extends Fragment {
 
-    TextView tvGender,tvDob,tvMaritalStatus,spnDateOfBirth, tvCategory, tvWorkingHour, tvWorkingSince,
-             tvCountry, tvCity, tvProvince, tvPostal;
+/*    TextView tvGender,tvDob,tvMaritalStatus, tvCategory, tvWorkingHour,
+             tvCountry, tvCity, tvProvince, tvPostal;*/
     EditText etFirstName,etMiddleName,etLastName,etAddress,etContact,etSkype,etDescription,etEmail,etOraginization, etDesignation,etZipCode;
-    TextView spnMaritalStatus,spnGender,spnCategory, spnCountry, spnCity, spnProvince;
+    EditText spnMaritalStatus,spnGender,spnCategory, spnCountry, spnCity, spnProvince,spnDateOfBirth,tvWorkingSince;
     ImageView imgProfile;
     Profile profile;
     public FragmentProfileDetail() {
@@ -71,34 +70,34 @@ public class FragmentProfileDetail extends Fragment {
         etLastName=(EditText)view.findViewById(R.id.edlastName);
 
         etAddress=(EditText)view.findViewById(R.id.edAddress);
-        tvGender=(TextView)view.findViewById(R.id.tvGender);
+     //   tvGender=(TextView)view.findViewById(R.id.tvGender);
 
-        tvDob=(TextView)view.findViewById(R.id.tvdateOfBirth);
-        spnDateOfBirth=(TextView)view.findViewById(R.id.spinner_dob);
-        tvMaritalStatus=(TextView)view.findViewById(R.id.tvMaritalStatus);
-        spnMaritalStatus=(TextView)view.findViewById(R.id.spinner_marital_status);
-        spnGender=(TextView)view.findViewById(R.id.spinner_gender);
-        tvPostal = (TextView) view.findViewById(R.id.et_Postal);
+      //  tvDob=(TextView)view.findViewById(R.id.tvdateOfBirth);
+        spnDateOfBirth=(EditText)view.findViewById(R.id.edDob);
+     //   tvMaritalStatus=(TextView)view.findViewById(R.id.tvMaritalStatus);
+        spnMaritalStatus=(EditText) view.findViewById(R.id.edMatiral_status);
+        spnGender=(EditText) view.findViewById(R.id.edGender);
+     //   tvPostal = (TextView) view.findViewById(R.id.et_Postal);
 
         etContact=(EditText)view.findViewById(R.id.edContact);
 
         etSkype=(EditText)view.findViewById(R.id.edSkype);
 
         etDescription=(EditText)view.findViewById(R.id.edDescription);
-        etZipCode = (EditText) view.findViewById(R.id.et_Postal);
+        etZipCode = (EditText) view.findViewById(R.id.edZipCode);
 
-        tvCategory = (TextView) view.findViewById(R.id.tvCategory);
-        tvWorkingHour = (TextView) view.findViewById(R.id.tvWorkingHour);
-        tvCountry = (TextView) view.findViewById(R.id.tvCountry);
-        tvCity = (TextView) view.findViewById(R.id.tvCity);
-        tvProvince = (TextView) view.findViewById(R.id.tvProvince);
-        tvWorkingSince = (TextView) view.findViewById(R.id.tv_working_since);
+    //    tvCategory = (TextView) view.findViewById(R.id.tvCategory);
+      //  tvWorkingHour = (TextView) view.findViewById(R.id.tvWorkingHour);
+     //   tvCountry = (TextView) view.findViewById(R.id.tvCountry);
+     //   tvCity = (TextView) view.findViewById(R.id.tvCity);
+     //   tvProvince = (TextView) view.findViewById(R.id.tvProvince);
+        tvWorkingSince = (EditText) view.findViewById(R.id.edWorkingSince);
 
-        spnCategory = (TextView) view.findViewById(R.id.spinner_category);
+        spnCategory = (EditText) view.findViewById(R.id.edCategory);
 
-        spnCountry = (TextView) view.findViewById(R.id.spinner_country);
-        spnCity = (TextView) view.findViewById(R.id.spinner_city);
-        spnProvince = (TextView) view.findViewById(R.id.spinner_province);
+        spnCountry = (EditText) view.findViewById(R.id.edCountry);
+        spnCity = (EditText) view.findViewById(R.id.edCity);
+        spnProvince = (EditText) view.findViewById(R.id.edProvince);
         etOraginization = (EditText) view.findViewById(R.id.edOrganization);
 
         etDesignation = (EditText) view.findViewById(R.id.edDesignation);
@@ -110,20 +109,20 @@ public class FragmentProfileDetail extends Fragment {
         etContact.setTypeface(Utils.getRegularTypeFace(getActivity()));
         etSkype.setTypeface(Utils.getRegularTypeFace(getActivity()));
         etDescription.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        tvGender.setTypeface(Utils.getLightTypeFace(getActivity()));
-        tvDob.setTypeface(Utils.getLightTypeFace(getActivity()));
+     //   tvGender.setTypeface(Utils.getLightTypeFace(getActivity()));
+    //    tvDob.setTypeface(Utils.getLightTypeFace(getActivity()));
         spnDateOfBirth.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        tvMaritalStatus.setTypeface(Utils.getLightTypeFace(getActivity()));
+     //   tvMaritalStatus.setTypeface(Utils.getLightTypeFace(getActivity()));
 
 
 
-        tvCategory.setTypeface(Utils.getLightTypeFace(getActivity()));
-        tvWorkingHour.setTypeface(Utils.getLightTypeFace(getActivity()));
-        tvCountry.setTypeface(Utils.getLightTypeFace(getActivity()));
-        tvCity.setTypeface(Utils.getLightTypeFace(getActivity()));
-        tvProvince.setTypeface(Utils.getLightTypeFace(getActivity()));
+      //  tvCategory.setTypeface(Utils.getLightTypeFace(getActivity()));
+    //    tvWorkingHour.setTypeface(Utils.getLightTypeFace(getActivity()));
+    //    tvCountry.setTypeface(Utils.getLightTypeFace(getActivity()));
+    //    tvCity.setTypeface(Utils.getLightTypeFace(getActivity()));
+     //   tvProvince.setTypeface(Utils.getLightTypeFace(getActivity()));
         tvWorkingSince.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        tvPostal.setTypeface(Utils.getRegularTypeFace(getActivity()));
+     //   tvPostal.setTypeface(Utils.getRegularTypeFace(getActivity()));
 
         etOraginization.setTypeface(Utils.getRegularTypeFace(getActivity()));
         etDesignation.setTypeface(Utils.getRegularTypeFace(getActivity()));

@@ -108,7 +108,7 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
             C.isloggedIn=false;
             Bundle bundle = this.getArguments();
             if (bundle != null) {
-
+                isEditProfile=true;
                 profileDtl = (ProfileDetail) bundle.getSerializable(C.DATA);
             }
         }

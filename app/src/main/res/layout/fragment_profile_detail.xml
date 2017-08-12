@@ -1,544 +1,482 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".view.fragments.FragmentBasicDetail">
-    <ImageView
-        android:id="@+id/imgProfile"
-        android:scaleType="fitXY"
-        android:background="@color/grey"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:custom="http://schemas.android.com/apk/res-auto/com.softmine.dooktravel.util"
+
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-         />
-    <!-- TODO: Update blank fragment layout -->
-
-    <ScrollView
-        android:layout_below="@id/imgProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <LinearLayout
-
-            android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        >
+        <ImageView
+            android:id="@+id/imgProfile"
+            android:scaleType="fitXY"
+            android:background="@color/grey"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="150dp"
+            />
+        <!-- TODO: Update blank fragment layout -->
 
-
-
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imgProfile"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
             <LinearLayout
-                android:id="@+id/ll"
+
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/back_basic_detail"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/ed_layout_firstName"
-                    android:layout_width="match_parent"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/hint"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/edFirstname"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/name"
-                        android:lines="1"
-                        android:focusable="false"
-                        android:textColor="@color/pilot"
-                        android:textSize="14sp" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/ed_layout_MiddleName"
-                    android:layout_width="match_parent"
-                    android:textColorHint="@color/hint"
-                    android:visibility="gone"
-
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/edMiddleName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:hint="@string/middle_name"
-                        android:lines="1"
-                        android:textColor="@color/pilot"
-                        android:focusable="false"
-                        android:textSize="14sp" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/ed_layout_LastName"
-                    android:layout_width="match_parent"
-                    android:visibility="gone"
-                    android:textColorHint="@color/hint"
-                    android:layout_height="wrap_content">
+                android:layout_height="wrap_content">
 
 
-                    <EditText
-                        android:id="@+id/edlastName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:hint="@string/last_name"
-                        android:focusable="false"
 
-                        android:lines="1"
-                        android:textColor="@color/pilot"
-
-                        android:textSize="14sp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/ed_layout_address"
-                    android:layout_width="match_parent"
-                    android:textColorHint="@color/hint"
-                    android:layout_height="wrap_content">
-
-
-                    <EditText
-                        android:id="@+id/edAddress"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:hint="@string/address"
-                        android:lines="1"
-                        android:focusable="false"
-
-                        android:textColor="@color/pilot"
-                        android:textSize="14sp" />
-                </android.support.design.widget.TextInputLayout>
-
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/ed_layout_email"
-                    android:layout_width="match_parent"
-                    android:textColorHint="@color/hint"
-
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/edEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:hint="@string/email"
-                        android:textColor="@color/pilot"
-                        android:lines="1"
-                        android:focusable="false"
-
-                        android:textSize="14sp" />
-
-                </android.support.design.widget.TextInputLayout>
-
-
-                <RelativeLayout
-                    android:layout_marginTop="5dp"
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvGender"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/gender"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/spinner_gender"
-                            android:background="@drawable/view_back_border"
-                            android:layout_width="105dp"
-                            android:layout_height="40dp"
-                            android:gravity="center"
-                            android:textColor="@color/black"
-                            android:layout_marginTop="2dp"
-                            android:entries="@array/gender" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvdateOfBirth"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/date_of_birth"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/spinner_dob"
-                            android:layout_width="105dp"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="2dp"
-                            android:background="@color/white"
-                            android:gravity="center"
-                            android:hint="@string/dob"
-                            android:lines="1"
-                            android:singleLine="true"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/hint"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvMaritalStatus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/marital_status"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/spinner_marital_status"
-                            android:layout_width="105dp"
-                            android:layout_height="40dp"
-                            android:gravity="center"
-                            android:textColor="@color/black"
-                            android:layout_marginTop="2dp"
-                            android:background="@drawable/view_back_border"
-                            android:entries="@array/marital_status" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvPostalCode"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:lines="1"
-                            android:text="@string/zip"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <EditText
-                            android:id="@+id/et_Postal"
-                            android:layout_width="105dp"
-                            android:layout_height="40dp"
-                            android:lines="1"
-                            android:textSize="14sp"
-                            android:hint="@string/zip"
-                            android:layout_gravity="right|end"
-                            android:layout_marginTop="2dp"
-                            android:background="@drawable/view_back_border"
-                            android:textColorHint="@color/hint"
-                            android:gravity="center"
-                            android:singleLine="true"
-                            android:inputType="number"
-                            android:focusable="false"
-
-                            android:maxLength="6"
-                            android:textColor="@color/black" />
-                    </LinearLayout>
-                </RelativeLayout>
-
-
-                  <android.support.design.widget.TextInputLayout
-                                       android:id="@+id/ed_layout_organization"
-                                       android:layout_width="match_parent"
-                                       android:layout_height="wrap_content"
-                      android:textColorHint="@color/hint"
-                      android:layout_marginTop="5dp"
-
-                      android:lines="1"
-                                       >
-
-                <EditText
-                    android:id="@+id/edOrganization"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/organization"
-                    android:lines="1"
-                    android:focusable="false"
-                    android:singleLine="true"
-                    android:textColor="@color/pilot"
-                    android:textSize="14sp" />
-                   </android.support.design.widget.TextInputLayout>
-
-                 <android.support.design.widget.TextInputLayout
-                     android:id="@+id/ed_layout_designation"
-                     android:layout_width="match_parent"
-                     android:textColorHint="@color/hint"
-
-                     android:layout_height="wrap_content"
-                     android:lines="1"
-
-                     >
-
-                <EditText
-                    android:id="@+id/edDesignation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:layout_marginTop="5dp"
-                    android:hint="@string/designation"
-                    android:lines="1"
-
-                    android:focusable="false"
-                    android:textColor="@color/pilot"
-                    android:textSize="14sp" />
-                   </android.support.design.widget.TextInputLayout>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvCountry"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/country"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/spinner_country"
-                            android:background="@drawable/view_back_border"
-                            android:layout_width="105dp"
-                            android:layout_height="40dp"
-                            android:singleLine="true"
-                            android:gravity="center"
-                            android:textColor="@color/black"
-                            android:layout_marginTop="2dp"
-                            android:entries="@array/category" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvCity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/city"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/spinner_city"
-                            android:background="@drawable/view_back_border"
-                            android:layout_width="105dp"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="2dp"
-                            android:gravity="center"
-                            android:singleLine="true"
-                            android:textColor="@color/black"
-                            android:entries="@array/category"
-
-                            android:hint="@string/dob" />
-                    </LinearLayout>
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvProvince"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/province"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/spinner_province"
-                            android:background="@drawable/view_back_border"
-                            android:layout_width="105dp"
-                            android:layout_height="40dp"
-                            android:gravity="center"
-                            android:textColor="@color/black"
-                            android:layout_marginTop="2dp"
-                            android:entries="@array/category"
-                            android:singleLine="true" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_marginTop="5dp"
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvWorkingHour"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/working_since"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/tv_working_since"
-                            android:layout_width="105dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="right|end"
-                            android:layout_marginTop="2dp"
-                            android:background="@drawable/view_back_border"
-                            android:gravity="center"
-                            android:singleLine="true"
-                            android:hint="@string/working_since"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_marginTop="5dp"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/ll"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/back_basic_detail"
                     android:orientation="vertical">
 
-                    <TextView
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginLeft="5dp"
                         android:id="@+id/tvCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/name"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                        <EditText
+                            android:id="@+id/edFirstname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lines="1"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:focusable="false"
+                            android:textColor="@color/pilot"
+                            android:textSize="14sp" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ed_layout_MiddleName"
+                        android:layout_width="match_parent"
+                        android:textColorHint="@color/hint"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/edMiddleName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:hint="@string/middle_name"
+                            android:lines="1"
+                            android:visibility="gone"
+                            android:textColor="@color/pilot"
+                            android:focusable="false"
+                            android:textSize="14sp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ed_layout_LastName"
+                        android:layout_width="match_parent"
+                        android:visibility="gone"
+
+                        android:textColorHint="@color/hint"
+                        android:layout_height="wrap_content">
+
+
+                        <EditText
+                            android:id="@+id/edlastName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:hint="@string/last_name"
+                            android:focusable="false"
+                            android:visibility="gone"
+                            android:lines="1"
+                            android:textColor="@color/pilot"
+
+                            android:textSize="14sp" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/address"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                        <EditText
+                            android:id="@+id/edAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lines="1"
+                            android:focusable="false"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:textColor="@color/pilot"
+                            android:textSize="14sp" />
+
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/email"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                        <EditText
+                            android:id="@+id/edEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/pilot"
+                            android:lines="1"
+                            android:focusable="false"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:textSize="14sp" />
+
+
+
+
+
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/contact"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/edContact"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:lines="1"
+                            android:textColor="@color/pilot"
+                            android:textSize="14sp" />
+
+
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/skype"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                        <EditText
+                            android:id="@+id/edSkype"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:lines="1"
+                            android:textColor="@color/pilot"
+
+                            android:textSize="14sp" />
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/description"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+
+
+
+                        <EditText
+                            android:id="@+id/edDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:lines="1"
+                            android:textColor="@color/pilot"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:textSize="14sp" />
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/gender"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                        <EditText
+                            android:id="@+id/edGender"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/pilot"
+                            android:lines="1"
+                            android:focusable="false"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:textSize="14sp" />
+
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/date_of_birth"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/edDob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/pilot"
+                            android:lines="1"
+                            android:focusable="false"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:textSize="14sp" />
+
+
+
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/marital_status"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/edMatiral_status"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/pilot"
+                            android:lines="1"
+                            android:focusable="false"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:textSize="14sp" />
+
+
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/organization"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/edOrganization"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lines="1"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:focusable="false"
+                            android:singleLine="true"
+                            android:textColor="@color/pilot"
+                            android:textSize="14sp" />
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/designation"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/edDesignation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:lines="1"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+
+                            android:focusable="false"
+                            android:textColor="@color/pilot"
+                            android:textSize="14sp" />
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/working_since"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/edWorkingSince"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/pilot"
+                            android:lines="1"
+                            android:focusable="false"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:textSize="14sp" />
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/category"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
-                    <TextView
-                        android:id="@+id/spinner_category"
-                        android:background="@drawable/view_back_border"
-                        android:layout_width="105dp"
-                        android:layout_height="40dp"
+                        <EditText
+                            android:id="@+id/edCategory"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/pilot"
+                            android:lines="1"
+                            android:focusable="false"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:textSize="14sp" />
+
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
                         android:layout_marginTop="2dp"
-                        android:gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/country"
                         android:textColor="@color/black"
-                        android:singleLine="true"
-                        android:entries="@array/category" />
+                        android:textSize="14sp" />
+                        <EditText
+                            android:id="@+id/edCountry"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/pilot"
+                            android:lines="1"
+                            android:focusable="false"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:textSize="14sp" />
+
+
+
+
+
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/province"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/edProvince"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/pilot"
+                            android:lines="1"
+                            android:focusable="false"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:textSize="14sp" />
+
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/city"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/edCity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:textColor="@color/pilot"
+                            android:lines="1"
+                            android:focusable="false"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:textSize="14sp" />
+
+
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-light.otf"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/zip"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/edZipCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/pilot"
+                            android:lines="1"
+                            android:focusable="false"
+                            android:theme="@style/EditText.profile"
+                            style="@style/EditText.profile"
+                            android:textSize="14sp" />
+
+
+
                 </LinearLayout>
-                </RelativeLayout>
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/ed_layout_contact"
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="5dp"
-                    android:textColorHint="@color/hint"
-                    android:layout_height="wrap_content">
 
-
-                    <EditText
-                        android:id="@+id/edContact"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:hint="@string/contact"
-                        android:focusable="false"
-
-                        android:lines="1"
-                        android:textColor="@color/pilot"
-                        android:textSize="14sp" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/ed_layout_skype"
-                    android:layout_width="match_parent"
-                    android:textColorHint="@color/hint"
-                    android:layout_height="wrap_content">
-
-
-                    <EditText
-                        android:id="@+id/edSkype"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:hint="@string/skype"
-                        android:focusable="false"
-
-                        android:lines="1"
-                        android:textColor="@color/pilot"
-
-                        android:textSize="14sp" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/ed_layout_description"
-                    android:layout_width="match_parent"
-                    android:textColorHint="@color/hint"
-                    android:layout_height="wrap_content">
-
-
-                    <EditText
-                        android:id="@+id/edDescription"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:hint="@string/description"
-                        android:focusable="false"
-                        android:lines="1"
-                        android:textColor="@color/pilot"
-
-                        android:textSize="14sp" />
-                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
+        </ScrollView>
 
-
-        </LinearLayout>
-    </ScrollView>
-
-</RelativeLayout>
+    </RelativeLayout>

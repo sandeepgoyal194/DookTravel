@@ -300,7 +300,7 @@ public class ActivityHome extends AppCompatActivity
                 tvTitle.setText(getResources().getString(R.string.basic_details));
                 fragment = new FragmentBasicDetail();
                 fragmentTransaction.replace(R.id.container, fragment);
-                 if(bundle.getBoolean(C.ADD_TO_BACK)) {
+
                      if(bundle.getBoolean(C.IS_EDIT_PROFILE)){
                          mSelectedPos=2;
                      }
@@ -308,10 +308,7 @@ public class ActivityHome extends AppCompatActivity
                          mSelectedPos=1;
                      }
                  //    fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_BASIC_DETAIL);
-                 }
-                 else {
-                     mSelectedPos=1;
-                 }
+
                 break;
             case C.FRAGMENT_PROFILE_DETAIL:
                 tvTitle.setVisibility(View.VISIBLE);

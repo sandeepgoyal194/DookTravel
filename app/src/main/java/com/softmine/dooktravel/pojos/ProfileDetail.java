@@ -62,7 +62,7 @@ public class ProfileDetail implements Serializable{
     @SerializedName("address")
     @Expose
     private String address;
-    @SerializedName("countryid ")
+    @SerializedName("countryid")
     @Expose
     private String countryid;
     @SerializedName("stateid")
