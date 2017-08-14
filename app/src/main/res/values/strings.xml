@@ -79,7 +79,7 @@
 
     </string-array>
 
-
+     <string name="gender_prompt">Gender</string>
     <string-array name="marital_status">
         <item>Marital Status</item>
         <item>Single</item>

@@ -1,6 +1,9 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/tv_spinner_text"
+<com.softmine.dooktravel.util.CustomTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto/com.softmine.dooktravel.util"
+    custom:typeface="proxima-nova-regular.otf"
+    android:id="@+id/tv_spinner_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:textSize="14sp"
+    android:singleLine="true"
         android:textColor="@color/blue" />

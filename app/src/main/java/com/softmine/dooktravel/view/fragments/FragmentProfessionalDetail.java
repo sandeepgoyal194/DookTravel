@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,13 +28,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.softmine.dooktravel.view.ActivityHome;
-import com.softmine.dooktravel.view.MainActivity;
 import com.softmine.dooktravel.R;
+import com.softmine.dooktravel.model.LoginStatus;
 import com.softmine.dooktravel.pojos.CategoryList;
 import com.softmine.dooktravel.pojos.CityList;
 import com.softmine.dooktravel.pojos.CountryList;
-import com.softmine.dooktravel.model.LoginStatus;
 import com.softmine.dooktravel.pojos.Profile;
 import com.softmine.dooktravel.pojos.ProfileDetail;
 import com.softmine.dooktravel.pojos.ProfileStatus;
@@ -45,12 +45,16 @@ import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
 import com.softmine.dooktravel.validations.Validations;
+import com.softmine.dooktravel.view.ActivityHome;
+import com.softmine.dooktravel.view.MainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -78,6 +82,12 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
     private DatePickerDialog DatePickerDialog;
     Profile profile;
     int mCountryPos = 0, mCityPos = 0, mStatePos = 0, mCategoryPos = 0;
+     ArrayAdapter<String> spinnerCategoryAdapter=null;
+    ArrayAdapter<String> spinnerStateAdapter=null;
+    ArrayAdapter<String> spinnerCountryAdapter=null;
+
+    ArrayAdapter<String> spinnerCityAdapter=null;
+
 
     public FragmentProfessionalDetail() {
         // Required empty public constructor
@@ -413,141 +423,158 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
 
     @Override
     public void done(String response) {
-        Log.e(FragmentProfessionalDetail.class.getName(), "RESPONSE==" + response);
-        if (action.equals(C.LOGIN_METHOD)) {
-            Log.e(FragmentLogin.class.getName(), "RESPONSE==" + response);
-            // Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
 
-            Gson gson = new Gson();
-            LoginStatus loginStatus = gson.fromJson(response, LoginStatus.class);
-            if (!loginStatus.getError()) {
-                SharedPreference.getInstance(getActivity()).setString(C.TOKEN, loginStatus.getMember().getToken());
-                SharedPreference.getInstance(getActivity()).setString(C.MEMBER_ID, loginStatus.getMember().getMemberId());
-                SharedPreference.getInstance(getActivity()).setString(C.EMAIL, loginStatus.getMember().getEmailId());
-                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN, true);
-                Intent intent = new Intent(getActivity(), ActivityHome.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            } else {
-                getDailogConfirm(loginStatus.getMessage(), "");
-            }
-        } else if (action.equals(C.CATEGORY_LIST_METHOD)) {
-            Gson gson = new Gson();
-            categoryList = gson.fromJson(response, CategoryList.class);
-            if (!categoryList.getError()) {
-                String[] catArr = new String[categoryList.getCategory().size() + 1];
-                catArr[0] = C.SELECT_CATEGORY;
-                for (int i = 0; i < categoryList.getCategory().size(); i++) {
+        try {
+            Log.e(FragmentProfessionalDetail.class.getName(), "RESPONSE==" + response);
+            if (action.equals(C.LOGIN_METHOD)) {
+                Log.e(FragmentLogin.class.getName(), "RESPONSE==" + response);
+                // Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
 
-                    catArr[i + 1] = String.valueOf(categoryList.getCategory().get(i).getCategoryName());
+                Gson gson = new Gson();
+                LoginStatus loginStatus = gson.fromJson(response, LoginStatus.class);
+                if (!loginStatus.getError()) {
+                    SharedPreference.getInstance(getActivity()).setString(C.TOKEN, loginStatus.getMember().getToken());
+                    SharedPreference.getInstance(getActivity()).setString(C.MEMBER_ID, loginStatus.getMember().getMemberId());
+                    SharedPreference.getInstance(getActivity()).setString(C.EMAIL, loginStatus.getMember().getEmailId());
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN, true);
+                    Intent intent = new Intent(getActivity(), ActivityHome.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                } else {
+                    getDailogConfirm(loginStatus.getMessage(), "");
+                }
+            } else if (action.equals(C.CATEGORY_LIST_METHOD)) {
+                Gson gson = new Gson();
+                categoryList = gson.fromJson(response, CategoryList.class);
+                if (!categoryList.getError()) {
+                    String[] catArr = new String[categoryList.getCategory().size() + 1];
+                    catArr[0] = C.SELECT_CATEGORY;
+                    for (int i = 0; i < categoryList.getCategory().size(); i++) {
+
+                        catArr[i + 1] = String.valueOf(categoryList.getCategory().get(i).getCategoryName());
+
+                    }
+
+                /*ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, catArr); //selected item will look like a spinner set from XML
+
+                spnCategory.setAdapter(spinnerArrayAdapter);*/
+                    setCategoryList(Arrays.asList(catArr));
+                    spinnerCategoryAdapter.notifyDataSetChanged();
+                    if (C.isloggedIn) {
+                        int pos = spinnerCategoryAdapter.getPosition(profile.getCategoryName());
+                        spnCategory.setSelection(pos);
+                    }
+                    getCountryList();
 
                 }
+            } else if (action.equals(C.COUNTRY_METHOD)) {
+                Gson gson = new Gson();
+                countryList = gson.fromJson(response, CountryList.class);
+                if (!countryList.getError()) {
+                    String[] countArr = new String[countryList.getCountry().size() + 1];
+                    countArr[0] = C.SELECT_COUNTRY;
+                    for (int i = 0; i < countryList.getCountry().size(); i++) {
+                        countArr[i + 1] = String.valueOf(countryList.getCountry().get(i).getName());
+                    }
 
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, catArr); //selected item will look like a spinner set from XML
+               /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
 
-                spnCategory.setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.notifyDataSetChanged();
-                if (C.isloggedIn) {
-                    int pos = spinnerArrayAdapter.getPosition(profile.getCategoryName());
-                    spnCategory.setSelection(pos);
+                spnCountry.setAdapter(spinnerArrayAdapter);*/
+                    setCountryList(Arrays.asList(countArr));
+
+                    spinnerCountryAdapter.notifyDataSetChanged();
+                    if (C.isloggedIn) {
+                        int pos = spinnerCountryAdapter.getPosition(profile.getCountryName());
+                        spnCountry.setSelection(pos, false);
+                    }
+
+                } else {
+                    String[] countArr = new String[1];
+                    countArr[0] = C.SELECT_COUNTRY;
+               /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
+                spnCountry.setAdapter(spinnerArrayAdapter);*/
+                    setCountryList(Arrays.asList(countArr));
+
+                    spinnerCountryAdapter.notifyDataSetChanged();
+
                 }
-                getCountryList();
+            } else if (action.equals(C.STATE_METHOD)) {
+                Gson gson = new Gson();
+                stateList = gson.fromJson(response, StateList.class);
+                if (!stateList.getError()) {
+                    String[] stateArr = new String[stateList.getState().size() + 1];
+                    stateArr[0] = C.SELECT_STATE;
+                    for (int i = 0; i < stateList.getState().size(); i++) {
+                        stateArr[i + 1] = String.valueOf(stateList.getState().get(i).getName());
+                    }
 
-            }
-        } else if (action.equals(C.COUNTRY_METHOD)) {
-            Gson gson = new Gson();
-            countryList = gson.fromJson(response, CountryList.class);
-            if (!countryList.getError()) {
-                String[] countArr = new String[countryList.getCountry().size() + 1];
-                countArr[0] = C.SELECT_COUNTRY;
-                for (int i = 0; i < countryList.getCountry().size(); i++) {
-                    countArr[i + 1] = String.valueOf(countryList.getCountry().get(i).getName());
+
+               /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
+                spnProvince.setAdapter(spinnerArrayAdapter);*/
+                    setStateList(Arrays.asList(stateArr));
+                    spinnerStateAdapter.notifyDataSetChanged();
+                    if (C.isloggedIn) {
+                        spnProvince.setSelection(spinnerStateAdapter.getPosition(profile.getStateName()));
+                    }
+                } else {
+                    String[] stateArr = new String[1];
+                    stateArr[0] = C.SELECT_STATE;
+               /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
+                spnProvince.setAdapter(spinnerArrayAdapter);*/
+                    setStateList(Arrays.asList(stateArr));
+                    spinnerStateAdapter.notifyDataSetChanged();
+
+                }
+            } else if (action.equals(C.CITY_METHOD)) {
+                Gson gson = new Gson();
+                cityList = gson.fromJson(response, CityList.class);
+                if (!cityList.getError()) {
+                    String[] cityArr = new String[cityList.getCity().size() + 1];
+                    cityArr[0] = C.SELECT_CITY;
+                    for (int i = 0; i < cityList.getCity().size(); i++) {
+                        cityArr[i + 1] = String.valueOf(cityList.getCity().get(i).getName());
+                    }
+
+             /*   ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, cityArr); //selected item will look like a spinner set from XML
+                spnCity.setAdapter(spinnerArrayAdapter);*/
+                    setCityList(Arrays.asList(cityArr));
+
+                    spinnerCityAdapter.notifyDataSetChanged();
+                    if (C.isloggedIn) {
+                        spnCity.setSelection(spinnerCityAdapter.getPosition(profile.getCityName()));
+                    }
+                } else {
+                    String[] cityArr = new String[1];
+                    cityArr[0] = C.SELECT_CITY;
+              /*  ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, cityArr); //selected item will look like a spinner set from XML
+                spnCity.setAdapter(spinnerArrayAdapter);*/
+                    setCityList(Arrays.asList(cityArr));
+
+                    spinnerCityAdapter.notifyDataSetChanged();
+                    // spinnerArrayAdapter.notifyDataSetChanged();
+                }
+            } else if (action.equals(C.REGISTER_COUNTINUE_METHOD)) {
+                Gson gson = new Gson();
+                RegisterStatus registerStatus = gson.fromJson(response, RegisterStatus.class);
+                if (!registerStatus.getError()) {
+                    getDailogConfirm(registerStatus.getMessage(), "1");
+                } else {
+                    getDailogConfirm(registerStatus.getMessage(), "");
                 }
 
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
+            } else if (action.equals(C.UPDATE_PROFILE_METHOD)) {
+                Gson gson = new Gson();
+                ProfileStatus profileStatus = gson.fromJson(response, ProfileStatus.class);
+                if (!profileStatus.getError()) {
+                    getDailogConfirm(profileStatus.getMessage(), "2");
 
-                spnCountry.setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.notifyDataSetChanged();
-                if (C.isloggedIn) {
-                    int pos = spinnerArrayAdapter.getPosition(profile.getCountryName());
-                    spnCountry.setSelection(pos, false);
+                } else {
+                    getDailogConfirm(profileStatus.getMessage(), "");
                 }
-
-            } else {
-                String[] countArr = new String[1];
-                countArr[0] = C.SELECT_COUNTRY;
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
-                spnCountry.setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.notifyDataSetChanged();
-
             }
-        } else if (action.equals(C.STATE_METHOD)) {
-            Gson gson = new Gson();
-            stateList = gson.fromJson(response, StateList.class);
-            if (!stateList.getError()) {
-                String[] stateArr = new String[stateList.getState().size() + 1];
-                stateArr[0] = C.SELECT_STATE;
-                for (int i = 0; i < stateList.getState().size(); i++) {
-                    stateArr[i + 1] = String.valueOf(stateList.getState().get(i).getName());
-                }
-
-
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
-                spnProvince.setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.notifyDataSetChanged();
-                if (C.isloggedIn) {
-                    spnProvince.setSelection(spinnerArrayAdapter.getPosition(profile.getStateName()));
-                }
-            } else {
-                String[] stateArr = new String[1];
-                stateArr[0] = C.SELECT_STATE;
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
-                spnProvince.setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.notifyDataSetChanged();
-
-            }
-        } else if (action.equals(C.CITY_METHOD)) {
-            Gson gson = new Gson();
-            cityList = gson.fromJson(response, CityList.class);
-            if (!cityList.getError()) {
-                String[] cityArr = new String[cityList.getCity().size() + 1];
-                cityArr[0] = C.SELECT_CITY;
-                for (int i = 0; i < cityList.getCity().size(); i++) {
-                    cityArr[i + 1] = String.valueOf(cityList.getCity().get(i).getName());
-                }
-
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, cityArr); //selected item will look like a spinner set from XML
-                spnCity.setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.notifyDataSetChanged();
-                if (C.isloggedIn) {
-                    spnCity.setSelection(spinnerArrayAdapter.getPosition(profile.getCityName()));
-                }
-            } else {
-                String[] cityArr = new String[1];
-                cityArr[0] = C.SELECT_CITY;
-                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, cityArr); //selected item will look like a spinner set from XML
-                spnCity.setAdapter(spinnerArrayAdapter);
-                spinnerArrayAdapter.notifyDataSetChanged();
-            }
-        } else if (action.equals(C.REGISTER_COUNTINUE_METHOD)) {
-            Gson gson = new Gson();
-            RegisterStatus registerStatus = gson.fromJson(response, RegisterStatus.class);
-            if(!registerStatus.getError()) {
-                getDailogConfirm(registerStatus.getMessage(), "1");
-            }
-            else {
-                getDailogConfirm(registerStatus.getMessage(),"");
-            }
-
-        } else if (action.equals(C.UPDATE_PROFILE_METHOD)) {
-            Gson gson = new Gson();
-            ProfileStatus profileStatus = gson.fromJson(response, ProfileStatus.class);
-            if (!profileStatus.getError()) {
-                getDailogConfirm(profileStatus.getMessage(), "2");
-
-            } else {
-                getDailogConfirm(profileStatus.getMessage(), "");
-            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -677,5 +704,153 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
 
     public Context getActivity() {
         return this;
+    }
+
+
+    void setCategoryList( List<String> catList){
+        try {
+
+            spinnerCategoryAdapter = new ArrayAdapter<String>(
+                    getActivity(), R.layout.spinner_item, catList) {
+                @Override
+                public boolean isEnabled(int position) {
+                    if (position == 0) {
+                        // Disable the first item from Spinner
+                        // First item will be use for hint
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
+                @Override
+                public View getDropDownView(int position, View convertView,
+                                            ViewGroup parent) {
+                    View view = super.getDropDownView(position, convertView, parent);
+                    TextView tv = (TextView) view;
+                    if (position == 0) {
+                        // Set the hint text color gray
+                        tv.setTextColor(Color.GRAY);
+                    } else {
+                        tv.setTextColor(Color.BLACK);
+                    }
+                    return view;
+                }
+            };
+            spinnerCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spnCategory.setAdapter(spinnerCategoryAdapter);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    void setCountryList( List<String> countryList){
+        try {
+            spinnerCountryAdapter = new ArrayAdapter<String>(
+                    getActivity(), R.layout.spinner_item, countryList) {
+                @Override
+                public boolean isEnabled(int position) {
+                    if (position == 0) {
+                        // Disable the first item from Spinner
+                        // First item will be use for hint
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
+                @Override
+                public View getDropDownView(int position, View convertView,
+                                            ViewGroup parent) {
+                    View view = super.getDropDownView(position, convertView, parent);
+                    TextView tv = (TextView) view;
+                    if (position == 0) {
+                        // Set the hint text color gray
+                        tv.setTextColor(Color.GRAY);
+                    } else {
+                        tv.setTextColor(Color.BLACK);
+                    }
+                    return view;
+                }
+            };
+            spinnerCountryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spnCountry.setAdapter(spinnerCountryAdapter);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    void setStateList( List<String> StateList){
+        try {
+            spinnerStateAdapter = new ArrayAdapter<String>(
+                    getActivity(), R.layout.spinner_item, StateList) {
+                @Override
+                public boolean isEnabled(int position) {
+                    if (position == 0) {
+                        // Disable the first item from Spinner
+                        // First item will be use for hint
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
+                @Override
+                public View getDropDownView(int position, View convertView,
+                                            ViewGroup parent) {
+                    View view = super.getDropDownView(position, convertView, parent);
+                    TextView tv = (TextView) view;
+                    if (position == 0) {
+                        // Set the hint text color gray
+                        tv.setTextColor(Color.GRAY);
+                    } else {
+                        tv.setTextColor(Color.BLACK);
+                    }
+                    return view;
+                }
+            };
+            spinnerStateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spnProvince.setAdapter(spinnerStateAdapter);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    void setCityList( List<String> cityList){
+        try {
+
+            spinnerCityAdapter = new ArrayAdapter<String>(
+                    getActivity(), R.layout.spinner_item, cityList) {
+                @Override
+                public boolean isEnabled(int position) {
+                    if (position == 0) {
+                        // Disable the first item from Spinner
+                        // First item will be use for hint
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
+                @Override
+                public View getDropDownView(int position, View convertView,
+                                            ViewGroup parent) {
+                    View view = super.getDropDownView(position, convertView, parent);
+                    TextView tv = (TextView) view;
+                    if (position == 0) {
+                        // Set the hint text color gray
+                        tv.setTextColor(Color.GRAY);
+                    } else {
+                        tv.setTextColor(Color.BLACK);
+                    }
+                    return view;
+                }
+            };
+            spinnerCityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spnCity.setAdapter(spinnerCityAdapter);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

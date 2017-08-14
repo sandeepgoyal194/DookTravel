@@ -80,7 +80,6 @@
                     android:layout_width="105dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="2dp"
-                    android:entries="@array/country"
                     />
             </LinearLayout>
 
@@ -105,7 +104,6 @@
                     android:layout_marginTop="2dp"
                     android:hint="@string/dob"
                     android:gravity="center"
-                    android:entries="@array/state"
                     style="@style/SpinnerTheme"
                     />
             </LinearLayout>
@@ -133,7 +131,6 @@
                     android:layout_height="40dp"
                     android:layout_marginTop="15dp"
                     style="@style/SpinnerTheme"
-                    android:entries="@array/category"
                     />
             </LinearLayout>
 

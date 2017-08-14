@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -56,7 +57,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import static android.app.Activity.RESULT_CANCELED;
 
@@ -84,7 +88,19 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
     ProfileDetail profileDtl;
     private int GALLERY = 1, CAMERA = 2;
     private static final String IMAGE_DIRECTORY = "/dooktravel";
-
+    String[] gender = new String[]{
+            "Gender",
+            "Male",
+            "Female"
+    };
+    String[] matirailStatus = new String[]{
+           "Marital Status",
+        "Single",
+      "Married",
+       "Widowed",
+        "Separated",
+       "Divorced"
+    };
     private int PICK_IMAGE_REQUEST = 1;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -164,6 +180,77 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
         btnNext=(Button) view.findViewById(R.id.btnNext);
         spnMaritalStatus=(Spinner)view.findViewById(R.id.spinner_marital_status);
         spnGender=(Spinner)view.findViewById(R.id.spinner_gender);
+        final List<String> genderList = new ArrayList<>(Arrays.asList(gender));
+         List<String> spnMaritalStatusList = new ArrayList<>(Arrays.asList(matirailStatus));
+
+
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                getActivity(),R.layout.spinner_item_black,genderList){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnGender.setAdapter(spinnerArrayAdapter);
+
+
+        final ArrayAdapter<String> spinnerMaritalAdapter = new ArrayAdapter<String>(
+                getActivity(),R.layout.spinner_item_black,spnMaritalStatusList){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        spinnerMaritalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnMaritalStatus.setAdapter(spinnerMaritalAdapter);
+
         viewUploadImage=(View)view.findViewById(R.id.rl_image);
         viewUploadImage.setOnClickListener(mUploadImageClickListner);
         imgProfile=(ImageView)view.findViewById(R.id.imgProfile);

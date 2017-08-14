@@ -232,9 +232,10 @@
                             android:id="@+id/spinner_gender"
                             style="@style/SpinnerTheme"
                             android:layout_width="105dp"
+                            android:gravity="center"
                             android:layout_height="40dp"
                             android:layout_marginTop="2dp"
-                            android:entries="@array/gender" />
+                           />
                     </LinearLayout>
 
                     <LinearLayout
@@ -257,10 +258,11 @@
                             android:layout_width="105dp"
                             android:layout_height="40dp"
                             android:layout_marginTop="2dp"
-                            android:background="@color/white"
+                            android:background="@drawable/view_back_border"
                             android:gravity="center"
                             android:textSize="14sp"
                             android:lines="1"
+                            android:paddingLeft="5dp"
                             android:singleLine="true"
                             android:hint="@string/date_of_birth"
                             android:textColor="@color/black"
@@ -295,7 +297,7 @@
                             android:layout_height="40dp"
                             android:layout_marginBottom="80dp"
                             android:layout_marginTop="2dp"
-                            android:entries="@array/marital_status" />
+                            />
                     </LinearLayout>
 
                 </RelativeLayout>

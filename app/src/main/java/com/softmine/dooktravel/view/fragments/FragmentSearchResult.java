@@ -3,6 +3,7 @@ package com.softmine.dooktravel.view.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -43,6 +44,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -67,6 +69,11 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
     int mCountryPos=-1,mStatePos=-1,mCategoryPos=-1;
     ProfileListRequest profileListRequest;
     Utils utils;
+    ArrayAdapter<String> spinnerCategoryAdapter=null;
+    ArrayAdapter<String> spinnerStateAdapter=null;
+    ArrayAdapter<String> spinnerCountryAdapter=null;
+
+    ArrayAdapter<String> spinnerCityAdapter=null;
     public FragmentSearchResult() {
         // Required empty public constructor
     }
@@ -94,6 +101,29 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
         spnCountry = (Spinner) view.findViewById(R.id.spinner_country);
         spnState = (Spinner) view.findViewById(R.id.spinner_state);
         spnCategory = (Spinner) view.findViewById(R.id.spinner_filter_category);
+
+
+        String[] catArr = new String[1];
+        catArr[0] = C.SELECT_CATEGORY;
+                /*    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
+                    spnState.setAdapter(spinnerArrayAdapter);
+                    spinnerArrayAdapter.notifyDataSetChanged();*/
+        setCategoryList(Arrays.asList(catArr));
+
+        String[] stateArr = new String[1];
+        stateArr[0] = C.SELECT_STATE;
+                /*    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
+                    spnState.setAdapter(spinnerArrayAdapter);
+                    spinnerArrayAdapter.notifyDataSetChanged();*/
+        setStateList(Arrays.asList(stateArr));
+
+        String[] counArr = new String[1];
+        counArr[0] = C.SELECT_COUNTRY;
+                /*    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
+                    spnState.setAdapter(spinnerArrayAdapter);
+                    spinnerArrayAdapter.notifyDataSetChanged();*/
+        setCountryList(Arrays.asList(counArr));
+
         tvSearchResult=(TextView)view.findViewById(R.id.tvSearchResult) ;
       /*  ArrayAdapter countryAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.country, R.layout.spinner_item);
 
@@ -279,18 +309,22 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
 
                     }
 
-                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, catArr); //selected item will look like a spinner set from XML
+                  /*  ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, catArr); //selected item will look like a spinner set from XML
 
-                    spnCategory.setAdapter(spinnerArrayAdapter);
-                    spinnerArrayAdapter.notifyDataSetChanged();
+                    spnCategory.setAdapter(spinnerArrayAdapter);*/
+
+                    setCategoryList(Arrays.asList(catArr));
+                    spinnerCategoryAdapter.notifyDataSetChanged();
                     getCountryList();
 
                 } else {
                     String[] countArr = new String[1];
                     countArr[0] = C.SELECT_CATEGORY;
-                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
-                    spnCategory.setAdapter(spinnerArrayAdapter);
-                    spinnerArrayAdapter.notifyDataSetChanged();
+                    /*ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
+                    spnCategory.setAdapter(spinnerArrayAdapter);*/
+                    setCategoryList(Arrays.asList(countArr));
+                    spinnerCategoryAdapter.notifyDataSetChanged();
+                 //   spinnerArrayAdapter.notifyDataSetChanged();
 
                 }
             } else if (action.equals(C.COUNTRY_METHOD)) {
@@ -303,18 +337,22 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
                         countArr[i + 1] = String.valueOf(countryList.getCountry().get(i).getName());
                     }
 
-                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
+                   /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
 
-                    spnCountry.setAdapter(spinnerArrayAdapter);
-                    spinnerArrayAdapter.notifyDataSetChanged();
+                    spnCountry.setAdapter(spinnerArrayAdapter);*/
+                    setCountryList(Arrays.asList(countArr));
+                    spinnerCountryAdapter.notifyDataSetChanged();
+
 
 
                 } else {
                     String[] countArr = new String[1];
                     countArr[0] = C.SELECT_COUNTRY;
-                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
+                   /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
                     spnCountry.setAdapter(spinnerArrayAdapter);
-                    spinnerArrayAdapter.notifyDataSetChanged();
+                    spinnerArrayAdapter.notifyDataSetChanged();*/
+                    setCountryList(Arrays.asList(countArr));
+                    spinnerCountryAdapter.notifyDataSetChanged();
 
                 }
             } else if (action.equals(C.STATE_METHOD)) {
@@ -322,22 +360,26 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
                 stateList = gson.fromJson(response, StateList.class);
                 if (!stateList.getError()) {
                     String[] stateArr = new String[stateList.getState().size() + 1];
-                    stateArr[0] = C.STATE_METHOD;
+                    stateArr[0] = C.SELECT_STATE;
                     for (int i = 0; i < stateList.getState().size(); i++) {
                         stateArr[i + 1] = String.valueOf(stateList.getState().get(i).getName());
                     }
 
 
-                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
+                  /*  ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
                     spnState.setAdapter(spinnerArrayAdapter);
-                    spinnerArrayAdapter.notifyDataSetChanged();
+                    spinnerArrayAdapter.notifyDataSetChanged();*/
+                    setStateList(Arrays.asList(stateArr));
+                    spinnerStateAdapter.notifyDataSetChanged();
 
                 } else {
                     String[] stateArr = new String[1];
-                    stateArr[0] = C.STATE_METHOD;
-                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
+                    stateArr[0] = C.SELECT_STATE;
+                /*    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
                     spnState.setAdapter(spinnerArrayAdapter);
-                    spinnerArrayAdapter.notifyDataSetChanged();
+                    spinnerArrayAdapter.notifyDataSetChanged();*/
+                    setStateList(Arrays.asList(stateArr));
+                    spinnerStateAdapter.notifyDataSetChanged();
 
                 }
             } else if (action.equals(C.PROFILE_LIST_METHOD)) {
@@ -396,4 +438,118 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
     public Context getApplicationsContext() {
         return getActivity();
     }
+
+
+
+    void setCategoryList( List<String> catList){
+        try {
+
+            spinnerCategoryAdapter = new ArrayAdapter<String>(
+                    getActivity(), R.layout.spinner_item_black, catList) {
+                @Override
+                public boolean isEnabled(int position) {
+                    if (position == 0) {
+                        // Disable the first item from Spinner
+                        // First item will be use for hint
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
+                @Override
+                public View getDropDownView(int position, View convertView,
+                                            ViewGroup parent) {
+                    View view = super.getDropDownView(position, convertView, parent);
+                    TextView tv = (TextView) view;
+                    if (position == 0) {
+                        // Set the hint text color gray
+                        tv.setTextColor(Color.GRAY);
+                    } else {
+                        tv.setTextColor(Color.BLACK);
+                    }
+                    return view;
+                }
+            };
+            spinnerCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spnCategory.setAdapter(spinnerCategoryAdapter);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    void setCountryList( List<String> countryList){
+        try {
+            spinnerCountryAdapter = new ArrayAdapter<String>(
+                    getActivity(), R.layout.spinner_item_black, countryList) {
+                @Override
+                public boolean isEnabled(int position) {
+                    if (position == 0) {
+                        // Disable the first item from Spinner
+                        // First item will be use for hint
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
+                @Override
+                public View getDropDownView(int position, View convertView,
+                                            ViewGroup parent) {
+                    View view = super.getDropDownView(position, convertView, parent);
+                    TextView tv = (TextView) view;
+                    if (position == 0) {
+                        // Set the hint text color gray
+                        tv.setTextColor(Color.GRAY);
+                    } else {
+                        tv.setTextColor(Color.BLACK);
+                    }
+                    return view;
+                }
+            };
+            spinnerCountryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spnCountry.setAdapter(spinnerCountryAdapter);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    void setStateList( List<String> StateList){
+        try {
+            spinnerStateAdapter = new ArrayAdapter<String>(
+                    getActivity(), R.layout.spinner_item_black, StateList) {
+                @Override
+                public boolean isEnabled(int position) {
+                    if (position == 0) {
+                        // Disable the first item from Spinner
+                        // First item will be use for hint
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+
+                @Override
+                public View getDropDownView(int position, View convertView,
+                                            ViewGroup parent) {
+                    View view = super.getDropDownView(position, convertView, parent);
+                    TextView tv = (TextView) view;
+                    if (position == 0) {
+                        // Set the hint text color gray
+                        tv.setTextColor(Color.GRAY);
+                    } else {
+                        tv.setTextColor(Color.BLACK);
+                    }
+                    return view;
+                }
+            };
+            spinnerStateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spnState.setAdapter(spinnerStateAdapter);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
 }
