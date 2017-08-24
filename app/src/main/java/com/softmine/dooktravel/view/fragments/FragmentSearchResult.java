@@ -2,7 +2,6 @@ package com.softmine.dooktravel.view.fragments;
 
 
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -31,8 +30,8 @@ import com.softmine.dooktravel.pojos.Model;
 import com.softmine.dooktravel.pojos.ProfileList;
 import com.softmine.dooktravel.pojos.ProfileListRequest;
 import com.softmine.dooktravel.pojos.StateList;
-import com.softmine.dooktravel.serviceconnection.CompleteListener;
-import com.softmine.dooktravel.serviceconnection.ServiceConnection;
+import com.softmine.dooktravel.presenter.FragmentSearchResultPresenterImpl;
+import com.softmine.dooktravel.presenter.IFragmentSearchResultPresenter;
 import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
@@ -50,7 +49,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSearchResult extends Fragment implements CompleteListener{
+public class FragmentSearchResult extends Fragment implements IFragmentView{
 
     private RecyclerView recyclerView;
     private AdapterSearchResult adapterSearchResult;
@@ -74,6 +73,7 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
     ArrayAdapter<String> spinnerCountryAdapter=null;
 
     ArrayAdapter<String> spinnerCityAdapter=null;
+    IFragmentSearchResultPresenter mIFragmentSearchResultPresenter;
     public FragmentSearchResult() {
         // Required empty public constructor
     }
@@ -87,10 +87,16 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         validation = new Validations();
         utils=new Utils();
+        mIFragmentSearchResultPresenter=new FragmentSearchResultPresenterImpl(this,getActivity());
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -217,19 +223,18 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ServiceConnection serviceConnection=new ServiceConnection();
-        serviceConnection.makeJsonObjectRequest(C.STATE_METHOD,jsonBody,FragmentSearchResult.this);
+        mIFragmentSearchResultPresenter.getStateList(jsonBody,true);
 
     }
     void  getCategoryList(){
         action= C.CATEGORY_LIST_METHOD;
-        ServiceConnection serviceConnection=new ServiceConnection();
-        serviceConnection.makeJsonObjectRequest(C.CATEGORY_LIST_METHOD,null,FragmentSearchResult.this);
+        mIFragmentSearchResultPresenter.getCategoryList(null,true);
+
     }
     void getCountryList(){
         action=C.COUNTRY_METHOD;
-        ServiceConnection serviceConnection=new ServiceConnection();
-        serviceConnection.serviceRequest(C.COUNTRY_METHOD,null,FragmentSearchResult.this);
+        mIFragmentSearchResultPresenter.getCountryList(null,false);
+
     }
     View.OnClickListener mGoClickListner = new View.OnClickListener() {
         @Override
@@ -247,8 +252,8 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
                     try {
                         action = C.PROFILE_LIST_METHOD;
                         JSONObject jsonObject = new JSONObject(obj);
-                        ServiceConnection serviceConnection = new ServiceConnection();
-                        serviceConnection.makeJsonObjectRequest(C.PROFILE_LIST_METHOD, jsonObject, FragmentSearchResult.this);
+                        mIFragmentSearchResultPresenter.getProfileList(jsonObject);
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -291,112 +296,7 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
         return results;
     }
 
-    @Override
-    public void done(String response) {
 
-        try {
-            Log.e(FragmentSearchResult.class.getName(), "RESPONSE==" + response);
-
-            if (action.equals(C.CATEGORY_LIST_METHOD)) {
-                Gson gson = new Gson();
-                categoryList = gson.fromJson(response, CategoryList.class);
-                if (!categoryList.getError()) {
-                    String[] catArr = new String[categoryList.getCategory().size() + 1];
-                    catArr[0] = C.SELECT_CATEGORY;
-                    for (int i = 0; i < categoryList.getCategory().size(); i++) {
-
-                        catArr[i + 1] = String.valueOf(categoryList.getCategory().get(i).getCategoryName());
-
-                    }
-
-                  /*  ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, catArr); //selected item will look like a spinner set from XML
-
-                    spnCategory.setAdapter(spinnerArrayAdapter);*/
-
-                    setCategoryList(Arrays.asList(catArr));
-                    spinnerCategoryAdapter.notifyDataSetChanged();
-                    getCountryList();
-
-                } else {
-                    String[] countArr = new String[1];
-                    countArr[0] = C.SELECT_CATEGORY;
-                    /*ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
-                    spnCategory.setAdapter(spinnerArrayAdapter);*/
-                    setCategoryList(Arrays.asList(countArr));
-                    spinnerCategoryAdapter.notifyDataSetChanged();
-                 //   spinnerArrayAdapter.notifyDataSetChanged();
-
-                }
-            } else if (action.equals(C.COUNTRY_METHOD)) {
-                Gson gson = new Gson();
-                countryList = gson.fromJson(response, CountryList.class);
-                if (!countryList.getError()) {
-                    String[] countArr = new String[countryList.getCountry().size() + 1];
-                    countArr[0] = C.SELECT_COUNTRY;
-                    for (int i = 0; i < countryList.getCountry().size(); i++) {
-                        countArr[i + 1] = String.valueOf(countryList.getCountry().get(i).getName());
-                    }
-
-                   /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
-
-                    spnCountry.setAdapter(spinnerArrayAdapter);*/
-                    setCountryList(Arrays.asList(countArr));
-                    spinnerCountryAdapter.notifyDataSetChanged();
-
-
-
-                } else {
-                    String[] countArr = new String[1];
-                    countArr[0] = C.SELECT_COUNTRY;
-                   /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
-                    spnCountry.setAdapter(spinnerArrayAdapter);
-                    spinnerArrayAdapter.notifyDataSetChanged();*/
-                    setCountryList(Arrays.asList(countArr));
-                    spinnerCountryAdapter.notifyDataSetChanged();
-
-                }
-            } else if (action.equals(C.STATE_METHOD)) {
-                Gson gson = new Gson();
-                stateList = gson.fromJson(response, StateList.class);
-                if (!stateList.getError()) {
-                    String[] stateArr = new String[stateList.getState().size() + 1];
-                    stateArr[0] = C.SELECT_STATE;
-                    for (int i = 0; i < stateList.getState().size(); i++) {
-                        stateArr[i + 1] = String.valueOf(stateList.getState().get(i).getName());
-                    }
-
-
-                  /*  ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
-                    spnState.setAdapter(spinnerArrayAdapter);
-                    spinnerArrayAdapter.notifyDataSetChanged();*/
-                    setStateList(Arrays.asList(stateArr));
-                    spinnerStateAdapter.notifyDataSetChanged();
-
-                } else {
-                    String[] stateArr = new String[1];
-                    stateArr[0] = C.SELECT_STATE;
-                /*    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
-                    spnState.setAdapter(spinnerArrayAdapter);
-                    spinnerArrayAdapter.notifyDataSetChanged();*/
-                    setStateList(Arrays.asList(stateArr));
-                    spinnerStateAdapter.notifyDataSetChanged();
-
-                }
-            } else if (action.equals(C.PROFILE_LIST_METHOD)) {
-                Gson gson = new Gson();
-                ProfileList profileList = gson.fromJson(response, ProfileList.class);
-                if (!profileList.getError()) {
-                    adapterSearchResult = new AdapterSearchResult(profileList.getMember(), getActivity());
-                    recyclerView.setAdapter(adapterSearchResult);
-                } else {
-                    Utils.showToast(getActivity(), profileList.getMessage());
-                }
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
     void getDailogConfirm(String dataText, String titleText) {
         try {
             final Dialog dialog = new Dialog(getActivity());
@@ -434,12 +334,6 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
             e.printStackTrace();
         }
     }
-    @Override
-    public Context getApplicationsContext() {
-        return getActivity();
-    }
-
-
 
     void setCategoryList( List<String> catList){
         try {
@@ -552,4 +446,125 @@ public class FragmentSearchResult extends Fragment implements CompleteListener{
     }
 
 
+    @Override
+    public void getResponseSuccess(String response) {
+
+        try {
+            Log.e(FragmentSearchResult.class.getName(), "RESPONSE==" + response);
+
+            if (action.equals(C.CATEGORY_LIST_METHOD)) {
+                Gson gson = new Gson();
+                categoryList = gson.fromJson(response, CategoryList.class);
+                if (!categoryList.getError()) {
+                    String[] catArr = new String[categoryList.getCategory().size() + 1];
+                    catArr[0] = C.SELECT_CATEGORY;
+                    for (int i = 0; i < categoryList.getCategory().size(); i++) {
+
+                        catArr[i + 1] = String.valueOf(categoryList.getCategory().get(i).getCategoryName());
+
+                    }
+
+                  /*  ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, catArr); //selected item will look like a spinner set from XML
+
+                    spnCategory.setAdapter(spinnerArrayAdapter);*/
+
+                    setCategoryList(Arrays.asList(catArr));
+                    spinnerCategoryAdapter.notifyDataSetChanged();
+                    getCountryList();
+
+                } else {
+                    String[] countArr = new String[1];
+                    countArr[0] = C.SELECT_CATEGORY;
+                    /*ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
+                    spnCategory.setAdapter(spinnerArrayAdapter);*/
+                    setCategoryList(Arrays.asList(countArr));
+                    spinnerCategoryAdapter.notifyDataSetChanged();
+                    //   spinnerArrayAdapter.notifyDataSetChanged();
+
+                }
+            } else if (action.equals(C.COUNTRY_METHOD)) {
+                Gson gson = new Gson();
+                countryList = gson.fromJson(response, CountryList.class);
+                if (!countryList.getError()) {
+                    String[] countArr = new String[countryList.getCountry().size() + 1];
+                    countArr[0] = C.SELECT_COUNTRY;
+                    for (int i = 0; i < countryList.getCountry().size(); i++) {
+                        countArr[i + 1] = String.valueOf(countryList.getCountry().get(i).getName());
+                    }
+
+                   /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
+
+                    spnCountry.setAdapter(spinnerArrayAdapter);*/
+                    setCountryList(Arrays.asList(countArr));
+                    spinnerCountryAdapter.notifyDataSetChanged();
+
+
+
+                } else {
+                    String[] countArr = new String[1];
+                    countArr[0] = C.SELECT_COUNTRY;
+                   /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
+                    spnCountry.setAdapter(spinnerArrayAdapter);
+                    spinnerArrayAdapter.notifyDataSetChanged();*/
+                    setCountryList(Arrays.asList(countArr));
+                    spinnerCountryAdapter.notifyDataSetChanged();
+
+                }
+            } else if (action.equals(C.STATE_METHOD)) {
+                Gson gson = new Gson();
+                stateList = gson.fromJson(response, StateList.class);
+                if (!stateList.getError()) {
+                    String[] stateArr = new String[stateList.getState().size() + 1];
+                    stateArr[0] = C.SELECT_STATE;
+                    for (int i = 0; i < stateList.getState().size(); i++) {
+                        stateArr[i + 1] = String.valueOf(stateList.getState().get(i).getName());
+                    }
+
+
+                  /*  ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
+                    spnState.setAdapter(spinnerArrayAdapter);
+                    spinnerArrayAdapter.notifyDataSetChanged();*/
+                    setStateList(Arrays.asList(stateArr));
+                    spinnerStateAdapter.notifyDataSetChanged();
+
+                } else {
+                    String[] stateArr = new String[1];
+                    stateArr[0] = C.SELECT_STATE;
+                /*    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
+                    spnState.setAdapter(spinnerArrayAdapter);
+                    spinnerArrayAdapter.notifyDataSetChanged();*/
+                    setStateList(Arrays.asList(stateArr));
+                    spinnerStateAdapter.notifyDataSetChanged();
+
+                }
+            } else if (action.equals(C.PROFILE_LIST_METHOD)) {
+                Gson gson = new Gson();
+                ProfileList profileList = gson.fromJson(response, ProfileList.class);
+                if (!profileList.getError()) {
+                    adapterSearchResult = new AdapterSearchResult(profileList.getMember(), getActivity());
+                    recyclerView.setAdapter(adapterSearchResult);
+                } else {
+                    Utils.showToast(getActivity(), profileList.getMessage());
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getResponseError(String response) {
+
+    }
+
+    @Override
+    public void showProgress() {
+        utils.showDialog(C.MSG,getActivity());
+    }
+
+    @Override
+    public void hideProgress() {
+        utils.hideDialog();
+    }
 }

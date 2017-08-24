@@ -72,6 +72,11 @@ public class C {
     public static final String SELECT_CITY = "City";
     public static final String IS_EDIT_PROFILE ="is_edit_profile" ;
     public static final String ADD_TO_BACK = "addToBack";
+    public static final String SINGLE = "single";
+    public static final String MARRIED ="Married" ;
+    public static final String WIDOWED = "Widowed";
+    public static final String SEAPRATED = "Separated";
+    public static final String DIVORCED ="Divorced" ;
 
 
     public static  boolean isloggedIn =false ;

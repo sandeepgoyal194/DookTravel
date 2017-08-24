@@ -1,4 +1,4 @@
-package com.softmine.dooktravel.pojos;
+package com.softmine.dooktravel.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

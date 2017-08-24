@@ -5,7 +5,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -37,11 +36,11 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.softmine.dooktravel.R;
-import com.softmine.dooktravel.pojos.Profile;
-import com.softmine.dooktravel.pojos.ProfileDetail;
+import com.softmine.dooktravel.model.Profile;
+import com.softmine.dooktravel.model.ProfileDetail;
 import com.softmine.dooktravel.pojos.ProfileStatus;
-import com.softmine.dooktravel.serviceconnection.CompleteListener;
-import com.softmine.dooktravel.serviceconnection.ServiceConnection;
+import com.softmine.dooktravel.presenter.FragmentBasicDetailPresenterImpl;
+import com.softmine.dooktravel.presenter.IFragmentBasicDetailPresenter;
 import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
@@ -67,7 +66,7 @@ import static android.app.Activity.RESULT_CANCELED;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentBasicDetail extends Fragment implements CompleteListener{
+public class FragmentBasicDetail extends Fragment implements IFragmentView{
     private DatePickerDialog DatePickerDialog;
     TextView tvbasicDetail,tvGender,tvDob,tvMaritalStatus,spnDateOfBirth,tvUpload;
     ValidateEditText edFirstName,edMiddleName,edLastName,edPassword,edConfirmPassword,edSkypeID,edPhone;
@@ -102,6 +101,7 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
        "Divorced"
     };
     private int PICK_IMAGE_REQUEST = 1;
+    IFragmentBasicDetailPresenter mIFragmentBasicDetailPresenter;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +128,7 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
                 profileDtl = (ProfileDetail) bundle.getSerializable(C.DATA);
             }
         }
+        mIFragmentBasicDetailPresenter=new FragmentBasicDetailPresenterImpl(this,getActivity());
 
     }
 
@@ -580,9 +581,13 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
         return true;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mIFragmentBasicDetailPresenter.onDestroy();
+    }
 
     void getProfileDetail(){
-
         if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
             JSONObject jsonBody = new JSONObject();
             try {
@@ -595,24 +600,10 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            ServiceConnection serviceConnection = new ServiceConnection();
-            serviceConnection.makeJsonObjectRequest(C.PROFILE_METHOD, jsonBody, FragmentBasicDetail.this);
+            mIFragmentBasicDetailPresenter.getBasicDetail(jsonBody);
         }
     }
-    @Override
-    public void done(String response) {
-        Log.e(FragmentBasicDetail.class.getName(),"RESPONSE=="+response);
-        Gson gson = new Gson();
-        ProfileStatus profileStatus= gson.fromJson(response,ProfileStatus.class);
-        if(!profileStatus.getError()){
-            profile=profileStatus.getMember().get(0);
-            showDetails(profile);
-        }
-        else{
-            getDailogConfirm(profileStatus.getMessage(),"");
-        }
 
-    }
 
 
     void showDetails(Profile profile){
@@ -627,18 +618,18 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
             } else {
                 spnGender.setSelection(2);
             }
-            if (profile.getMaritalStatus().equalsIgnoreCase("single")) {
+            if (profile.getMaritalStatus().equalsIgnoreCase(C.SINGLE)) {
                 spnMaritalStatus.setSelection(1);
-            } else if(profile.getMaritalStatus().equalsIgnoreCase("Married")) {
+            } else if(profile.getMaritalStatus().equalsIgnoreCase(C.MARRIED)) {
                 spnMaritalStatus.setSelection(2);
             }
-            else if(profile.getMaritalStatus().equalsIgnoreCase("Widowed")) {
+            else if(profile.getMaritalStatus().equalsIgnoreCase(C.WIDOWED)) {
                 spnMaritalStatus.setSelection(3);
             }
-            else if(profile.getMaritalStatus().equalsIgnoreCase("Separated")) {
+            else if(profile.getMaritalStatus().equalsIgnoreCase(C.SEAPRATED)) {
                 spnMaritalStatus.setSelection(4);
             }
-            else if(profile.getMaritalStatus().equalsIgnoreCase("Divorced")) {
+            else if(profile.getMaritalStatus().equalsIgnoreCase(C.DIVORCED)) {
                 spnMaritalStatus.setSelection(5);
             }
 
@@ -658,10 +649,7 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
         }
     }
 
-    @Override
-    public Context getApplicationsContext() {
-        return getActivity();
-    }
+
 
 
     void getDailogConfirm(String dataText, String titleText) {
@@ -707,6 +695,40 @@ public class FragmentBasicDetail extends Fragment implements CompleteListener{
     public void onResume() {
         super.onResume();
 
+    }
+
+    @Override
+    public void getResponseSuccess(String response) {
+        try {
+            Log.e(FragmentBasicDetail.class.getName(),"RESPONSE=="+response);
+            Gson gson = new Gson();
+            ProfileStatus profileStatus= gson.fromJson(response,ProfileStatus.class);
+            if(!profileStatus.getError()){
+                profile=profileStatus.getMember().get(0);
+                showDetails(profile);
+            }
+            else{
+                getDailogConfirm(profileStatus.getMessage(),"");
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getResponseError(String response) {
+
+    }
+
+    @Override
+    public void showProgress() {
+        util.showDialog(C.MSG,getActivity());
+    }
+
+    @Override
+    public void hideProgress() {
+        util.hideDialog();
     }
 
     private class AsyncGettingBitmapFromUrl extends AsyncTask<Void, Void, Bitmap> {

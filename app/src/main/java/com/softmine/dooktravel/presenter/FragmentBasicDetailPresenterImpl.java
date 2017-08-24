@@ -2,34 +2,34 @@ package com.softmine.dooktravel.presenter;
 
 import android.content.Context;
 
-import com.softmine.dooktravel.model.ILoginResponseIntractor;
-import com.softmine.dooktravel.model.LoginResponseIntractorImpl;
+import com.softmine.dooktravel.model.BasicDetailResponseIntractorImpl;
+import com.softmine.dooktravel.model.IBasicDetailResponseIntractor;
 import com.softmine.dooktravel.view.fragments.IFragmentView;
 
 import org.json.JSONObject;
 
 /**
- * Created by GAURAV on 7/31/2017.
+ * Created by GAURAV on 8/23/2017.
  */
 
-public class FragmentLoginPresenterImpl implements IFragmentLoginPresenter,ILoginResponseIntractor.OnLoginFinishedListener {
+public class FragmentBasicDetailPresenterImpl implements IFragmentBasicDetailPresenter , IBasicDetailResponseIntractor.OnBasicDetailResponseFinishedListener{
+
     IFragmentView mView;
     Context context;
-        private ILoginResponseIntractor iLoginResponseIntractor;
-    public FragmentLoginPresenterImpl(IFragmentView mView, Context context) {
+    IBasicDetailResponseIntractor iBasicDetailResponseIntractor;
+
+    public FragmentBasicDetailPresenterImpl(IFragmentView mView, Context context) {
         this.mView = mView;
-        this.context=context;
-        iLoginResponseIntractor=new LoginResponseIntractorImpl();
+        this.context = context;
+        iBasicDetailResponseIntractor=new BasicDetailResponseIntractorImpl();
     }
 
-
     @Override
-    public void validateLogin(JSONObject jsonObject) {
-            if(mView!=null){
-                mView.showProgress();
-            }
-        iLoginResponseIntractor.getLoginResponse(jsonObject, this);
-
+    public void getBasicDetail(JSONObject jsonObject) {
+        if(mView!=null){
+            mView.showProgress();
+        }
+        iBasicDetailResponseIntractor.getBasicDetail(jsonObject,this);
     }
 
     @Override

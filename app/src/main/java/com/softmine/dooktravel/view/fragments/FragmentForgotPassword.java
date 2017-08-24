@@ -2,7 +2,6 @@ package com.softmine.dooktravel.view.fragments;
 
 
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,9 +17,9 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.softmine.dooktravel.R;
-import com.softmine.dooktravel.pojos.RegisterStatus;
-import com.softmine.dooktravel.serviceconnection.CompleteListener;
-import com.softmine.dooktravel.serviceconnection.ServiceConnection;
+import com.softmine.dooktravel.model.RegisterStatus;
+import com.softmine.dooktravel.presenter.FragmentForgotPasswordPresenterImpl;
+import com.softmine.dooktravel.presenter.IFragmentForgotPasswordPresenter;
 import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
@@ -32,13 +31,14 @@ import org.json.JSONObject;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentForgotPassword extends Fragment implements CompleteListener{
+public class FragmentForgotPassword extends Fragment implements IFragmentView{
     int flags;
     ValidateEditText etEmail;
     Button btnSubmit;
     TextView tvForgotPassword;
     Validations validation;
     Utils utils;
+    IFragmentForgotPasswordPresenter mIFragmentForgotPasswordPresenter;
     public FragmentForgotPassword() {
         // Required empty public constructor
     }
@@ -65,8 +65,13 @@ public class FragmentForgotPassword extends Fragment implements CompleteListener
         btnSubmit.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
         btnSubmit.setOnClickListener(mSubmitClickListner);
         validation.addtoList(etEmail);
+        mIFragmentForgotPasswordPresenter=new FragmentForgotPasswordPresenterImpl(this,getActivity());
     }
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mIFragmentForgotPasswordPresenter.onDestroy();
+    }
     View.OnClickListener mSubmitClickListner=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -79,8 +84,8 @@ public class FragmentForgotPassword extends Fragment implements CompleteListener
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    ServiceConnection serviceConnection = new ServiceConnection();
-                    serviceConnection.makeJsonObjectRequest(C.FORGOT_METHOD, jsonBody, FragmentForgotPassword.this);
+
+                    mIFragmentForgotPasswordPresenter.validateForgotPassword(jsonBody);
                 }
                 else {
                     getDailogConfirm(getString(R.string.internet_issue)
@@ -126,24 +131,6 @@ public class FragmentForgotPassword extends Fragment implements CompleteListener
             e.printStackTrace();
         }
     }
-    @Override
-    public void done(String response) {
-        Log.e(FragmentForgotPassword.class.getName(),"RESPONSE=="+response);
-        Gson gson = new Gson();
-        RegisterStatus registerStatus= gson.fromJson(response,RegisterStatus.class);
-        if(!registerStatus.getError()){
-            getDailog(registerStatus.getMessage(),"1");
-        }
-        else {
-            getDailog(registerStatus.getMessage(),"");
-        }
-    }
-
-    @Override
-    public Context getApplicationsContext() {
-        return getActivity();
-    }
-
 
     void getDailog(String dataText, final String titleText) {
         try {
@@ -186,5 +173,38 @@ public class FragmentForgotPassword extends Fragment implements CompleteListener
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void getResponseSuccess(String response) {
+        try {
+            Log.e(FragmentForgotPassword.class.getName(),"RESPONSE=="+response);
+            Gson gson = new Gson();
+            RegisterStatus registerStatus= gson.fromJson(response,RegisterStatus.class);
+            if(!registerStatus.getError()){
+                getDailog(registerStatus.getMessage(),"1");
+            }
+            else {
+                getDailog(registerStatus.getMessage(),"");
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getResponseError(String response) {
+
+    }
+
+    @Override
+    public void showProgress() {
+        utils.showDialog(C.MSG,getActivity());
+    }
+
+    @Override
+    public void hideProgress() {
+        utils.hideDialog();
     }
 }

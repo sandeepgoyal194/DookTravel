@@ -1,7 +1,6 @@
 package com.softmine.dooktravel.view;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -27,11 +26,11 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.adapter.AdapterSideMenu;
-import com.softmine.dooktravel.pojos.Profile;
+import com.softmine.dooktravel.model.Profile;
+import com.softmine.dooktravel.model.RegisterStatus;
 import com.softmine.dooktravel.pojos.ProfileStatus;
-import com.softmine.dooktravel.pojos.RegisterStatus;
-import com.softmine.dooktravel.serviceconnection.CompleteListener;
-import com.softmine.dooktravel.serviceconnection.ServiceConnection;
+import com.softmine.dooktravel.presenter.ActivityHomePresenterImpl;
+import com.softmine.dooktravel.presenter.IActivityHomePresenter;
 import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
@@ -40,6 +39,7 @@ import com.softmine.dooktravel.view.fragments.FragmentChangePassword;
 import com.softmine.dooktravel.view.fragments.FragmentContactDetail;
 import com.softmine.dooktravel.view.fragments.FragmentProfileDetail;
 import com.softmine.dooktravel.view.fragments.FragmentSearchResult;
+import com.softmine.dooktravel.view.fragments.IFragmentView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,7 +49,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ActivityHome extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,CompleteListener {
+        implements NavigationView.OnNavigationItemSelectedListener,IFragmentView {
     private AdapterSideMenu adapterSideMenu;
     ListView listView;
     private Fragment fragment;
@@ -60,6 +60,8 @@ public class ActivityHome extends AppCompatActivity
     CircleImageView circleImageView;
     String action;
     List<Profile> profile;
+    Utils utils;
+    IActivityHomePresenter mIActivityHomePresenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +72,8 @@ public class ActivityHome extends AppCompatActivity
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
         setContentView(R.layout.activity_home);
-
+        utils=new Utils();
+        mIActivityHomePresenter=new ActivityHomePresenterImpl(this,ActivityHome.this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -212,8 +215,7 @@ public class ActivityHome extends AppCompatActivity
                 e.printStackTrace();
             }
             action=C.LOGOUT;
-            ServiceConnection serviceConnection = new ServiceConnection();
-            serviceConnection.makeJsonObjectRequest(C.LOGOUT, jsonBody, ActivityHome.this);
+            mIActivityHomePresenter.logout(jsonBody);
         }
     }
 
@@ -232,8 +234,8 @@ public class ActivityHome extends AppCompatActivity
                 e.printStackTrace();
             }
             action=C.PROFILE_METHOD;
-            ServiceConnection serviceConnection = new ServiceConnection();
-            serviceConnection.serviceRequest(C.PROFILE_METHOD, jsonBody, ActivityHome.this);
+            mIActivityHomePresenter.getProfileInfo(jsonBody,false);
+
         }
     }
     @Override
@@ -380,7 +382,7 @@ public class ActivityHome extends AppCompatActivity
 
 
     @Override
-    public void done(String response) {
+    public void getResponseSuccess(String response) {
         Log.e(ActivityHome.class.getName(), "RESPONSE==" + response);
         if(action.equals(C.LOGOUT)) {
 
@@ -401,7 +403,7 @@ public class ActivityHome extends AppCompatActivity
             Gson gson = new Gson();
             ProfileStatus profileStatus = gson.fromJson(response, ProfileStatus.class);
             if (!profileStatus.getError()) {
-                 profile = profileStatus.getMember();
+                profile = profileStatus.getMember();
                 if(profile.get(0).getProfilePic()!=null && !profile.get(0).getProfilePic().equals("")) {
                     Utils.displayImage(this, C.IMAGE_BASE_URL + profile.get(0).getProfilePic(), circleImageView);
                 }
@@ -415,9 +417,20 @@ public class ActivityHome extends AppCompatActivity
     }
 
     @Override
-    public Context getApplicationsContext() {
-        return ActivityHome.this;
+    public void getResponseError(String response) {
+
     }
+
+    @Override
+    public void showProgress() {
+        utils.showDialog(C.MSG,this);
+    }
+
+    @Override
+    public void hideProgress() {
+        utils.hideDialog();
+    }
+
 
     void getDailog(String dataText, String titleText) {
         try {
@@ -456,4 +469,5 @@ public class ActivityHome extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
 }

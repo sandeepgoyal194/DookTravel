@@ -2,7 +2,6 @@ package com.softmine.dooktravel.view.fragments;
 
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -28,16 +27,16 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
-import com.softmine.dooktravel.view.MainActivity;
 import com.softmine.dooktravel.R;
-import com.softmine.dooktravel.pojos.ProfileDetail;
-import com.softmine.dooktravel.pojos.RegisterStatus;
-import com.softmine.dooktravel.serviceconnection.CompleteListener;
-import com.softmine.dooktravel.serviceconnection.ServiceConnection;
+import com.softmine.dooktravel.model.RegisterStatus;
+import com.softmine.dooktravel.model.ProfileDetail;
+import com.softmine.dooktravel.presenter.FragmentSignUpPresenterImpl;
+import com.softmine.dooktravel.presenter.IFragmentSignUpPresenter;
 import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
 import com.softmine.dooktravel.validations.Validations;
+import com.softmine.dooktravel.view.MainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +44,7 @@ import org.json.JSONObject;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSignUp extends Fragment implements CompleteListener {
+public class FragmentSignUp extends Fragment implements IFragmentView {
 
     TextView tvLogin,tvAlreadyAccount;
     Button btnSignUp,btnFacebook;
@@ -56,6 +55,7 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
     CallbackManager callbackManager;
     Validations validation ;
     Utils utils;
+    IFragmentSignUpPresenter mIFragmentSignUpPresenter;
     public FragmentSignUp() {
         // Required empty public constructor
     }
@@ -63,7 +63,7 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationsContext());
+        FacebookSdk.sdkInitialize(getActivity());
 
     }
     @Override
@@ -139,6 +139,13 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
                 Log.e("DEBUG","error"+error.toString());
             }
         });
+        mIFragmentSignUpPresenter=new FragmentSignUpPresenterImpl(this,getActivity());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mIFragmentSignUpPresenter.onDestroy();
     }
 
     @Override
@@ -173,38 +180,24 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
     void userFacebookLogin(String token,String email){
         JSONObject jsonBody = new JSONObject();
         try {
-             /*   jsonBody.put(C.EMAIL, "pradeep.bansal@techmobia.com");
-                jsonBody.put(C.PASSWORD, "abc123");
-                jsonBody.put(C.SOCAIL_ID, "");*/
             this.email=email;
             socailId=token;
             jsonBody.put(C.EMAIL, email);
-            // jsonBody.put(C.PASSWORD, etPassword.getString());
             jsonBody.put(C.SOCAIL_ID,token);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
         Log.e("DEBUG","Request="+jsonBody.toString());
-        ServiceConnection serviceConnection = new ServiceConnection();
-        serviceConnection.makeJsonObjectRequest(C.SIGNUP_METHOD, jsonBody, FragmentSignUp.this);
+        mIFragmentSignUpPresenter.validateSignUp(jsonBody);
     }
     View.OnClickListener mSignUpClickLisnter=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-         /*   Map<String,String> params = new HashMap<String, String>();
-            params.put(C.EMAIL,etUserName.getText().toString());
-            params.put(C.SOCAIL_ID,"");
-            ServiceConnection serviceConnection=new ServiceConnection();
-            serviceConnection.sendToServer(C.SIGNUP_METHOD,params,FragmentSignUp.this);*/
-
             if(validation.validateAllEditText()) {
                 if (utils.isInternetOn(getActivity())) {
                     JSONObject jsonBody = new JSONObject();
                     try {
-             /*   jsonBody.put(C.EMAIL, "pradeep.bansal@techmobia.com");
-                jsonBody.put(C.PASSWORD, "abc123");
-                jsonBody.put(C.SOCAIL_ID, "");*/
                         email = etUserName.getEditText().getText().toString();
                         socailId = "";
                         jsonBody.put(C.EMAIL, email);
@@ -213,15 +206,13 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    ServiceConnection serviceConnection = new ServiceConnection();
-                    serviceConnection.makeJsonObjectRequest(C.SIGNUP_METHOD, jsonBody, FragmentSignUp.this);
+                   mIFragmentSignUpPresenter.validateSignUp(jsonBody);
                 }
                 else {
                     getDailogConfirm(getString(R.string.internet_issue)
                             , "Internet Issue");
                 }
             }
-           // serviceConnection.getResponse(FragmentSignUp.this);
         }
     };
     View.OnClickListener tvLoginCLickListner=new View.OnClickListener() {
@@ -232,30 +223,6 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
         }
     };
 
-    @Override
-    public void done(String response) {
-        Log.e(FragmentSignUp.class.getName(),"RESPONSE=="+response);
-        Gson gson = new Gson();
-        RegisterStatus registerStatus= gson.fromJson(response,RegisterStatus.class);
-        if(!registerStatus.getError()){
-           /* Intent intent=new Intent(getActivity(), ActivityHome.class);
-            startActivity(intent);*/
-           ProfileDetail profileDetail=new ProfileDetail();
-            profileDetail.setEmail(email);
-            profileDetail.setSocialid(socailId);
-            Bundle bundle=new Bundle();
-            bundle.putSerializable(C.DATA,profileDetail);
-           ((MainActivity)getActivity()).fragmnetLoader(C.FRAGMENT_BASIC_DETAIL,bundle);
-        }
-        else {
-            getDailogConfirm(registerStatus.getMessage(),"");
-        }
-    }
-
-    @Override
-    public Context getApplicationsContext() {
-        return getActivity();
-    }
 
 
     void getDailogConfirm(String dataText, String titleText) {
@@ -294,5 +261,44 @@ public class FragmentSignUp extends Fragment implements CompleteListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void getResponseSuccess(String response) {
+        try {
+            Log.e(FragmentSignUp.class.getName(), "RESPONSE==" + response);
+            Gson gson = new Gson();
+            RegisterStatus registerStatus = gson.fromJson(response, RegisterStatus.class);
+            if (!registerStatus.getError()) {
+           /* Intent intent=new Intent(getActivity(), ActivityHome.class);
+            startActivity(intent);*/
+                ProfileDetail profileDetail = new ProfileDetail();
+                profileDetail.setEmail(email);
+                profileDetail.setSocialid(socailId);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(C.DATA, profileDetail);
+                ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_BASIC_DETAIL, bundle);
+            } else {
+                getDailogConfirm(registerStatus.getMessage(), "");
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getResponseError(String response) {
+
+    }
+
+    @Override
+    public void showProgress() {
+        utils.showDialog(C.MSG,getActivity());
+    }
+
+    @Override
+    public void hideProgress() {
+        utils.hideDialog();
     }
 }

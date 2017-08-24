@@ -2,7 +2,6 @@ package com.softmine.dooktravel.view.fragments;
 
 
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,9 +17,9 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.softmine.dooktravel.R;
-import com.softmine.dooktravel.pojos.RegisterStatus;
-import com.softmine.dooktravel.serviceconnection.CompleteListener;
-import com.softmine.dooktravel.serviceconnection.ServiceConnection;
+import com.softmine.dooktravel.model.RegisterStatus;
+import com.softmine.dooktravel.presenter.FragmentChangePasswordPresenterImpl;
+import com.softmine.dooktravel.presenter.IFragmentChangePasswordPresenter;
 import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
@@ -34,13 +33,14 @@ import org.json.JSONObject;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentChangePassword extends Fragment implements CompleteListener {
+public class FragmentChangePassword extends Fragment implements IFragmentView {
 
     int flags;
     ValidateEditText etPassword,etConfirmPassword;
     Button btnSubmit;
     Validations validation;
     Utils utils;
+    IFragmentChangePasswordPresenter mIFragmentChangePasswordPresenter;
     public FragmentChangePassword() {
         // Required empty public constructor
     }
@@ -77,6 +77,7 @@ public class FragmentChangePassword extends Fragment implements CompleteListener
         btnSubmit.setOnClickListener(mSubmitClickListner);
         validation.addtoList(etConfirmPassword);
         validation.addtoList(etPassword);
+        mIFragmentChangePasswordPresenter=new FragmentChangePasswordPresenterImpl(this,getActivity());
     }
 
     View.OnClickListener mSubmitClickListner=new View.OnClickListener() {
@@ -85,23 +86,18 @@ public class FragmentChangePassword extends Fragment implements CompleteListener
                 if(validation.validateAllEditText()){
                     if(isValid()){
                         if(utils.isInternetOn(getActivity())) {
-                            //TODO hit API
-
                             if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
                                 JSONObject jsonBody = new JSONObject();
                                 try {
                                     jsonBody.put(C.MEMBER_ID, SharedPreference.getInstance(getActivity()).getString(C.MEMBER_ID));
                                     jsonBody.put(C.TOKEN, SharedPreference.getInstance(getActivity()).getString(C.TOKEN));
                                     jsonBody.put(C.PASSWORD,etPassword.getEditText().getText().toString());
-
+                                    mIFragmentChangePasswordPresenter.validateChangePassword(jsonBody);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                ServiceConnection serviceConnection = new ServiceConnection();
-                                serviceConnection.makeJsonObjectRequest(C.CHANGE_PASSWORD_METHOD, jsonBody, FragmentChangePassword.this);
-                            }
 
-                          //  Utils.showToast(getActivity(), "Under development");
+                            }
                         }
                         else {
                             getDailogConfirm(getString(R.string.internet_issue)
@@ -121,27 +117,10 @@ public class FragmentChangePassword extends Fragment implements CompleteListener
     }
 
     @Override
-    public void done(String response) {
-        // TODO handle response
-        Log.e(FragmentChangePassword.class.getName(),"RESPONSE=="+response);
-        Gson gson = new Gson();
-        RegisterStatus registerStatus= gson.fromJson(response,RegisterStatus.class);
-        if(!registerStatus.getError()){
-
-            getDailogConfirm(registerStatus.getMessage(),"1");
-        }
-        else {
-            getDailogConfirm(registerStatus.getMessage(),"");
-        }
-
+    public void onDestroy() {
+        super.onDestroy();
+        mIFragmentChangePasswordPresenter.onDestroy();
     }
-
-    @Override
-    public Context getApplicationsContext() {
-        return getActivity();
-    }
-
-
 
 
     void getDailogConfirm(String dataText, final String titleText) {
@@ -184,5 +163,40 @@ public class FragmentChangePassword extends Fragment implements CompleteListener
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void getResponseSuccess(String response) {
+        try {
+            Log.e(FragmentChangePassword.class.getName(),"RESPONSE=="+response);
+            Gson gson = new Gson();
+            RegisterStatus registerStatus= gson.fromJson(response,RegisterStatus.class);
+            if(!registerStatus.getError()){
+
+                getDailogConfirm(registerStatus.getMessage(),"1");
+            }
+            else {
+                getDailogConfirm(registerStatus.getMessage(),"");
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getResponseError(String response) {
+
+    }
+
+    @Override
+    public void showProgress() {
+
+            utils.showDialog(C.MSG,getActivity());
+    }
+
+    @Override
+    public void hideProgress() {
+        utils.hideDialog();
     }
 }

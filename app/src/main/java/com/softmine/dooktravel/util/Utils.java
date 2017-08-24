@@ -60,16 +60,28 @@ public class Utils {
     }
 
     public void showDialog(String msg, Context context){
-        if(progressDialog==null || !progressDialog.isShowing()) {
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage(msg);
-            progressDialog.show();
+        try {
+
+            if (progressDialog == null || !progressDialog.isShowing()) {
+                progressDialog = new ProgressDialog(context);
+                progressDialog.setMessage(msg);
+                progressDialog.show();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
    public void hideDialog(){
-        if(progressDialog.isShowing()){
-            progressDialog.dismiss();
-        }
+       try {
+
+           if (progressDialog.isShowing()) {
+               progressDialog.dismiss();
+           }
+       }
+       catch (Exception e){
+           e.printStackTrace();
+       }
     }
     public static Typeface getRegularTypeFace(Context context){
         return Typeface.createFromAsset(context.getAssets(), "font/proxima-nova-regular.otf");

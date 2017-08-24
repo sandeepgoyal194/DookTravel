@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.softmine.dooktravel.view.ActivityHome;
 import com.softmine.dooktravel.R;
-import com.softmine.dooktravel.pojos.Profile;
+import com.softmine.dooktravel.model.Profile;
 import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.Utils;
 

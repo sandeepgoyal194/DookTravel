@@ -45,7 +45,7 @@ import org.json.JSONObject;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentLogin extends Fragment implements IFragmentLoginView {
+public class FragmentLogin extends Fragment implements IFragmentView {
     int flags;
     Validations validation ;
     TextView tvSignUp,tvforgotPassword,tvDontHaveAccount;
@@ -255,28 +255,32 @@ public class FragmentLogin extends Fragment implements IFragmentLoginView {
 
 
     @Override
-    public void getLoginResponseSuccess(String response) {
-        Log.e(FragmentLogin.class.getName(),"RESPONSE=="+response);
-        // Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
+    public void getResponseSuccess(String response) {
+        try {
+            Log.e(FragmentLogin.class.getName(), "RESPONSE==" + response);
+            // Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
 
-        Gson gson = new Gson();
-        LoginStatus loginStatus= gson.fromJson(response,LoginStatus.class);
-        if(!loginStatus.getError()){
-            SharedPreference.getInstance(getActivity()).setString(C.TOKEN,loginStatus.getMember().getToken());
-            SharedPreference.getInstance(getActivity()).setString(C.MEMBER_ID,loginStatus.getMember().getMemberId());
-            SharedPreference.getInstance(getActivity()).setString(C.EMAIL,loginStatus.getMember().getEmailId());
-            SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,true);
-            Intent intent=new Intent(getActivity(), ActivityHome.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            Gson gson = new Gson();
+            LoginStatus loginStatus = gson.fromJson(response, LoginStatus.class);
+            if (!loginStatus.getError()) {
+                SharedPreference.getInstance(getActivity()).setString(C.TOKEN, loginStatus.getMember().getToken());
+                SharedPreference.getInstance(getActivity()).setString(C.MEMBER_ID, loginStatus.getMember().getMemberId());
+                SharedPreference.getInstance(getActivity()).setString(C.EMAIL, loginStatus.getMember().getEmailId());
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN, true);
+                Intent intent = new Intent(getActivity(), ActivityHome.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            } else {
+                getDailogConfirm(loginStatus.getMessage(), "");
+            }
         }
-        else{
-            getDailogConfirm(loginStatus.getMessage(),"");
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void getLoginResponseError(String response) {
+    public void getResponseError(String response) {
 
     }
 

@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.softmine.dooktravel.R;
-import com.softmine.dooktravel.pojos.Profile;
+import com.softmine.dooktravel.model.Profile;
 import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;

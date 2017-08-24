@@ -30,16 +30,16 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.model.LoginStatus;
+import com.softmine.dooktravel.model.Profile;
+import com.softmine.dooktravel.model.ProfileDetail;
+import com.softmine.dooktravel.model.RegisterStatus;
 import com.softmine.dooktravel.pojos.CategoryList;
 import com.softmine.dooktravel.pojos.CityList;
 import com.softmine.dooktravel.pojos.CountryList;
-import com.softmine.dooktravel.pojos.Profile;
-import com.softmine.dooktravel.pojos.ProfileDetail;
 import com.softmine.dooktravel.pojos.ProfileStatus;
-import com.softmine.dooktravel.pojos.RegisterStatus;
 import com.softmine.dooktravel.pojos.StateList;
-import com.softmine.dooktravel.serviceconnection.CompleteListener;
-import com.softmine.dooktravel.serviceconnection.ServiceConnection;
+import com.softmine.dooktravel.presenter.FragmentProfessionalDetailPresenterImpl;
+import com.softmine.dooktravel.presenter.IFragmentProfessionalDetailPresenter;
 import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
@@ -59,7 +59,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentProfessionalDetail extends AppCompatActivity implements CompleteListener {
+public class FragmentProfessionalDetail extends AppCompatActivity implements IFragmentView {
     String action;
     ProfileDetail profileDetail;
     Button btnSubmit;
@@ -87,7 +87,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
     ArrayAdapter<String> spinnerCountryAdapter=null;
 
     ArrayAdapter<String> spinnerCityAdapter=null;
-
+    IFragmentProfessionalDetailPresenter mIFragmentProfessionalDetailPresenter;
 
     public FragmentProfessionalDetail() {
         // Required empty public constructor
@@ -120,6 +120,8 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
                 onBackPressed();
             }
         });
+
+        mIFragmentProfessionalDetailPresenter=new FragmentProfessionalDetailPresenterImpl(this,getActivity());
     }
 
 
@@ -358,11 +360,14 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
 
         }
     };
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mIFragmentProfessionalDetailPresenter.onDestroy();
+    }
     void getCategoryList() {
         action = C.CATEGORY_LIST_METHOD;
-        ServiceConnection serviceConnection = new ServiceConnection();
-        serviceConnection.makeJsonObjectRequest(C.CATEGORY_LIST_METHOD, null, FragmentProfessionalDetail.this);
+        mIFragmentProfessionalDetailPresenter.getCategoryList(null,true);
     }
 
     View.OnClickListener mBtnSubmitCLickLisner = new View.OnClickListener() {
@@ -386,8 +391,7 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
                     try {
                         action = C.UPDATE_PROFILE_METHOD;
                         JSONObject jsonObject = new JSONObject(obj);
-                        ServiceConnection serviceConnection = new ServiceConnection();
-                        serviceConnection.makeJsonObjectRequest(C.UPDATE_PROFILE_METHOD, jsonObject, FragmentProfessionalDetail.this);
+                        mIFragmentProfessionalDetailPresenter.updateDetail(jsonObject);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -406,8 +410,8 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
                         Log.e("DEBUG", "profileDetail=" + obj);
                         JSONObject jsonObject = new JSONObject(obj);
                         action = C.REGISTER_COUNTINUE_METHOD;
-                        ServiceConnection serviceConnection = new ServiceConnection();
-                        serviceConnection.makeJsonObjectRequest(C.REGISTER_COUNTINUE_METHOD, jsonObject, FragmentProfessionalDetail.this);
+                        mIFragmentProfessionalDetailPresenter.registerDetail(jsonObject);
+
                         //     Toast.makeText(getActivity(),"Under development",Toast.LENGTH_LONG).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -421,167 +425,9 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
         }
     };
 
-    @Override
-    public void done(String response) {
-
-        try {
-            Log.e(FragmentProfessionalDetail.class.getName(), "RESPONSE==" + response);
-            if (action.equals(C.LOGIN_METHOD)) {
-                Log.e(FragmentLogin.class.getName(), "RESPONSE==" + response);
-                // Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
-
-                Gson gson = new Gson();
-                LoginStatus loginStatus = gson.fromJson(response, LoginStatus.class);
-                if (!loginStatus.getError()) {
-                    SharedPreference.getInstance(getActivity()).setString(C.TOKEN, loginStatus.getMember().getToken());
-                    SharedPreference.getInstance(getActivity()).setString(C.MEMBER_ID, loginStatus.getMember().getMemberId());
-                    SharedPreference.getInstance(getActivity()).setString(C.EMAIL, loginStatus.getMember().getEmailId());
-                    SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN, true);
-                    Intent intent = new Intent(getActivity(), ActivityHome.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                } else {
-                    getDailogConfirm(loginStatus.getMessage(), "");
-                }
-            } else if (action.equals(C.CATEGORY_LIST_METHOD)) {
-                Gson gson = new Gson();
-                categoryList = gson.fromJson(response, CategoryList.class);
-                if (!categoryList.getError()) {
-                    String[] catArr = new String[categoryList.getCategory().size() + 1];
-                    catArr[0] = C.SELECT_CATEGORY;
-                    for (int i = 0; i < categoryList.getCategory().size(); i++) {
-
-                        catArr[i + 1] = String.valueOf(categoryList.getCategory().get(i).getCategoryName());
-
-                    }
-
-                /*ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, catArr); //selected item will look like a spinner set from XML
-
-                spnCategory.setAdapter(spinnerArrayAdapter);*/
-                    setCategoryList(Arrays.asList(catArr));
-                    spinnerCategoryAdapter.notifyDataSetChanged();
-                    if (C.isloggedIn) {
-                        int pos = spinnerCategoryAdapter.getPosition(profile.getCategoryName());
-                        spnCategory.setSelection(pos);
-                    }
-                    getCountryList();
-
-                }
-            } else if (action.equals(C.COUNTRY_METHOD)) {
-                Gson gson = new Gson();
-                countryList = gson.fromJson(response, CountryList.class);
-                if (!countryList.getError()) {
-                    String[] countArr = new String[countryList.getCountry().size() + 1];
-                    countArr[0] = C.SELECT_COUNTRY;
-                    for (int i = 0; i < countryList.getCountry().size(); i++) {
-                        countArr[i + 1] = String.valueOf(countryList.getCountry().get(i).getName());
-                    }
-
-               /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
-
-                spnCountry.setAdapter(spinnerArrayAdapter);*/
-                    setCountryList(Arrays.asList(countArr));
-
-                    spinnerCountryAdapter.notifyDataSetChanged();
-                    if (C.isloggedIn) {
-                        int pos = spinnerCountryAdapter.getPosition(profile.getCountryName());
-                        spnCountry.setSelection(pos, false);
-                    }
-
-                } else {
-                    String[] countArr = new String[1];
-                    countArr[0] = C.SELECT_COUNTRY;
-               /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
-                spnCountry.setAdapter(spinnerArrayAdapter);*/
-                    setCountryList(Arrays.asList(countArr));
-
-                    spinnerCountryAdapter.notifyDataSetChanged();
-
-                }
-            } else if (action.equals(C.STATE_METHOD)) {
-                Gson gson = new Gson();
-                stateList = gson.fromJson(response, StateList.class);
-                if (!stateList.getError()) {
-                    String[] stateArr = new String[stateList.getState().size() + 1];
-                    stateArr[0] = C.SELECT_STATE;
-                    for (int i = 0; i < stateList.getState().size(); i++) {
-                        stateArr[i + 1] = String.valueOf(stateList.getState().get(i).getName());
-                    }
-
-
-               /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
-                spnProvince.setAdapter(spinnerArrayAdapter);*/
-                    setStateList(Arrays.asList(stateArr));
-                    spinnerStateAdapter.notifyDataSetChanged();
-                    if (C.isloggedIn) {
-                        spnProvince.setSelection(spinnerStateAdapter.getPosition(profile.getStateName()));
-                    }
-                } else {
-                    String[] stateArr = new String[1];
-                    stateArr[0] = C.SELECT_STATE;
-               /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
-                spnProvince.setAdapter(spinnerArrayAdapter);*/
-                    setStateList(Arrays.asList(stateArr));
-                    spinnerStateAdapter.notifyDataSetChanged();
-
-                }
-            } else if (action.equals(C.CITY_METHOD)) {
-                Gson gson = new Gson();
-                cityList = gson.fromJson(response, CityList.class);
-                if (!cityList.getError()) {
-                    String[] cityArr = new String[cityList.getCity().size() + 1];
-                    cityArr[0] = C.SELECT_CITY;
-                    for (int i = 0; i < cityList.getCity().size(); i++) {
-                        cityArr[i + 1] = String.valueOf(cityList.getCity().get(i).getName());
-                    }
-
-             /*   ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, cityArr); //selected item will look like a spinner set from XML
-                spnCity.setAdapter(spinnerArrayAdapter);*/
-                    setCityList(Arrays.asList(cityArr));
-
-                    spinnerCityAdapter.notifyDataSetChanged();
-                    if (C.isloggedIn) {
-                        spnCity.setSelection(spinnerCityAdapter.getPosition(profile.getCityName()));
-                    }
-                } else {
-                    String[] cityArr = new String[1];
-                    cityArr[0] = C.SELECT_CITY;
-              /*  ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, cityArr); //selected item will look like a spinner set from XML
-                spnCity.setAdapter(spinnerArrayAdapter);*/
-                    setCityList(Arrays.asList(cityArr));
-
-                    spinnerCityAdapter.notifyDataSetChanged();
-                    // spinnerArrayAdapter.notifyDataSetChanged();
-                }
-            } else if (action.equals(C.REGISTER_COUNTINUE_METHOD)) {
-                Gson gson = new Gson();
-                RegisterStatus registerStatus = gson.fromJson(response, RegisterStatus.class);
-                if (!registerStatus.getError()) {
-                    getDailogConfirm(registerStatus.getMessage(), "1");
-                } else {
-                    getDailogConfirm(registerStatus.getMessage(), "");
-                }
-
-            } else if (action.equals(C.UPDATE_PROFILE_METHOD)) {
-                Gson gson = new Gson();
-                ProfileStatus profileStatus = gson.fromJson(response, ProfileStatus.class);
-                if (!profileStatus.getError()) {
-                    getDailogConfirm(profileStatus.getMessage(), "2");
-
-                } else {
-                    getDailogConfirm(profileStatus.getMessage(), "");
-                }
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
     void getCountryList() {
         action = C.COUNTRY_METHOD;
-        ServiceConnection serviceConnection = new ServiceConnection();
-        serviceConnection.serviceRequest(C.COUNTRY_METHOD, null, FragmentProfessionalDetail.this);
+       mIFragmentProfessionalDetailPresenter.getCountryList(null,true);
     }
 
     void getStateList(String countryId) {
@@ -596,12 +442,12 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ServiceConnection serviceConnection = new ServiceConnection();
+
         if(C.isloggedIn) {
-            serviceConnection.serviceRequest(C.STATE_METHOD, jsonBody, FragmentProfessionalDetail.this);
+            mIFragmentProfessionalDetailPresenter.getStateList(jsonBody,false);
         }
         else{
-            serviceConnection.makeJsonObjectRequest(C.STATE_METHOD, jsonBody, FragmentProfessionalDetail.this);
+            mIFragmentProfessionalDetailPresenter.getStateList(jsonBody,true);
         }
 
     }
@@ -617,19 +463,13 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ServiceConnection serviceConnection = new ServiceConnection();
         if(C.isloggedIn) {
-            serviceConnection.serviceRequest(C.CITY_METHOD, jsonBody, FragmentProfessionalDetail.this);
+            mIFragmentProfessionalDetailPresenter.getCityList(jsonBody,false);
         }
         else{
-            serviceConnection.makeJsonObjectRequest(C.CITY_METHOD, jsonBody, FragmentProfessionalDetail.this);
+            mIFragmentProfessionalDetailPresenter.getCityList(jsonBody,true);
         }
 
-    }
-
-    @Override
-    public Context getApplicationsContext() {
-        return getActivity();
     }
 
     void getDailogConfirm(String dataText, final String titleText) {
@@ -852,5 +692,177 @@ public class FragmentProfessionalDetail extends AppCompatActivity implements Com
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void getResponseSuccess(String response) {
+
+        try {
+            Log.e(FragmentProfessionalDetail.class.getName(), "RESPONSE==" + response);
+            if (action.equals(C.LOGIN_METHOD)) {
+                Log.e(FragmentLogin.class.getName(), "RESPONSE==" + response);
+                // Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
+
+                Gson gson = new Gson();
+                LoginStatus loginStatus = gson.fromJson(response, LoginStatus.class);
+                if (!loginStatus.getError()) {
+                    SharedPreference.getInstance(getActivity()).setString(C.TOKEN, loginStatus.getMember().getToken());
+                    SharedPreference.getInstance(getActivity()).setString(C.MEMBER_ID, loginStatus.getMember().getMemberId());
+                    SharedPreference.getInstance(getActivity()).setString(C.EMAIL, loginStatus.getMember().getEmailId());
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN, true);
+                    Intent intent = new Intent(getActivity(), ActivityHome.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                } else {
+                    getDailogConfirm(loginStatus.getMessage(), "");
+                }
+            } else if (action.equals(C.CATEGORY_LIST_METHOD)) {
+                Gson gson = new Gson();
+                categoryList = gson.fromJson(response, CategoryList.class);
+                if (!categoryList.getError()) {
+                    String[] catArr = new String[categoryList.getCategory().size() + 1];
+                    catArr[0] = C.SELECT_CATEGORY;
+                    for (int i = 0; i < categoryList.getCategory().size(); i++) {
+
+                        catArr[i + 1] = String.valueOf(categoryList.getCategory().get(i).getCategoryName());
+
+                    }
+
+                /*ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, catArr); //selected item will look like a spinner set from XML
+
+                spnCategory.setAdapter(spinnerArrayAdapter);*/
+                    setCategoryList(Arrays.asList(catArr));
+                    spinnerCategoryAdapter.notifyDataSetChanged();
+                    if (C.isloggedIn) {
+                        int pos = spinnerCategoryAdapter.getPosition(profile.getCategoryName());
+                        spnCategory.setSelection(pos);
+                    }
+                    getCountryList();
+
+                }
+            } else if (action.equals(C.COUNTRY_METHOD)) {
+                Gson gson = new Gson();
+                countryList = gson.fromJson(response, CountryList.class);
+                if (!countryList.getError()) {
+                    String[] countArr = new String[countryList.getCountry().size() + 1];
+                    countArr[0] = C.SELECT_COUNTRY;
+                    for (int i = 0; i < countryList.getCountry().size(); i++) {
+                        countArr[i + 1] = String.valueOf(countryList.getCountry().get(i).getName());
+                    }
+
+               /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
+
+                spnCountry.setAdapter(spinnerArrayAdapter);*/
+                    setCountryList(Arrays.asList(countArr));
+
+                    spinnerCountryAdapter.notifyDataSetChanged();
+                    if (C.isloggedIn) {
+                        int pos = spinnerCountryAdapter.getPosition(profile.getCountryName());
+                        spnCountry.setSelection(pos, false);
+                    }
+
+                } else {
+                    String[] countArr = new String[1];
+                    countArr[0] = C.SELECT_COUNTRY;
+               /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, countArr); //selected item will look like a spinner set from XML
+                spnCountry.setAdapter(spinnerArrayAdapter);*/
+                    setCountryList(Arrays.asList(countArr));
+
+                    spinnerCountryAdapter.notifyDataSetChanged();
+
+                }
+            } else if (action.equals(C.STATE_METHOD)) {
+                Gson gson = new Gson();
+                stateList = gson.fromJson(response, StateList.class);
+                if (!stateList.getError()) {
+                    String[] stateArr = new String[stateList.getState().size() + 1];
+                    stateArr[0] = C.SELECT_STATE;
+                    for (int i = 0; i < stateList.getState().size(); i++) {
+                        stateArr[i + 1] = String.valueOf(stateList.getState().get(i).getName());
+                    }
+
+
+               /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
+                spnProvince.setAdapter(spinnerArrayAdapter);*/
+                    setStateList(Arrays.asList(stateArr));
+                    spinnerStateAdapter.notifyDataSetChanged();
+                    if (C.isloggedIn) {
+                        spnProvince.setSelection(spinnerStateAdapter.getPosition(profile.getStateName()));
+                    }
+                } else {
+                    String[] stateArr = new String[1];
+                    stateArr[0] = C.SELECT_STATE;
+               /* ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, stateArr); //selected item will look like a spinner set from XML
+                spnProvince.setAdapter(spinnerArrayAdapter);*/
+                    setStateList(Arrays.asList(stateArr));
+                    spinnerStateAdapter.notifyDataSetChanged();
+
+                }
+            } else if (action.equals(C.CITY_METHOD)) {
+                Gson gson = new Gson();
+                cityList = gson.fromJson(response, CityList.class);
+                if (!cityList.getError()) {
+                    String[] cityArr = new String[cityList.getCity().size() + 1];
+                    cityArr[0] = C.SELECT_CITY;
+                    for (int i = 0; i < cityList.getCity().size(); i++) {
+                        cityArr[i + 1] = String.valueOf(cityList.getCity().get(i).getName());
+                    }
+
+             /*   ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, cityArr); //selected item will look like a spinner set from XML
+                spnCity.setAdapter(spinnerArrayAdapter);*/
+                    setCityList(Arrays.asList(cityArr));
+
+                    spinnerCityAdapter.notifyDataSetChanged();
+                    if (C.isloggedIn) {
+                        spnCity.setSelection(spinnerCityAdapter.getPosition(profile.getCityName()));
+                    }
+                } else {
+                    String[] cityArr = new String[1];
+                    cityArr[0] = C.SELECT_CITY;
+              /*  ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, cityArr); //selected item will look like a spinner set from XML
+                spnCity.setAdapter(spinnerArrayAdapter);*/
+                    setCityList(Arrays.asList(cityArr));
+
+                    spinnerCityAdapter.notifyDataSetChanged();
+                    // spinnerArrayAdapter.notifyDataSetChanged();
+                }
+            } else if (action.equals(C.REGISTER_COUNTINUE_METHOD)) {
+                Gson gson = new Gson();
+                RegisterStatus registerStatus = gson.fromJson(response, RegisterStatus.class);
+                if (!registerStatus.getError()) {
+                    getDailogConfirm(registerStatus.getMessage(), "1");
+                } else {
+                    getDailogConfirm(registerStatus.getMessage(), "");
+                }
+
+            } else if (action.equals(C.UPDATE_PROFILE_METHOD)) {
+                Gson gson = new Gson();
+                ProfileStatus profileStatus = gson.fromJson(response, ProfileStatus.class);
+                if (!profileStatus.getError()) {
+                    getDailogConfirm(profileStatus.getMessage(), "2");
+
+                } else {
+                    getDailogConfirm(profileStatus.getMessage(), "");
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getResponseError(String response) {
+
+    }
+
+    @Override
+    public void showProgress() {
+        utils.showDialog(C.MSG,getActivity());
+    }
+
+    @Override
+    public void hideProgress() {
+        utils.hideDialog();
     }
 }
