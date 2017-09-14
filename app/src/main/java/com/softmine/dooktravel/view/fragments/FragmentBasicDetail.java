@@ -22,7 +22,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.Selection;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -204,13 +208,91 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
         flags = 0 | Validations.FLAG_NOT_EMPTY;
         edSkypeID=new ValidateEditText((EditText)view.findViewById(R.id.edSkype),getActivity(),flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
-        flags = flags | Validations.TYPE_MOBILE;
+
         edPrimary=new ValidateEditText((EditText)view.findViewById(R.id.edContact1),getActivity(),flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
-        flags = flags | Validations.TYPE_MOBILE;
         edSecondary=new ValidateEditText((EditText)view.findViewById(R.id.edContact2),getActivity(),flags);
-        flags = 0 | Validations.FLAG_NOT_EMPTY;
-        flags = flags | Validations.TYPE_EMAIL;
+
+        final Spannable code = new SpannableString("(+91)");
+
+        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 0,1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.background_blue)), 1,4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 4,5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+
+        edPrimary.getEditText().setText(code);
+        Selection.setSelection(edPrimary.getEditText().getText(), edPrimary.getEditText().getText().length());
+        edPrimary.getEditText().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(edPrimary.getEditText().getText().toString().length()>8){
+                    getDialPad(Utils.getSubstringPhone(edPrimary.getEditText().getText().toString()));
+                }
+            }
+        });
+        edPrimary.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!s.toString().contains(code)){
+                    edPrimary.getEditText().setText(code);
+                    Selection.setSelection(edPrimary.getEditText().getText(), edPrimary.getEditText().getText().length());
+
+                }
+
+            }
+        });
+
+
+        edSecondary.getEditText().setText(code);
+        Selection.setSelection(edSecondary.getEditText().getText(), edSecondary.getEditText().getText().length());
+        edSecondary.getEditText().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(edSecondary.getEditText().getText().toString().length()>8){
+                    getDialPad(Utils.getSubstringPhone(edSecondary.getEditText().getText().toString()));
+                }
+            }
+        });
+        edSecondary.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!s.toString().contains(code)){
+                    edSecondary.getEditText().setText(code);
+                    Selection.setSelection(edSecondary.getEditText().getText(), edSecondary.getEditText().getText().length());
+
+                }
+
+            }
+        });
         edEmail=new ValidateEditText((EditText)view.findViewById(R.id.edEmail),getActivity(),flags);
 
         btnNext=(Button) view.findViewById(R.id.btnNext);
@@ -372,6 +454,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
         try {
 
             if(C.isloggedIn) {
+
                 edPassword.getEditText().setVisibility(View.GONE);
                 edConfirmPassword.getEditText().setVisibility(View.GONE);
                 getProfileDetail();
@@ -384,6 +467,10 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
              /*   validation.addtoList(edPassword);
                 validation.addtoList(edConfirmPassword);*/
 
+                edEmail.getEditText().setFocusable(false);
+                if(profileDtl.getPhone()!=null && profileDtl.getPhone().length()>0){
+                    edPrimary.getEditText().setFocusable(false);
+                }
                 edEmail.getEditText().setText(profileDtl.getEmail());
                 edPrimary.getEditText().setText(profileDtl.getPhone());
                 getCategoryList();
@@ -780,8 +867,10 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                         profileDetail.setLastname(edLastName.getEditText().getText().toString());
                         profileDetail.setGender(spnGender.getSelectedItem().toString());
                         profileDetail.setSkype(edSkypeID.getEditText().getText().toString());
-                        profileDetail.setPhone(edPrimary.getEditText().getText().toString());
-                        profileDetail.setMobile1(edSecondary.getEditText().getText().toString());
+                        profileDetail.setPhone(Utils.getSubstringPhone(edPrimary.getEditText().getText().toString()));
+                        if(edSecondary.getEditText().length()>8) {
+                            profileDetail.setMobile1(Utils.getSubstringPhone(edSecondary.getEditText().getText().toString()));
+                        }
 
                            /* if (spnGender.getSelectedItem().toString().equalsIgnoreCase("Male")) {
                                 profileDetail.setGender("Male");
@@ -835,10 +924,11 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                         profile.setLastName(edLastName.getEditText().getText().toString());
                         profile.setMaritalStatus(spnMaritalStatus.getSelectedItem().toString());
                         profile.setSkype(edSkypeID.getEditText().getText().toString());
-                        profile.setPhone(edPrimary.getEditText().getText().toString());
+                        profile.setPhone(Utils.getSubstringPhone(edPrimary.getEditText().getText().toString()));
                         profile.setEmailId(edEmail.getEditText().getText().toString());
-
-                        profile.setMobile(edSecondary.getEditText().getText().toString());
+                        if(edSecondary.getEditText().getText().toString().length()>8) {
+                            profile.setMobile(Utils.getSubstringPhone(edSecondary.getEditText().getText().toString()));
+                        }
                            /* if (spnGender.getSelectedItem().toString().equalsIgnoreCase("Male")) {
                                 profile.setGender("Male");
                             } else {
@@ -951,6 +1041,11 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
             edFirstName.getEditText().setText(profile.getFirstName());
             edMiddleName.getEditText().setText(profile.getMiddleName());
             edLastName.getEditText().setText(profile.getLastName());
+            if(profile.getPhone()!=null && profile.getPhone().length()>1) {
+                edPrimary.getEditText().setFocusable(false);
+            }
+            edEmail.getEditText().setFocusable(false);
+
             edPrimary.getEditText().setText(profile.getPhone());
             edSecondary.getEditText().setText(profile.getMobile());
             edEmail.getEditText().setText(profile.getEmailId());

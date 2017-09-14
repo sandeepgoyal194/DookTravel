@@ -84,34 +84,47 @@ public class FragmentSplash extends Fragment {
         }
     }
     private void requestPermissionForStorage() {
+        try {
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            //     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},Utils.PERMISSION_REQUEST_CODE);
-            getDailogConfirm("Please allow storage permission in App Settings for additional functionality.", "");
-            //  Toast.makeText(getActivity(),"GPS permission allows us to access location data. Please allow in App Settings for additional functionality.",Toast.LENGTH_LONG).show();
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                //     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},Utils.PERMISSION_REQUEST_CODE);
+                getDailogConfirm("Please allow storage permission in App Settings for additional functionality.", "");
+                //  Toast.makeText(getActivity(),"GPS permission allows us to access location data. Please allow in App Settings for additional functionality.",Toast.LENGTH_LONG).show();
 
-        } else {
+            } else {
 
-            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
     public boolean isStoragePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
+
+        try {
+
+            if (Build.VERSION.SDK_INT >= 23) {
+                if (getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) {
+
+                    return true;
+                } else {
+
+
+                    //  ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    return false;
+                }
+            } else { //permission is automatically granted on sdk<23 upon installation
 
                 return true;
-            } else {
-
-
-                //  ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                return false;
             }
-        } else { //permission is automatically granted on sdk<23 upon installation
-
-            return true;
         }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return  false;
     }
 
     void getDailogConfirm(String dataText, String titleText) {

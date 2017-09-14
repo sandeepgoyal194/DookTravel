@@ -189,4 +189,8 @@ public class Utils {
         }
     }
 
+    public static String getSubstringPhone(String number){
+        return number.substring(5,number.length());
+    }
+
 }
