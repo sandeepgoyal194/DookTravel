@@ -8,5 +8,6 @@
     android:layout_gravity="start"
     android:gravity="start"
     android:singleLine="true"
-    custom:typeface="proxima-nova-regular.otf"
-        android:textColor="@color/black" />
+    android:paddingBottom="20dp"
+    custom:typeface="proxima-nova-semibold.otf"
+        android:textColor="@color/white" />

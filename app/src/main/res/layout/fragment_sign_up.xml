@@ -1,8 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res-auto/com.softmine.dooktravel.util"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:background="@color/background_blue"
     tools:context=".view.fragments.FragmentLogin">
 
     <LinearLayout
@@ -24,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:text="@string/logo"
-                android:src="@mipmap/dook_logo"
+                android:src="@drawable/logo"
                 />
 
 
@@ -36,14 +38,15 @@
             android:layout_weight="5"
             android:orientation="vertical">
 
-            <TextView
+            <com.softmine.dooktravel.util.CustomTextView
+                custom:typeface="ProximaNova-Bold.otf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
                 android:textSize="14sp"
-                android:text="@string/sign_up_below"
+                android:text="@string/signup"
                 android:textColor="@color/white" />
 
 
@@ -55,7 +58,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:background="@drawable/back_rounded_corner"
+                android:background="@color/background_blue"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -72,34 +75,60 @@
                         android:lines="1"
                         android:textColorHint="@color/grey"
                         android:layout_height="wrap_content">-->
-
-                        <EditText
-                            android:id="@+id/edEmail"
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
+                        android:id="@+id/edEmail"
+                        style="@style/EditText.custom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_email"
+                        android:gravity="center"
+                        android:hint="@string/email_address"
+                        android:inputType="textEmailAddress"
+                        android:lines="1"
+                        android:paddingLeft="10dp"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/hint_color"
+                        android:textSize="14sp"
+                        android:theme="@style/EditText.custom" />
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
+                            android:id="@+id/edPhone"
+                            style="@style/EditText.custom"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/email_address"
-                            android:inputType="textEmailAddress"
+                            android:drawableLeft="@drawable/ic_phone"
+                            android:gravity="center"
+                            android:paddingLeft="10dp"
+                            android:hint="@string/phone"
+                            android:inputType="number"
                             android:lines="1"
+                            android:maxLength="10"
                             android:singleLine="true"
-                            android:textColorHint="@color/hint"
-                            android:textSize="14sp" />
+                            android:textColor="@color/white"
+                            android:textColorHint="@color/hint_color"
+                            android:textSize="14sp"
+                            android:theme="@style/EditText.custom"/>
                  <!--   </android.support.design.widget.TextInputLayout>-->
 
 
 
-                    <Button
+                    <com.softmine.dooktravel.util.CustomButton
+                        custom:typeface="proxima-nova-semibold.otf"
                         android:id="@+id/btnSignUp"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:layout_marginTop="30dp"
-                        android:background="@drawable/button_green"
+                        android:background="@drawable/button_back"
                         android:text="@string/signup"
                         android:textSize="16sp"
-                        android:textColor="@color/white" />
+                        android:textColor="@drawable/text_color" />
 
-                    <TextView
+                    <com.softmine.dooktravel.util.CustomTextView
+                        custom:typeface="proxima-nova-semibold.otf"
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -108,9 +137,11 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="2dp"
                         android:text="@string/or"
+                        android:textColor="@color/white"
                         android:textSize="14sp" />
 
-                    <Button
+                    <com.softmine.dooktravel.util.CustomButton
+                        custom:typeface="proxima-nova-semibold.otf"
                         android:id="@+id/btnfb"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
@@ -138,6 +169,7 @@
                 android:layout_above="@+id/ll"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/bus"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <LinearLayout
@@ -148,7 +180,8 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center_horizontal">
 
-                <TextView
+                <com.softmine.dooktravel.util.CustomTextView
+                    custom:typeface="proxima-nova-regular-italic.otf"
                     android:id="@+id/tv_already_have_account"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -156,7 +189,8 @@
                     android:textColor="@color/blue2"
                     android:textStyle="italic" />
 
-                <TextView
+                <com.softmine.dooktravel.util.CustomTextView
+                    custom:typeface="proxima-nova-semibold.otf"
                     android:id="@+id/tv_login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

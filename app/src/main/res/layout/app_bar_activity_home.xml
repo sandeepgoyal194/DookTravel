@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto/com.softmine.dooktravel.util"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/bg"
+            android:background="@color/background_blue"
             android:titleTextColor="@color/white"
             app:popupTheme="@style/AppTheme.PopupOverlay" >
 
@@ -25,13 +26,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <TextView
+            <com.softmine.dooktravel.util.CustomTextView
+                custom:typeface="ProximaNova-Bold.otf"
                 android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:paddingRight="60dp"
-                android:text=""
+                android:text="@string/find_people"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
             <ImageView
@@ -39,11 +41,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/logo"
+                android:visibility="gone"
                 android:paddingRight="60dp"
                 android:gravity="center_horizontal"
                 android:src="@mipmap/dook_logo"
                 />
-            <TextView
+            <com.softmine.dooktravel.util.CustomTextView
+                custom:typeface="proxima-nova-semibold.otf"
                 android:id="@+id/tvEdit"
                 android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"

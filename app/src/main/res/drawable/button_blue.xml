@@ -4,5 +4,5 @@
     <!--border color and border width-->
 
     <!--border radius in dp-->
-    <corners android:radius="5dp" />
+    <corners android:radius="20dp" />
 </shape>

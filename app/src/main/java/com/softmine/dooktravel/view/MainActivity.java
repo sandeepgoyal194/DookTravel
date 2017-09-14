@@ -16,6 +16,7 @@ import com.softmine.dooktravel.view.fragments.FragmentBasicDetail;
 import com.softmine.dooktravel.view.fragments.FragmentContactDetail;
 import com.softmine.dooktravel.view.fragments.FragmentForgotPassword;
 import com.softmine.dooktravel.view.fragments.FragmentLogin;
+import com.softmine.dooktravel.view.fragments.FragmentOtp;
 import com.softmine.dooktravel.view.fragments.FragmentSignUp;
 import com.softmine.dooktravel.view.fragments.FragmentSplash;
 import com.softmine.dooktravel.util.C;
@@ -75,6 +76,12 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new FragmentSignUp();
                 fragmentTransaction.replace(R.id.container, fragment);
                 fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_SIGNUP);
+                break;
+            case C.FRAGMENT_OTP:
+                getSupportActionBar().hide();
+                fragment = new FragmentOtp();
+                fragmentTransaction.replace(R.id.container, fragment);
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_OTP);
                 break;
             case C.FRAGMENT_BASIC_DETAIL:
                 tvTitle.setText(getResources().getString(R.string.profile));

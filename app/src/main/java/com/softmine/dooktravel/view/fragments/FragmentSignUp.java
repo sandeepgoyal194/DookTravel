@@ -33,6 +33,7 @@ import com.softmine.dooktravel.model.ProfileDetail;
 import com.softmine.dooktravel.presenter.FragmentSignUpPresenterImpl;
 import com.softmine.dooktravel.presenter.IFragmentSignUpPresenter;
 import com.softmine.dooktravel.util.C;
+import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
 import com.softmine.dooktravel.validations.Validations;
@@ -48,9 +49,9 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
 
     TextView tvLogin,tvAlreadyAccount;
     Button btnSignUp,btnFacebook;
-    ValidateEditText etUserName;
+    ValidateEditText etUserName,edPhone;
     int flags;
-    String email="",socailId="";
+    String email="",socailId="",phone="";
     LoginButton loginButton;
     CallbackManager callbackManager;
     Validations validation ;
@@ -111,15 +112,12 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
         flags = 0 | Validations.FLAG_NOT_EMPTY;
         flags = flags | Validations.TYPE_EMAIL;
         etUserName=new ValidateEditText((EditText)view.findViewById(R.id.edEmail),getActivity(),flags);
-        tvLogin.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
-        tvAlreadyAccount.setTypeface(Utils.getRegularItalicTypeFace(getActivity()));
-
-        btnSignUp.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
-
-        btnFacebook.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
-
-        etUserName.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
+        flags = 0 | Validations.FLAG_NOT_EMPTY;
+        flags = flags | Validations.TYPE_MOBILE;
+        edPhone=new ValidateEditText((EditText)view.findViewById(R.id.edPhone),getActivity(),flags);
         validation.addtoList(etUserName);
+        validation.addtoList(edPhone);
+
         callbackManager =CallbackManager.Factory.create();
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -199,10 +197,11 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
                     JSONObject jsonBody = new JSONObject();
                     try {
                         email = etUserName.getEditText().getText().toString();
+                        phone=edPhone.getEditText().getText().toString();
                         socailId = "";
                         jsonBody.put(C.EMAIL, email);
                         jsonBody.put(C.SOCAIL_ID, "");
-
+                        jsonBody.put(C.PHONE, phone);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -213,6 +212,9 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
                             , "Internet Issue");
                 }
             }
+
+           // ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_OTP, null);
+
         }
     };
     View.OnClickListener tvLoginCLickListner=new View.OnClickListener() {
@@ -274,10 +276,13 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
             startActivity(intent);*/
                 ProfileDetail profileDetail = new ProfileDetail();
                 profileDetail.setEmail(email);
+                profileDetail.setPhone(phone);
                 profileDetail.setSocialid(socailId);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(C.DATA, profileDetail);
-                ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_BASIC_DETAIL, bundle);
+                bundle.putBoolean(C.IS_SIGNUP, true);
+                SharedPreference.getInstance(getActivity()).setString(C.OTP,registerStatus.getOTP());
+                ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_OTP, bundle);
             } else {
                 getDailogConfirm(registerStatus.getMessage(), "");
             }

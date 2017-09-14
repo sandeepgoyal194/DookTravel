@@ -17,7 +17,9 @@ public class RegisterStatus implements Serializable {
     @SerializedName("message")
     @Expose
     private String message;
-
+    @SerializedName("OTP")
+    @Expose
+    private String OTP;
 
     /**
      * No args constructor for use in serialization
@@ -30,12 +32,13 @@ public class RegisterStatus implements Serializable {
      *
      * @param message
      * @param error
+     * @param OTP
      */
-    public RegisterStatus(Boolean error, String message) {
-        super();
+
+    public RegisterStatus(Boolean error, String message, String OTP) {
         this.error = error;
         this.message = message;
-
+        this.OTP = OTP;
     }
 
     public Boolean getError() {
@@ -54,5 +57,11 @@ public class RegisterStatus implements Serializable {
         this.message = message;
     }
 
+    public String getOTP() {
+        return OTP;
+    }
 
+    public void setOTP(String OTP) {
+        this.OTP = OTP;
+    }
 }

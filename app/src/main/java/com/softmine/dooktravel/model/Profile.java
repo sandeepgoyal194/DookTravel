@@ -23,6 +23,9 @@ public class Profile implements Serializable {
     @SerializedName("phone")
     @Expose
     private String phone;
+    @SerializedName("mobile")
+    @Expose
+    private String mobile;
     @SerializedName("category_id")
     @Expose
     private String categoryId;
@@ -109,6 +112,7 @@ public class Profile implements Serializable {
      * @param lastName
      * @param countryName
      * @param phone
+     * @param mobile
      * @param cityName
      * @param categoryId
      * @param about
@@ -132,11 +136,12 @@ public class Profile implements Serializable {
      * @param skype
      */
 
-    public Profile(String memberId, String emailId, String token, String phone, String categoryId, String categoryName, String firstName, String middleName, String lastName, String profilePic, String profilePicname, String gender, String dateOfBirth, String maritalStatus, String organization, String designation, String workingSince, String address, String countryId, String countryName, String stateId, String stateName, String city, String cityName, String zipCode, String skype, String about) {
+    public Profile(String memberId, String emailId, String token, String phone, String mobile, String categoryId, String categoryName, String firstName, String middleName, String lastName, String profilePic, String profilePicname, String gender, String dateOfBirth, String maritalStatus, String organization, String designation, String workingSince, String address, String countryId, String countryName, String stateId, String stateName, String city, String cityName, String zipCode, String skype, String about) {
         this.memberId = memberId;
         this.emailId = emailId;
         this.token = token;
         this.phone = phone;
+        this.mobile = mobile;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.firstName = firstName;
@@ -161,6 +166,7 @@ public class Profile implements Serializable {
         this.skype = skype;
         this.about = about;
     }
+
 
     public String getMemberId() {
         return memberId;
@@ -192,6 +198,14 @@ public class Profile implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getCategoryId() {

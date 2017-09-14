@@ -29,6 +29,7 @@ import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.model.LoginStatus;
+import com.softmine.dooktravel.model.ProfileDetail;
 import com.softmine.dooktravel.presenter.FragmentLoginPresenterImpl;
 import com.softmine.dooktravel.presenter.IFragmentLoginPresenter;
 import com.softmine.dooktravel.util.C;
@@ -36,7 +37,6 @@ import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
 import com.softmine.dooktravel.validations.Validations;
-import com.softmine.dooktravel.view.ActivityHome;
 import com.softmine.dooktravel.view.MainActivity;
 
 import org.json.JSONException;
@@ -103,20 +103,12 @@ public class FragmentLogin extends Fragment implements IFragmentView {
         tvDontHaveAccount=(TextView)view.findViewById(R.id.tv_dont_have_account);
         btnFacebook=(Button)view.findViewById(R.id.btnfb);
             flags = 0 | Validations.FLAG_NOT_EMPTY;
-        flags = flags | Validations.TYPE_EMAIL;
+        flags = flags | Validations.TYPE_MOBILE;
         etUsername=new ValidateEditText((EditText)view.findViewById(R.id.edUsername),getActivity(),flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
         etPassword=new ValidateEditText((EditText)view.findViewById(R.id.edPassword),getActivity(),flags);
-
-        etUsername.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
-        etPassword.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
-        tvSignUp.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
-        btnLogin.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
-        tvforgotPassword.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        tvDontHaveAccount.setTypeface(Utils.getRegularItalicTypeFace(getActivity()));
-        btnFacebook.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
         btnFacebook.setOnClickListener(mButtonClickListner);
-        validation.addtoList(etPassword);
+      //  validation.addtoList(etPassword);
         validation.addtoList(etUsername);
         callbackManager =CallbackManager.Factory.create();
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -225,8 +217,8 @@ public class FragmentLogin extends Fragment implements IFragmentView {
                 if(util.isInternetOn(getActivity())) {
                     JSONObject jsonBody = new JSONObject();
                     try {
-                        jsonBody.put(C.EMAIL, etUsername.getEditText().getText().toString());
-                        jsonBody.put(C.PASSWORD, etPassword.getEditText().getText().toString());
+                        jsonBody.put(C.PHONE, etUsername.getEditText().getText().toString());
+                     //   jsonBody.put(C.PASSWORD, etPassword.getEditText().getText().toString());
                         jsonBody.put(C.SOCAIL_ID, "");
 
                     } catch (JSONException e) {
@@ -239,6 +231,9 @@ public class FragmentLogin extends Fragment implements IFragmentView {
                             , "Internet Issue");
                 }
             }
+            /*Intent intent = new Intent(getActivity(), ActivityHome.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);*/
         }
     };
     View.OnClickListener tvSignUpClickListner=new View.OnClickListener() {
@@ -266,10 +261,18 @@ public class FragmentLogin extends Fragment implements IFragmentView {
                 SharedPreference.getInstance(getActivity()).setString(C.TOKEN, loginStatus.getMember().getToken());
                 SharedPreference.getInstance(getActivity()).setString(C.MEMBER_ID, loginStatus.getMember().getMemberId());
                 SharedPreference.getInstance(getActivity()).setString(C.EMAIL, loginStatus.getMember().getEmailId());
-                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN, true);
-                Intent intent = new Intent(getActivity(), ActivityHome.class);
+                /*Intent intent = new Intent(getActivity(), ActivityHome.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                startActivity(intent);*/
+
+                ProfileDetail profileDetail = new ProfileDetail();
+                profileDetail.setEmail(loginStatus.getMember().getEmailId());
+                profileDetail.setPhone(loginStatus.getMember().getPhone());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(C.DATA, profileDetail);
+                bundle.putBoolean(C.IS_SIGNUP, false);
+                SharedPreference.getInstance(getActivity()).setString(C.OTP,loginStatus.getMember().getOtp());
+                ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_OTP, bundle);
             } else {
                 getDailogConfirm(loginStatus.getMessage(), "");
             }

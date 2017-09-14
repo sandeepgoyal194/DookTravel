@@ -124,7 +124,7 @@
 
                             <Spinner
                                 android:id="@+id/spinner_category"
-                                style="@style/SpinnerTheme"
+                                style="@style/EditText.custom_details"
                                 android:layout_width="105dp"
                                 android:layout_height="40dp"
                                 android:layout_marginTop="2dp"

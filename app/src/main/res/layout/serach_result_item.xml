@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto/com.softmine.dooktravel.util"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -24,28 +25,35 @@
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-            <TextView
+                <com.softmine.dooktravel.util.CustomTextView
+                    custom:typeface="proxima-nova-semibold.otf"
                 android:id="@+id/tvName"
                 android:textSize="16sp"
-                android:textColor="@color/blue"
+                    android:singleLine="true"
+                    android:lines="1"
+                android:textColor="@color/blue3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:textStyle="bold"/>
 
-            <TextView
+                <com.softmine.dooktravel.util.CustomTextView
+                    custom:typeface="proxima-nova-regular.otf"
                 android:textSize="14sp"
-
-                android:textColor="@color/black"
+                    android:singleLine="true"
+                    android:lines="1"
+                android:textColor="@color/grey_light"
                 android:id="@+id/tvCompany"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"/>
 
-            <TextView
+                <com.softmine.dooktravel.util.CustomTextView
+                    custom:typeface="proxima-nova-regular.otf"
                 android:textSize="14sp"
-
-                android:textColor="@color/black"
+                android:singleLine="true"
+                    android:lines="1"
+                android:textColor="@color/grey_light"
                 android:id="@+id/tvAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

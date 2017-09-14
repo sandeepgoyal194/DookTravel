@@ -69,11 +69,6 @@ public class FragmentChangePassword extends Fragment implements IFragmentView {
         flags = 0 | Validations.FLAG_NOT_EMPTY;
         etConfirmPassword=new ValidateEditText((EditText)view.findViewById(R.id.edConfirmPassword),getActivity(),flags);
         btnSubmit=(Button)view.findViewById(R.id.btnSubmit);
-
-
-        etPassword.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
-        etConfirmPassword.getEditText().setTypeface(Utils.getRegularTypeFace(getActivity()));
-        btnSubmit.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
         btnSubmit.setOnClickListener(mSubmitClickListner);
         validation.addtoList(etConfirmPassword);
         validation.addtoList(etPassword);

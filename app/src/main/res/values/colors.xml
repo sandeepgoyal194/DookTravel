@@ -7,7 +7,9 @@
     <color name="grey3">#2b2b2b</color>
     <color name="green">#00a86b</color>
     <color name="blue">#00008B</color>
-    <color name="background_blue">#4682B4</color>
+    <color name="blue3">#050283</color>
+
+    <color name="background_blue">#2196F3</color>
     <color name="black">#000000</color>
     <color name="grey">#AEB6BF</color>
     <color name="bottom_text_blue">#01539C</color>
@@ -17,10 +19,17 @@
     <color name="light_grey1">#F2F3F4</color>
     <color name="blue1">#55acf7</color>
     <color name="grey2">#585858</color>
-    <color name="hint">#585858</color>
+    <color name="hint">#CFCFCF</color>
     <color name="fb_color">#3b5998</color>
     <color name="blue2">#01539c</color>
     <color name="pilot">#5f2dba</color>
     <color name="blue4">#55acf7</color>
+    <color name="hint_color">#A6D0F8</color>
+    <color name="side_item_color">#585858</color>
+    <color name="title_bar_color">#C3E5FF</color>
+    <color name="title_text_color">#252E33</color>
+    <color name="edittext_color">#2C2C2C</color>
+    <color name="grey_light">#303030</color>
+    <color name="yellow">#DFFE00</color>
 
 </resources>

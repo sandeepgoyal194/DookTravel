@@ -20,7 +20,7 @@ public class StateListIntractorImpl implements IStateListIntractor {
         try {
 //            Log.e("DEBUG","REQUEST="+jsonBody.toString());
 
-            String REGISTER_URL= C.BASE_URL+ C.PROFILE_METHOD;
+            String REGISTER_URL= C.BASE_URL+ C.STATE_METHOD;
 
             JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                     REGISTER_URL,jsonObject ,new Response.Listener<JSONObject>() {

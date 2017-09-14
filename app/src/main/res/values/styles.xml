@@ -3,22 +3,30 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="android:typeface">monospace</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorPrimaryDark</item>
-        <item name="colorControlNormal">@color/pilot</item>
-        <item name="colorControlActivated">@color/pilot</item>
-        <item name="colorControlHighlight">@color/pilot</item>
-        <item name="android:textColorHint">@color/pilot</item>
+        <item name="colorPrimary">@color/background_blue</item>
+        <item name="colorPrimaryDark">@color/background_blue</item>
+        <item name="colorAccent">@color/background_blue</item>
+        <item name="colorControlNormal">@color/background_blue</item>
+        <item name="colorControlActivated">@color/background_blue</item>
+        <item name="colorControlHighlight">@color/background_blue</item>
+        <item name="android:textColorHint">@color/background_blue</item>
     </style>
     <style name="EditText.profile" parent="Widget.AppCompat.EditText">
-        <item name="colorAccent">@color/pilot</item>
-        <item name="colorControlNormal">@color/pilot</item>
-        <item name="colorControlActivated">@color/pilot</item>
+        <item name="colorAccent">@color/background_blue</item>
+        <item name="colorControlNormal">@color/background_blue</item>
+        <item name="colorControlActivated">@color/background_blue</item>
     </style>
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"
-
-        >
+    <style name="EditText.custom" parent="Widget.AppCompat.EditText">
+        <item name="colorAccent">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+    </style>
+    <style name="EditText.custom_details" parent="Widget.AppCompat.EditText">
+        <item name="colorAccent">@color/hint</item>
+        <item name="colorControlNormal">@color/hint</item>
+        <item name="colorControlActivated">@color/hint</item>
+    </style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
@@ -31,10 +39,10 @@
 
     <style name="AppTheme.NoActionBar">
         <item name="android:typeface">monospace</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/background_blue</item>
         <item name="windowActionBar">false</item>
         <item name="elevation">0dp</item>
-        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/background_blue</item>
         <item name="android:textAllCaps">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@null</item>
@@ -43,9 +51,47 @@
 
     </style>
     <style name="SpinnerTheme" parent="android:Widget.Spinner">
+
         <item name="android:background">@drawable/spinner_back</item>
     </style>
 
+    <style name="SpinnerTheme_category_white" parent="android:Widget.Spinner">
+
+        <item name="android:background">@drawable/spinner_back_cat_white</item>
+    </style>
+    <style name="SpinnerTheme_country_white" parent="android:Widget.Spinner">
+
+        <item name="android:background">@drawable/spinner_back_country_white</item>
+    </style>
+
+    <style name="SpinnerTheme_detail" parent="android:Widget.Spinner">
+
+        <item name="android:background">@drawable/spinner_back_deatils</item>
+    </style>
+    <style name="SpinnerTheme_category" parent="android:Widget.Spinner">
+
+        <item name="android:background">@drawable/spinner_back_category</item>
+    </style>
+    <style name="SpinnerTheme_city" parent="android:Widget.Spinner">
+
+        <item name="android:background">@drawable/spinner_back_city</item>
+    </style>
+    <style name="SpinnerTheme_country" parent="android:Widget.Spinner">
+
+        <item name="android:background">@drawable/spinner_back_country</item>
+    </style>
+    <style name="SpinnerTheme_gender" parent="android:Widget.Spinner">
+
+        <item name="android:background">@drawable/spinner_back_gender</item>
+    </style>
+    <style name="SpinnerTheme_marital_status" parent="android:Widget.Spinner">
+
+        <item name="android:background">@drawable/spinner_back_marital_status</item>
+    </style>
+    <style name="SpinnerTheme_state" parent="android:Widget.Spinner">
+
+        <item name="android:background">@drawable/spinner_back_state</item>
+    </style>
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">18sp</item>
     </style>

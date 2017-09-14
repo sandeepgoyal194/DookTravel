@@ -150,8 +150,6 @@ public class FragmentSearchResult extends Fragment implements IFragmentView{
 
         spnCategory.setAdapter(categoryAdapter);*/
 
-        btnGo.setTypeface(Utils.getSemiBoldTypeFace(getActivity()));
-        tvSearchResult.setTypeface(Utils.getRegularTypeFace(getActivity()));
         validation.addtoList(etKeyword);
         getCategoryList();
     }

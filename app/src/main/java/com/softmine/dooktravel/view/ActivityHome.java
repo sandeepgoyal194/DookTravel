@@ -82,8 +82,7 @@ public class ActivityHome extends AppCompatActivity
         imgTitle=(ImageView)findViewById(R.id.imgLogo);
         tvEdit=(TextView)findViewById(R.id.tvEdit);
         tvEdit.setOnClickListener(mTvEditClickListner);
-        tvTitle.setTypeface(Utils.getRegularTypeFace(this));
-        tvEdit.setTypeface(Utils.getRegularTypeFace(this));
+
         listView=(ListView) findViewById(R.id.lvMenuItem);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -124,7 +123,7 @@ public class ActivityHome extends AppCompatActivity
                         fragmnetLoader(C.FRAGMENT_BASIC_DETAIL, bundle);
                     }
                 }
-                else if(position==2 && mSelectedPos!=position){
+                else if(position==4 && mSelectedPos!=position){
                     mSelectedPos=position;
                     Bundle bundle=new Bundle();
                     bundle.putSerializable(C.DATA,profile.get(0));
@@ -137,7 +136,7 @@ public class ActivityHome extends AppCompatActivity
                     mSelectedPos=position;
                     fragmnetLoader(C.FRAGMENT_CHANGE_PASSWORD,null);
                 }
-                else if(position==4&&mSelectedPos!=position){
+                else if(position==2&&mSelectedPos!=position){
                     mSelectedPos=position;
                     getDailogConfirm("Are you sure you want to logout?","");
                 }
@@ -191,7 +190,7 @@ public class ActivityHome extends AppCompatActivity
     View.OnClickListener mTvEditClickListner=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mSelectedPos=2;
+            mSelectedPos=1;
             Bundle bundle=new Bundle();
             bundle.putSerializable(C.DATA,profile.get(0));
             bundle.putBoolean(C.IS_EDIT_PROFILE,true);
@@ -258,7 +257,7 @@ public class ActivityHome extends AppCompatActivity
                 getSupportFragmentManager().executePendingTransactions();
 
                 if(fragmentTag.equals(C.TAG_FRAGMENT_BASIC_DETAIL)){
-                    tvTitle.setText(getResources().getString(R.string.basic_details));
+                    tvTitle.setText(getResources().getString(R.string.profile));
                 }
               /*  else if(fragmentTag.equals(C.TAG_FRAGMENT_PROFESSIONAL_DETAIL)){
                     tvTitle.setText(getResources().getString(profile));
@@ -269,7 +268,7 @@ public class ActivityHome extends AppCompatActivity
                 else if(fragmentTag.equals(C.TAG_FRAGMENT_SEARCH_RESULT)){
                     imgTitle.setVisibility(View.GONE);
                     tvTitle.setVisibility(View.VISIBLE);
-                    tvTitle.setText(getResources().getString(R.string.search_result));
+                    tvTitle.setText(getResources().getString(R.string.find_people));
 
                 }
                /* else if(fragmentTag.equals(C.TAG_FRAGMENT_CONTACT_DETAIL)){
@@ -281,7 +280,7 @@ public class ActivityHome extends AppCompatActivity
                 if(fragment instanceof FragmentProfileDetail){
                     imgTitle.setVisibility(View.GONE);
                     tvTitle.setVisibility(View.VISIBLE);
-                    tvTitle.setText(getResources().getString(R.string.search_result));
+                    tvTitle.setText(getResources().getString(R.string.find_people));
                     mSelectedPos=0;
                 }
                 super.onBackPressed();
@@ -299,12 +298,14 @@ public class ActivityHome extends AppCompatActivity
 
             case C.FRAGMENT_BASIC_DETAIL:
                 tvTitle.setVisibility(View.VISIBLE);
-                tvTitle.setText(getResources().getString(R.string.basic_details));
+                tvTitle.setText(getResources().getString(R.string.profile));
                 fragment = new FragmentBasicDetail();
                 fragmentTransaction.replace(R.id.container, fragment);
 
                      if(bundle.getBoolean(C.IS_EDIT_PROFILE)){
-                         mSelectedPos=2;
+                         mSelectedPos=1;
+                         tvTitle.setText(getResources().getString(R.string.updateprofile));
+
                      }
                      else {
                          mSelectedPos=1;
@@ -324,7 +325,7 @@ public class ActivityHome extends AppCompatActivity
             case C.FRAGMENT_SEARCH_RESULT:
                 getSupportFragmentManager().popBackStack(0,FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 imgTitle.setVisibility(View.GONE);
-                tvTitle.setText(getResources().getString(R.string.search_result));
+                tvTitle.setText(getResources().getString(R.string.find_people));
                 tvTitle.setVisibility(View.VISIBLE);
                 fragment = new FragmentSearchResult();
                 fragmentTransaction.replace(R.id.container, fragment);

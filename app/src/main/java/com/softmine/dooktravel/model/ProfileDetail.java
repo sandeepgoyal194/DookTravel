@@ -80,7 +80,7 @@ public class ProfileDetail implements Serializable{
     @SerializedName("secondaryEmail")
     @Expose
     private String secondaryEmail;
-    @SerializedName("mobile1")
+    @SerializedName("mobile")
     @Expose
     private String mobile1;
     @SerializedName("mobile2")

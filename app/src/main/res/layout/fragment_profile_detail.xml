@@ -6,19 +6,68 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         >
-        <ImageView
-            android:id="@+id/imgProfile"
-            android:scaleType="fitXY"
-            android:background="@color/grey"
+
+        <RelativeLayout
+            android:id="@+id/logo_img"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            />
-        <!-- TODO: Update blank fragment layout -->
+            android:layout_gravity="center_horizontal"
+            android:background="@color/background_blue"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/logo"
+            android:text="@string/logo" />
 
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="110dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="20dp"
+
+                android:paddingLeft="20dp">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgProfile"
+            android:layout_width="100dp"
+            android:layout_centerHorizontal="true"
+
+            android:src="@drawable/placeholder_man"
+            android:layout_height="100dp"
+            />
+            </RelativeLayout>
+        </RelativeLayout>
+        <!-- TODO: Update blank fragment layout -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img"
+            android:background="@color/background_blue">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white">
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imgProfile"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
 
@@ -37,11 +86,11 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/back_basic_detail"
+                    android:background="@color/white"
                     android:orientation="vertical">
 
 
@@ -52,17 +101,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/name"
+
                         android:textColor="@color/black"
                         android:textSize="14sp" />
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edFirstname"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:lines="1"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:focusable="false"
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
                             android:textSize="14sp" />
 
                     <android.support.design.widget.TextInputLayout
@@ -72,7 +123,8 @@
                         android:visibility="gone"
                         android:layout_height="wrap_content">
 
-                        <EditText
+                        <com.softmine.dooktravel.util.CustomEditText
+                            custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edMiddleName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -94,7 +146,8 @@
                         android:layout_height="wrap_content">
 
 
-                        <EditText
+                        <com.softmine.dooktravel.util.CustomEditText
+                            custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edlastName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -120,15 +173,16 @@
                         android:text="@string/address"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edAddress"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:lines="1"
                             android:focusable="false"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
-                            android:textColor="@color/pilot"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
+                            android:textColor="@color/background_blue"
                             android:textSize="14sp" />
 
 
@@ -141,15 +195,16 @@
                         android:text="@string/email"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
                             android:lines="1"
                             android:focusable="false"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:textSize="14sp" />
 
 
@@ -167,15 +222,16 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edContact"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:lines="1"
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
                             android:textSize="14sp" />
 
 
@@ -189,15 +245,16 @@
                         android:text="@string/skype"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edSkype"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:lines="1"
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
 
                             android:textSize="14sp" />
                     <com.softmine.dooktravel.util.CustomTextView
@@ -213,15 +270,16 @@
 
 
 
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edDescription"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:lines="1"
-                            android:textColor="@color/pilot"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:textColor="@color/background_blue"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:textSize="14sp" />
 
                     <com.softmine.dooktravel.util.CustomTextView
@@ -233,15 +291,16 @@
                         android:text="@string/gender"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edGender"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
                             android:lines="1"
                             android:focusable="false"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:textSize="14sp" />
 
 
@@ -255,15 +314,16 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edDob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
                             android:lines="1"
                             android:focusable="false"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:textSize="14sp" />
 
 
@@ -279,15 +339,16 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edMatiral_status"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
                             android:lines="1"
                             android:focusable="false"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:textSize="14sp" />
 
 
@@ -302,16 +363,17 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edOrganization"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:lines="1"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:focusable="false"
                             android:singleLine="true"
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
                             android:textSize="14sp" />
 
                     <com.softmine.dooktravel.util.CustomTextView
@@ -324,17 +386,18 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edDesignation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:singleLine="true"
                             android:lines="1"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
 
                             android:focusable="false"
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
                             android:textSize="14sp" />
 
                     <com.softmine.dooktravel.util.CustomTextView
@@ -347,15 +410,16 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edWorkingSince"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
                             android:lines="1"
                             android:focusable="false"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:textSize="14sp" />
 
                     <com.softmine.dooktravel.util.CustomTextView
@@ -368,15 +432,16 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edCategory"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
                             android:lines="1"
                             android:focusable="false"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:textSize="14sp" />
 
 
@@ -389,15 +454,16 @@
                         android:text="@string/country"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edCountry"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
                             android:lines="1"
                             android:focusable="false"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:textSize="14sp" />
 
 
@@ -415,15 +481,15 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
-                        <EditText
-                            android:id="@+id/edProvince"
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"                            android:id="@+id/edProvince"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
                             android:lines="1"
                             android:focusable="false"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:textSize="14sp" />
 
 
@@ -437,16 +503,17 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edCity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
 
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
                             android:lines="1"
                             android:focusable="false"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:textSize="14sp" />
 
 
@@ -460,15 +527,16 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
-                        <EditText
+                    <com.softmine.dooktravel.util.CustomEditText
+                        custom:typeface="proxima-nova-semibold.otf"
                             android:id="@+id/edZipCode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/pilot"
+                            android:textColor="@color/background_blue"
                             android:lines="1"
                             android:focusable="false"
-                            android:theme="@style/EditText.profile"
-                            style="@style/EditText.profile"
+                            android:theme="@style/EditText.custom_details"
+                            style="@style/EditText.custom_details"
                             android:textSize="14sp" />
 
 
@@ -478,5 +546,6 @@
 
             </LinearLayout>
         </ScrollView>
-
+</RelativeLayout>
+            </RelativeLayout>
     </RelativeLayout>

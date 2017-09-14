@@ -8,11 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.softmine.dooktravel.view.ActivityHome;
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.model.Profile;
 import com.softmine.dooktravel.util.C;
-import com.softmine.dooktravel.util.Utils;
+import com.softmine.dooktravel.view.ActivityHome;
 
 import java.util.List;
 
@@ -40,9 +39,6 @@ public class AdapterSearchResult extends RecyclerView
             tvName = (TextView) itemView.findViewById(R.id.tvName);
             tvCompany = (TextView) itemView.findViewById(R.id.tvCompany);
             tvAddress = (TextView) itemView.findViewById(R.id.tvAddress);
-            tvName.setTypeface(Utils.getSemiBoldTypeFace(context));
-            tvCompany.setTypeface(Utils.getRegularTypeFace(context));
-            tvAddress.setTypeface(Utils.getRegularTypeFace(context));
             itemView.setOnClickListener(this);
         }
 

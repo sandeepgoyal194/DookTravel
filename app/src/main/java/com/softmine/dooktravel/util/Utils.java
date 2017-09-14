@@ -36,11 +36,11 @@ public class Utils {
     ProgressDialog progressDialog=null;
     public static ArrayList<SideMenuItem> getSideMenuList() {
         ArrayList<SideMenuItem> sideMenuItems = new ArrayList<SideMenuItem>();
-        sideMenuItems.add(new SideMenuItem(R.string.home, R.drawable.ic_menu_camera));
-        sideMenuItems.add(new SideMenuItem(R.string.profile, R.drawable.ic_menu_camera));
-        sideMenuItems.add(new SideMenuItem(R.string.update_profile, R.drawable.ic_menu_camera));
-        sideMenuItems.add(new SideMenuItem(R.string.change_password, R.drawable.ic_menu_camera));
-        sideMenuItems.add(new SideMenuItem(R.string.logout, R.drawable.ic_menu_camera));
+        sideMenuItems.add(new SideMenuItem(R.string.search, R.drawable.search));
+        sideMenuItems.add(new SideMenuItem(R.string.profile, R.drawable.user));
+        //sideMenuItems.add(new SideMenuItem(R.string.update_profile, R.drawable.user));
+       // sideMenuItems.add(new SideMenuItem(R.string.change_password, R.drawable.user));
+        sideMenuItems.add(new SideMenuItem(R.string.logout, R.drawable.logout));
 
         return sideMenuItems;
     }

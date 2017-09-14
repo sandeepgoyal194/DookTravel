@@ -32,6 +32,8 @@ public class C {
 
 
     public static final String EMAIL = "email";
+    public static final String PHONE = "phone";
+
     public static final String PASSWORD ="password" ;
     public static final String SOCAIL_ID ="socialid" ;
     public static final String MSG ="Please wait..." ;
@@ -77,6 +79,11 @@ public class C {
     public static final String WIDOWED = "Widowed";
     public static final String SEAPRATED = "Separated";
     public static final String DIVORCED ="Divorced" ;
+    public static final int FRAGMENT_OTP = 10;
+    public static final String TAG_FRAGMENT_OTP = "otp_screen";
+    public static final String OTP = "OTP";
+    public static final String IS_SIGNUP = "is_signup";
+    public static final String OTPRESEND ="otpresend" ;
 
 
     public static  boolean isloggedIn =false ;

@@ -22,13 +22,19 @@ public class Member implements Serializable{
     private String firstName;
     @SerializedName("middle_name")
     @Expose
-    private Object middleName;
+    private String middleName;
     @SerializedName("last_name")
     @Expose
     private String lastName;
     @SerializedName("token")
     @Expose
     private String token;
+    @SerializedName("otp")
+    @Expose
+    private String otp;
+    @SerializedName("phone")
+    @Expose
+    private String phone;
 
     /**
      * No args constructor for use in serialization
@@ -45,15 +51,18 @@ public class Member implements Serializable{
      * @param token
      * @param memberId
      * @param firstName
+     * @param otp
+     * @param phone
      */
-    public Member(String memberId, String emailId, String firstName, Object middleName, String lastName, String token) {
-        super();
+    public Member(String memberId, String emailId, String firstName, String middleName, String lastName, String token, String otp, String phone) {
         this.memberId = memberId;
         this.emailId = emailId;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
         this.token = token;
+        this.otp = otp;
+        this.phone = phone;
     }
 
     public String getMemberId() {
@@ -80,11 +89,11 @@ public class Member implements Serializable{
         this.firstName = firstName;
     }
 
-    public Object getMiddleName() {
+    public String getMiddleName() {
         return middleName;
     }
 
-    public void setMiddleName(Object middleName) {
+    public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
 
@@ -102,5 +111,21 @@ public class Member implements Serializable{
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
