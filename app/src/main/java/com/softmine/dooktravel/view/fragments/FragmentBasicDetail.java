@@ -22,11 +22,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.text.Selection;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +58,7 @@ import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
 import com.softmine.dooktravel.validations.Validations;
 import com.softmine.dooktravel.view.ActivityHome;
+import com.softmine.dooktravel.view.MainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -208,21 +205,33 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
         flags = 0 | Validations.FLAG_NOT_EMPTY;
         edSkypeID=new ValidateEditText((EditText)view.findViewById(R.id.edSkype),getActivity(),flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
+        flags = flags | Validations.TYPE_MOBILE;
 
         edPrimary=new ValidateEditText((EditText)view.findViewById(R.id.edContact1),getActivity(),flags);
-        flags = 0 | Validations.FLAG_NOT_EMPTY;
+
+
         edSecondary=new ValidateEditText((EditText)view.findViewById(R.id.edContact2),getActivity(),flags);
 
-        final Spannable code = new SpannableString("(+91)");
+       /* final Spannable code = new SpannableString("(+91) Primary Number");
 
         code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 0,1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.background_blue)), 1,4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 4,5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 4,code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        final Spannable code = new SpannableString("(+91) Primary Number");
+
+        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 0,1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.background_blue)), 1,4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 4,code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        final Spannable code1= new SpannableString("(+91) Secondary Number");
+
+        code1.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 0,1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        code1.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.background_blue)), 1,4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        code1.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 4,code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
 
-
-        edPrimary.getEditText().setText(code);
-        Selection.setSelection(edPrimary.getEditText().getText(), edPrimary.getEditText().getText().length());
+        edPrimary.getEditText().setHint(code);*/
         edPrimary.getEditText().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -231,35 +240,9 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                 }
             }
         });
-        edPrimary.getEditText().addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(!s.toString().contains(code)){
-                    edPrimary.getEditText().setText(code);
-                    Selection.setSelection(edPrimary.getEditText().getText(), edPrimary.getEditText().getText().length());
-
-                }
-
-            }
-        });
 
 
-        edSecondary.getEditText().setText(code);
-        Selection.setSelection(edSecondary.getEditText().getText(), edSecondary.getEditText().getText().length());
+     //   edSecondary.getEditText().setHint(code1);
         edSecondary.getEditText().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -268,31 +251,31 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                 }
             }
         });
-        edSecondary.getEditText().addTextChangedListener(new TextWatcher() {
+      /*  edSecondary.getEditText().addTextChangedListener(new TextWatcher() {
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // TODO Auto-generated method stub
-
+            public void afterTextChanged(Editable s) {
+                if (s != null && s.length() == 5 && (s.charAt(4) < '7')) {
+                    edSecondary.getEditText().setText("");
+                    edSecondary.getEditText().setError("Number should start with 9,8 and 7");
+                }
             }
 
-            @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
                                           int after) {
-                // TODO Auto-generated method stub
 
             }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(!s.toString().contains(code)){
-                    edSecondary.getEditText().setText(code);
-                    Selection.setSelection(edSecondary.getEditText().getText(), edSecondary.getEditText().getText().length());
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if (!s.toString().startsWith("+91-")) {
+                    edSecondary.getEditText().setText("+91-");
+                    Selection.setSelection( edSecondary.getEditText().getText(),  edSecondary.getEditText()
+                            .getText().length());
 
                 }
-
             }
-        });
+        });*/
+
         edEmail=new ValidateEditText((EditText)view.findViewById(R.id.edEmail),getActivity(),flags);
 
         btnNext=(Button) view.findViewById(R.id.btnNext);
@@ -1130,11 +1113,15 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                 public void onClick(View v) {
                     dialog.dismiss();
                     if (titleText.equals("1")) {
-
-                        Intent intent=new Intent(getActivity(), ActivityHome.class);
+                        Intent intent=new Intent(getActivity(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.putExtra(C.SCREEN,C.FRAGMENT_LOGIN);
+                     /*   Intent intent=new Intent(getActivity(), ActivityHome.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra(C.SCREEN,C.FRAGMENT_SEARCH_RESULT);
-                        startActivity(intent);
+                        startActivity(intent);*/
+
+
                     }
                    else if(titleText.equals("2")){
                         Intent intent=new Intent(getActivity(), ActivityHome.class);

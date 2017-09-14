@@ -59,8 +59,10 @@ public class ActivityHome extends AppCompatActivity
     int mSelectedPos=0;
     CircleImageView circleImageView;
     String action;
+    int save = 0;
     List<Profile> profile;
     Utils utils;
+    TextView tvSideMenu;
     IActivityHomePresenter mIActivityHomePresenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,20 +97,46 @@ public class ActivityHome extends AppCompatActivity
         adapterSideMenu = new AdapterSideMenu(this, Utils.getSideMenuList());
         listView.setAdapter(adapterSideMenu);
 
-        try {
-            Bundle bundle = getIntent().getExtras();
-            int screen = getIntent().getIntExtra(C.SCREEN, C.FRAGMENT_SEARCH_RESULT);
-            fragmnetLoader(screen, bundle);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            fragmnetLoader(C.FRAGMENT_SEARCH_RESULT, null);
-        }
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
+
+
+                if(position!=2) {
+                    parent.getChildAt(position).setBackgroundColor(
+                            getResources().getColor(R.color.hint));
+
+                    if (tvSideMenu == null) {
+
+                        TextView t = (TextView) AdapterSideMenu.view.findViewById(R.id.tvMenuName);
+
+                        t.setTextColor(getResources().getColor(R.color.side_item_color));
+                    } else {
+                        tvSideMenu.setTextColor(getResources().getColor(R.color.side_item_color));
+
+                    }
+
+                    TextView t = (TextView) view.findViewById(R.id.tvMenuName);
+                    t.setTextColor(getResources().getColor(R.color.background_blue));
+
+                    tvSideMenu = t;
+
+                    if (save != -1 && save != position) {
+                        parent.getChildAt(save).setBackgroundColor(
+                                getResources().getColor(R.color.white));
+
+                   /* RelativeLayout relativeLayout = (RelativeLayout) view.getParent();
+                    TextView textView = (TextView) relativeLayout.getChildAt(1);
+                    textView.setTextColor(getResources().getColor(R.color.side_item_color));*/
+                    }
+
+                    save = position;
+
+
+                }
                 if(position==0&& mSelectedPos!=position){
                     mSelectedPos=position;
                     fragmnetLoader(C.FRAGMENT_SEARCH_RESULT,null);
@@ -116,7 +144,9 @@ public class ActivityHome extends AppCompatActivity
                else if(position==1 && mSelectedPos!=position){
                     mSelectedPos=position;
                     Bundle bundle=new Bundle();
-                    bundle.putSerializable(C.DATA,profile.get(0));
+                    if(profile!=null) {
+                        bundle.putSerializable(C.DATA, profile.get(0));
+                    }
                     bundle.putBoolean(C.ADD_TO_BACK,true);
                     bundle.putBoolean(C.IS_EDIT_PROFILE,false);
                     if(profile!=null && profile.size()>0) {
@@ -137,11 +167,21 @@ public class ActivityHome extends AppCompatActivity
                     fragmnetLoader(C.FRAGMENT_CHANGE_PASSWORD,null);
                 }
                 else if(position==2&&mSelectedPos!=position){
-                    mSelectedPos=position;
+                   // mSelectedPos=position;
                     getDailogConfirm("Are you sure you want to logout?","");
                 }
             }
         });
+        try {
+            Bundle bundle = getIntent().getExtras();
+            int screen = getIntent().getIntExtra(C.SCREEN, C.FRAGMENT_SEARCH_RESULT);
+            fragmnetLoader(screen, bundle);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+           fragmnetLoader(C.FRAGMENT_SEARCH_RESULT, null);
+
+        }
         getProfileDetail();
     }
     void getDailogConfirm(String dataText, String titleText) {
@@ -323,6 +363,7 @@ public class ActivityHome extends AppCompatActivity
                 break;
 
             case C.FRAGMENT_SEARCH_RESULT:
+                mSelectedPos=0;
                 getSupportFragmentManager().popBackStack(0,FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 imgTitle.setVisibility(View.GONE);
                 tvTitle.setText(getResources().getString(R.string.find_people));

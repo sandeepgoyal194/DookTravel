@@ -190,7 +190,7 @@ public class Utils {
     }
 
     public static String getSubstringPhone(String number){
-        return number.substring(5,number.length());
+        return number.substring(0,number.length());
     }
 
 }

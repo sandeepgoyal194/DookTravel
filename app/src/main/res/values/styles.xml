@@ -63,7 +63,10 @@
 
         <item name="android:background">@drawable/spinner_back_country_white</item>
     </style>
+    <style name="SpinnerTheme_state_white" parent="android:Widget.Spinner">
 
+        <item name="android:background">@drawable/spinner_back_state_white</item>
+    </style>
     <style name="SpinnerTheme_detail" parent="android:Widget.Spinner">
 
         <item name="android:background">@drawable/spinner_back_deatils</item>

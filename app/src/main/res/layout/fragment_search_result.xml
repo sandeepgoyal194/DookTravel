@@ -104,7 +104,7 @@
                     android:id="@+id/spinner_state"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="4dp"
-                    style="@style/SpinnerTheme"
+                    style="@style/SpinnerTheme_state_white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />

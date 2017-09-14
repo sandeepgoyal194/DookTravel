@@ -97,7 +97,7 @@ public class FragmentOtp extends Fragment implements IFragmentView {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // TODO Auto-generated method stub
                 if (edit1ED.getEditText().getText().toString().length() == 1) {
-                    str.append(s);
+
                     edit1ED.clearFocus();
                     edit2ED.getEditText().requestFocus();
                     edit2ED.getEditText().setCursorVisible(true);
@@ -122,7 +122,6 @@ public class FragmentOtp extends Fragment implements IFragmentView {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // TODO Auto-generated method stub
                 if (edit2ED.getEditText().getText().toString().length() == 1) {
-                    str.append(s);
                     edit2ED.getEditText().clearFocus();
                     edit3ED.getEditText().requestFocus();
                     edit3ED.getEditText().setCursorVisible(true);
@@ -148,7 +147,6 @@ public class FragmentOtp extends Fragment implements IFragmentView {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // TODO Auto-generated method stub
                 if (edit3ED.getEditText().getText().toString().length() == 1) {
-                    str.append(s);
                     edit3ED.getEditText().clearFocus();
                     edit4ED.getEditText().requestFocus();
                     edit4ED.getEditText().setCursorVisible(true);
@@ -173,7 +171,6 @@ public class FragmentOtp extends Fragment implements IFragmentView {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // TODO Auto-generated method stub
 
-                str.append(s);
                 edit4ED.getEditText().clearFocus();
             }
 
@@ -193,7 +190,7 @@ public class FragmentOtp extends Fragment implements IFragmentView {
     View.OnClickListener mResendOtpClickListner=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(validation.validateAllEditText()){
+
                 JSONObject jsonBody = new JSONObject();
                 try {
                     jsonBody.put(C.PHONE, profileDtl.getPhone());
@@ -201,18 +198,22 @@ public class FragmentOtp extends Fragment implements IFragmentView {
                     e.printStackTrace();
                 }
                 mPresenter.resend(jsonBody);
-            }
+
         }
     };
     View.OnClickListener mSubmitClickListner=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if(validation.validateAllEditText()) {
+
+                str.append(edit1ED.getEditText().getText().toString()+
+                        edit2ED.getEditText().getText().toString()
+                        +edit3ED.getEditText().getText().toString()+edit4ED.getEditText().getText().toString());
                 if (SharedPreference.getInstance(getActivity()).getString(C.OTP).equals(str.toString())) {
                     if (isSignUp) {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable(C.DATA, profileDtl);
-                        ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_BASIC_DETAIL, null);
+                        ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_BASIC_DETAIL, bundle);
                     } else {
                         SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN, true);
 

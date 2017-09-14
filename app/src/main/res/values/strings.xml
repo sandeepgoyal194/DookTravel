@@ -61,8 +61,8 @@
     <string name="tv_no_of_char">0/250</string>
     <string name="first_name">First Name</string>
     <string name="contact">Contact</string>
-    <string name="primary">Primary Phone</string>
-    <string name="secondary">Secondary Phone</string>
+    <string name="primary">(+91) Primary Phone</string>
+    <string name="secondary">(+91) Secondary Phone</string>
 
     <string name="email">Email</string>
     <string name="skype">Skype</string>

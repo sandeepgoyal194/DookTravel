@@ -20,7 +20,7 @@ public class AdapterSideMenu extends BaseAdapter {
     private final LayoutInflater mInflater;
     private Activity activity;
     private ArrayList<SideMenuItem> sideMenuItems;
-
+   public static View view;
     public AdapterSideMenu(Activity activity, ArrayList<SideMenuItem> sideMenuItems) {
         this.activity = activity;
         this.sideMenuItems = sideMenuItems;
@@ -50,12 +50,16 @@ public class AdapterSideMenu extends BaseAdapter {
             convertView = mInflater.inflate(
                     R.layout.side_item_menu, parent, false);
         }
-
         TextView tvMenuName = (TextView)convertView.findViewById(R.id.tvMenuName);
         tvMenuName.setText(activity.getResources().getString(getItem(position).getNameResourse()));
         ImageView ivIcon = (ImageView) convertView.findViewById(R.id.ivIcon);
         ivIcon.setImageResource((getItem(position).getImageNameResource()));
         tvMenuName.setTypeface(Utils.getRegularTypeFace(activity));
+        if(position==0){
+            tvMenuName.setTextColor(activity.getResources().getColor(R.color.background_blue));
+            convertView.setBackgroundColor(activity.getResources().getColor(R.color.hint));
+            view=convertView;
+        }
         return convertView;
     }
 }
