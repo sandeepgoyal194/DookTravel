@@ -1059,7 +1059,8 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                 if(!isEditProfile) {
                     tvUpload.setVisibility(View.GONE);
                 }
-                Utils.displayImage(getActivity(), C.IMAGE_BASE_URL + profile.getProfilePic(), imgProfile);
+               // Utils.displayImage(getActivity(), C.IMAGE_BASE_URL + profile.getProfilePic(), imgProfile);
+                Utils.displayImage(getActivity(), profile.getProfilePic(), imgProfile);
                 //TODO Image Display
                 profile.setProfilePicname(profile.getProfilePic());
                 new AsyncGettingBitmapFromUrl().execute();

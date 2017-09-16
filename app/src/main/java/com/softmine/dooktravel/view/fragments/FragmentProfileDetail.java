@@ -146,8 +146,8 @@ public class FragmentProfileDetail extends Fragment {
         etSkype.setText(profile.getSkype());
         etEmail.setText(profile.getEmailId());
         if(profile.getProfilePic()!=null && !profile.getProfilePic().equals("")) {
-            Utils.displayImage(getActivity(),C.IMAGE_BASE_URL+profile.getProfilePic(),imgProfile);
-
+     //       Utils.displayImage(getActivity(),C.IMAGE_BASE_URL+profile.getProfilePic(),imgProfile);
+            Utils.displayImage(getActivity(),profile.getProfilePic(),imgProfile);
         }
         if(profile.getGender().equalsIgnoreCase("m")||profile.getGender().equalsIgnoreCase("Male") ){
             spnGender.setText("Male");
