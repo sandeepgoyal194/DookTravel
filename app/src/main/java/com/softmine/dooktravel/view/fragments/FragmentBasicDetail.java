@@ -1166,7 +1166,17 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                     getCategoryList();
                     showDetails(profile);
                 } else {
-                    getDailogConfirm(profileStatus.getMessage(), "");
+                    if(profileStatus.getMessage().equals(C.InvalidToken)){
+                        Utils.showToast(getActivity(), C.Session_expired);
+                        Intent intent=new Intent(getActivity(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.putExtra(C.SCREEN,C.FRAGMENT_LOGIN);
+                        startActivity(intent);
+                    }
+                    else{
+                        getDailogConfirm(profileStatus.getMessage(), "");
+
+                    }
                 }
             }
           else  if (action.equals(C.LOGIN_METHOD)) {
@@ -1302,7 +1312,16 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                 if (!registerStatus.getError()) {
                     getDailogConfirm(registerStatus.getMessage(), "1");
                 } else {
-                    getDailogConfirm(registerStatus.getMessage(), "");
+
+                    if (registerStatus.getMessage().equals(C.InvalidToken)) {
+                        Utils.showToast(getActivity(), C.Session_expired);
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.putExtra(C.SCREEN, C.FRAGMENT_LOGIN);
+                        startActivity(intent);
+                    } else {
+                        getDailogConfirm(registerStatus.getMessage(), "");
+                    }
                 }
 
             } else if (action.equals(C.UPDATE_PROFILE_METHOD)) {
@@ -1312,7 +1331,17 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                     getDailogConfirm(profileStatus.getMessage(), "2");
 
                 } else {
-                    getDailogConfirm(profileStatus.getMessage(), "");
+
+                    if (profileStatus.getMessage().equals(C.InvalidToken)) {
+                        Utils.showToast(getActivity(), C.Session_expired);
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.putExtra(C.SCREEN, C.FRAGMENT_LOGIN);
+                        startActivity(intent);
+                    }
+                    else {
+                        getDailogConfirm(profileStatus.getMessage(), "");
+                    }
                 }
             }
         }
