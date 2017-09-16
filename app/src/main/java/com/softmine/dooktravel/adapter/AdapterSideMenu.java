@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.pojos.SideMenuItem;
+import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.Utils;
 
 import java.util.ArrayList;
@@ -19,11 +20,13 @@ public class AdapterSideMenu extends BaseAdapter {
 
     private final LayoutInflater mInflater;
     private Activity activity;
+    private int screen;
     private ArrayList<SideMenuItem> sideMenuItems;
    public static View view;
-    public AdapterSideMenu(Activity activity, ArrayList<SideMenuItem> sideMenuItems) {
+    public AdapterSideMenu(Activity activity, ArrayList<SideMenuItem> sideMenuItems , int screen) {
         this.activity = activity;
         this.sideMenuItems = sideMenuItems;
+        this.screen=screen;
         mInflater = LayoutInflater.from(activity);
 
     }
@@ -55,7 +58,12 @@ public class AdapterSideMenu extends BaseAdapter {
         ImageView ivIcon = (ImageView) convertView.findViewById(R.id.ivIcon);
         ivIcon.setImageResource((getItem(position).getImageNameResource()));
         tvMenuName.setTypeface(Utils.getRegularTypeFace(activity));
-        if(position==0){
+        if(position==0 && screen== C.FRAGMENT_SEARCH_RESULT){
+            tvMenuName.setTextColor(activity.getResources().getColor(R.color.background_blue));
+            convertView.setBackgroundColor(activity.getResources().getColor(R.color.hint));
+            view=convertView;
+        }
+        else if(position==1 && screen== C.FRAGMENT_BASIC_DETAIL){
             tvMenuName.setTextColor(activity.getResources().getColor(R.color.background_blue));
             convertView.setBackgroundColor(activity.getResources().getColor(R.color.hint));
             view=convertView;

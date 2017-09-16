@@ -2,6 +2,7 @@ package com.softmine.dooktravel.view.fragments;
 
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
 import com.softmine.dooktravel.validations.Validations;
 import com.softmine.dooktravel.view.ActivityHome;
+import com.softmine.dooktravel.view.MainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -542,7 +544,16 @@ public class FragmentSearchResult extends Fragment implements IFragmentView{
                     adapterSearchResult = new AdapterSearchResult(profileList.getMember(), getActivity());
                     recyclerView.setAdapter(adapterSearchResult);
                 } else {
-                    Utils.showToast(getActivity(), profileList.getMessage());
+                    if(profileList.getMessage().equals(C.InvalidToken)){
+                        Utils.showToast(getActivity(), C.Session_expired);
+                        Intent intent=new Intent(getActivity(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.putExtra(C.SCREEN,C.FRAGMENT_LOGIN);
+                        startActivity(intent);
+                    }
+                    else {
+                        Utils.showToast(getActivity(), profileList.getMessage());
+                    }
                 }
             }
         }

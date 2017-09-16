@@ -60,6 +60,7 @@ public class ActivityHome extends AppCompatActivity
     CircleImageView circleImageView;
     String action;
     int save = 0;
+    int s=6;
     List<Profile> profile;
     Utils utils;
     TextView tvSideMenu;
@@ -94,7 +95,18 @@ public class ActivityHome extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        adapterSideMenu = new AdapterSideMenu(this, Utils.getSideMenuList());
+        try {
+            Bundle bundle = getIntent().getExtras();
+             s = getIntent().getIntExtra(C.SCREEN, C.FRAGMENT_SEARCH_RESULT);
+            if(s==C.FRAGMENT_BASIC_DETAIL){
+                save=1;
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+
+        }
+        adapterSideMenu = new AdapterSideMenu(this, Utils.getSideMenuList(),s);
         listView.setAdapter(adapterSideMenu);
 
 
@@ -168,7 +180,7 @@ public class ActivityHome extends AppCompatActivity
                 }
                 else if(position==2&&mSelectedPos!=position){
                    // mSelectedPos=position;
-                    getDailogConfirm("Are you sure you want to logout?","");
+                    getDailogConfirm("Are you sure you want to logout?","1");
                 }
             }
         });
@@ -184,7 +196,7 @@ public class ActivityHome extends AppCompatActivity
         }
         getProfileDetail();
     }
-    void getDailogConfirm(String dataText, String titleText) {
+    void getDailogConfirm(final String dataText, final String titleText) {
         try {
             final Dialog dialog = new Dialog(ActivityHome.this);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -214,7 +226,9 @@ public class ActivityHome extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
-                    logout();
+                    if(titleText.equals("1")) {
+                        logout();
+                    }
 
                 }
             });
@@ -438,7 +452,16 @@ public class ActivityHome extends AppCompatActivity
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } else {
-                getDailog(registerStatus.getMessage(), "");
+                if(registerStatus.getMessage().equals(C.InvalidToken)){
+                    Utils.showToast(this, C.Session_expired);
+                    Intent intent=new Intent(this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra(C.SCREEN,C.FRAGMENT_LOGIN);
+                    startActivity(intent);
+                }
+                else {
+                    getDailog(registerStatus.getMessage(), "");
+                }
             }
         }
         else if(action.equals(C.PROFILE_METHOD)) {
@@ -452,7 +475,16 @@ public class ActivityHome extends AppCompatActivity
                 //TODO Image Display
                 // imgProfile.setImageBitmap(Utils.getImageBitmapFromByte64(profile.get(0).getProfilePic()));
             } else {
-                getDailogConfirm(profileStatus.getMessage(), "");
+                if(profileStatus.getMessage().equals(C.InvalidToken)){
+                    Utils.showToast(this, C.Session_expired);
+                    Intent intent=new Intent(this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra(C.SCREEN,C.FRAGMENT_LOGIN);
+                    startActivity(intent);
+                }
+                else {
+                    getDailogConfirm(profileStatus.getMessage(), "");
+                }
             }
 
         }

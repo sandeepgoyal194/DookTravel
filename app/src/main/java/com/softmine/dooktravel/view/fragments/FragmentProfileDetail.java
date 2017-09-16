@@ -1,7 +1,9 @@
 package com.softmine.dooktravel.view.fragments;
 
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,7 +28,7 @@ public class FragmentProfileDetail extends Fragment {
 /*    TextView tvGender,tvDob,tvMaritalStatus, tvCategory, tvWorkingHour,
              tvCountry, tvCity, tvProvince, tvPostal;*/
     EditText etFirstName,etMiddleName,etLastName,etAddress,etContact,etSkype,etDescription,etEmail,etOraginization, etDesignation,etZipCode;
-    EditText spnMaritalStatus,spnGender,spnCategory, spnCountry, spnCity, spnProvince,spnDateOfBirth,tvWorkingSince;
+    EditText spnMaritalStatus,spnGender,spnCategory, spnCountry, spnCity, spnProvince,spnDateOfBirth,tvWorkingSince,etContact1;
     ImageView imgProfile;
     Profile profile;
     public FragmentProfileDetail() {
@@ -79,8 +81,27 @@ public class FragmentProfileDetail extends Fragment {
         spnGender=(EditText) view.findViewById(R.id.edGender);
      //   tvPostal = (TextView) view.findViewById(R.id.et_Postal);
 
-        etContact=(EditText)view.findViewById(R.id.edContact);
+        etContact=(EditText)view.findViewById(R.id.edContact1);
+        etContact1=(EditText)view.findViewById(R.id.edContact2);
+        etContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(etContact.getText().toString().length()>8){
+                    getDialPad(Utils.getSubstringPhone(etContact.getText().toString()));
+                }
+            }
+        });
 
+
+        //   edSecondary.getEditText().setHint(code1);
+        etContact1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(etContact1.getText().toString().length()>8){
+                    getDialPad(Utils.getSubstringPhone(etContact1.getText().toString()));
+                }
+            }
+        });
         etSkype=(EditText)view.findViewById(R.id.edSkype);
 
         etDescription=(EditText)view.findViewById(R.id.edDescription);
@@ -101,33 +122,6 @@ public class FragmentProfileDetail extends Fragment {
         etOraginization = (EditText) view.findViewById(R.id.edOrganization);
 
         etDesignation = (EditText) view.findViewById(R.id.edDesignation);
-        etFirstName.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        etMiddleName.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        etLastName.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        etAddress.setTypeface(Utils.getRegularTypeFace(getActivity()));
-
-        etContact.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        etSkype.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        etDescription.setTypeface(Utils.getRegularTypeFace(getActivity()));
-     //   tvGender.setTypeface(Utils.getLightTypeFace(getActivity()));
-    //    tvDob.setTypeface(Utils.getLightTypeFace(getActivity()));
-        spnDateOfBirth.setTypeface(Utils.getRegularTypeFace(getActivity()));
-     //   tvMaritalStatus.setTypeface(Utils.getLightTypeFace(getActivity()));
-
-
-
-      //  tvCategory.setTypeface(Utils.getLightTypeFace(getActivity()));
-    //    tvWorkingHour.setTypeface(Utils.getLightTypeFace(getActivity()));
-    //    tvCountry.setTypeface(Utils.getLightTypeFace(getActivity()));
-    //    tvCity.setTypeface(Utils.getLightTypeFace(getActivity()));
-     //   tvProvince.setTypeface(Utils.getLightTypeFace(getActivity()));
-        tvWorkingSince.setTypeface(Utils.getRegularTypeFace(getActivity()));
-     //   tvPostal.setTypeface(Utils.getRegularTypeFace(getActivity()));
-
-        etOraginization.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        etDesignation.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        etAddress.setTypeface(Utils.getRegularTypeFace(getActivity()));
-        etZipCode.setTypeface(Utils.getRegularTypeFace(getActivity()));
 
         showDetail();
 
@@ -146,6 +140,8 @@ public class FragmentProfileDetail extends Fragment {
       //  etMiddleName.setText(profile.getMiddleName());
         etAddress.setText(profile.getAddress());
         etContact.setText(profile.getPhone());
+        etContact1.setText(profile.getMobile());
+
         etDescription.setText(profile.getAbout());
         etSkype.setText(profile.getSkype());
         etEmail.setText(profile.getEmailId());
@@ -169,5 +165,11 @@ public class FragmentProfileDetail extends Fragment {
         spnCity.setText(profile.getCityName());
         tvWorkingSince.setText(Utils.getFormattedDate(profile.getWorkingSince(),C.SERVER_DATE_FORMAT,C.DATE_FORMAT));
         spnCategory.setText(profile.getCategoryName());
+    }
+    void getDialPad(String dial_number){
+        Intent dial = new Intent();
+        dial.setAction("android.intent.action.DIAL");
+        dial.setData(Uri.parse("tel:"+dial_number));
+        startActivity(dial);
     }
 }

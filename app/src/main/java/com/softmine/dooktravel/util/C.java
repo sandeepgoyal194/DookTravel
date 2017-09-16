@@ -88,4 +88,6 @@ public class C {
 
     public static  boolean isloggedIn =false ;
 
+    public static String InvalidToken="Invalid token";
+    public static String Session_expired="Session expired";
 }

@@ -1073,7 +1073,11 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
             etAboutMe.getEditText().setText(profile.getAbout());
             // tvWorkingSince.setText(Utils.getFormattedDate( profile.getWorkingSince(),"yyyy/MM/dd","dd/MM/yyyy"));
             tvWorkingSince.setText(Utils.getFormattedDate(profile.getWorkingSince(), C.SERVER_DATE_FORMAT, C.DATE_FORMAT));
+            tvAboutMe.setText("ABOUT "+profile.getFirstName()+" "+profile.getLastName());
 
+            if(!isEditProfile) {
+                btnNext.setVisibility(View.GONE);
+            }
         }
         catch (Exception e){
             e.printStackTrace();
@@ -1116,6 +1120,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                         Intent intent=new Intent(getActivity(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra(C.SCREEN,C.FRAGMENT_LOGIN);
+                        startActivity(intent);
                      /*   Intent intent=new Intent(getActivity(), ActivityHome.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra(C.SCREEN,C.FRAGMENT_SEARCH_RESULT);

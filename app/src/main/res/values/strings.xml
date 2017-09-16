@@ -56,8 +56,10 @@
 
     <string name="submit">SUBMIT</string>
     <string name="Otp_wrong">OTP, you enter is wrong</string>
+    <string name="about_me">ABOUT ME</string>
+    <string name="about">ABOUT</string>
 
-    <string name="about_me">Enter about yourself...</string>
+    <string name="about_about_youself">Enter about yourself...</string>
     <string name="tv_no_of_char">0/250</string>
     <string name="first_name">First Name</string>
     <string name="contact">Contact</string>
