@@ -470,8 +470,8 @@ public class ActivityHome extends AppCompatActivity
             if (!profileStatus.getError()) {
                 profile = profileStatus.getMember();
                 if(profile.get(0).getProfilePic()!=null && !profile.get(0).getProfilePic().equals("")) {
-                   // Utils.displayImage(this, C.IMAGE_BASE_URL + profile.get(0).getProfilePic(), circleImageView);
-                    Utils.displayImage(this, profile.get(0).getProfilePic(), circleImageView);
+                    Utils.displayImage(this, C.IMAGE_BASE_URL + profile.get(0).getProfilePic(), circleImageView);
+                 //   Utils.displayImage(this, profile.get(0).getProfilePic(), circleImageView);
                 }
                 //TODO Image Display
                 // imgProfile.setImageBitmap(Utils.getImageBitmapFromByte64(profile.get(0).getProfilePic()));
