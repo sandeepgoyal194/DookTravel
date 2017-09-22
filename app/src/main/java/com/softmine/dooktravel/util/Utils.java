@@ -127,7 +127,7 @@ public class Utils {
     public static void displayImage(Context context, String imageUrl, ImageView imageView){
         Picasso.with(context)
                 .load(imageUrl)
-                .resize(375,375)
+                .resize(100,100)
                    .placeholder(R.drawable.placeholder_man)
                 .error(R.drawable.placeholder_man)
                 .into(imageView);

@@ -454,6 +454,7 @@ public class ActivityHome extends AppCompatActivity
             } else {
                 if(registerStatus.getMessage().equals(C.InvalidToken)){
                     Utils.showToast(this, C.Session_expired);
+                    SharedPreference.getInstance(this).setBoolean(C.IS_LOGIN,false);
                     Intent intent=new Intent(this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.putExtra(C.SCREEN,C.FRAGMENT_LOGIN);
@@ -478,6 +479,7 @@ public class ActivityHome extends AppCompatActivity
             } else {
                 if(profileStatus.getMessage().equals(C.InvalidToken)){
                     Utils.showToast(this, C.Session_expired);
+                    SharedPreference.getInstance(this).setBoolean(C.IS_LOGIN,false);
                     Intent intent=new Intent(this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.putExtra(C.SCREEN,C.FRAGMENT_LOGIN);

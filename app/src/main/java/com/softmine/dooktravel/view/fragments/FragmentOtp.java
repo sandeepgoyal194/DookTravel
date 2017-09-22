@@ -127,6 +127,9 @@ public class FragmentOtp extends Fragment implements IFragmentView {
                     edit3ED.getEditText().setCursorVisible(true);
 
                 }
+                if(s.length()==0){
+                    edit1ED.getEditText().requestFocus();
+                }
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count,
@@ -152,6 +155,9 @@ public class FragmentOtp extends Fragment implements IFragmentView {
                     edit4ED.getEditText().setCursorVisible(true);
 
                 }
+                if(s.length()==0){
+                    edit2ED.getEditText().requestFocus();
+                }
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count,
@@ -172,6 +178,9 @@ public class FragmentOtp extends Fragment implements IFragmentView {
                 // TODO Auto-generated method stub
 
                 edit4ED.getEditText().clearFocus();
+                if(s.length()==0){
+                    edit3ED.getEditText().requestFocus();
+                }
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count,

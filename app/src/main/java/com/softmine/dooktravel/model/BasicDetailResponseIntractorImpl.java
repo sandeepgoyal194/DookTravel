@@ -1,5 +1,6 @@
 package com.softmine.dooktravel.model;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -46,8 +47,18 @@ public class BasicDetailResponseIntractorImpl implements IBasicDetailResponseInt
 
             // Adding request to request queue
             // AppController.getInstance().addToRequestQueue(jsonObjReq);
+
             RequestQueue requestQueue = Volley.newRequestQueue(listener.getAPPContext());
+            jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(
+                    12000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             requestQueue.add(jsonObjReq);
+/*
+            RetryPolicy policy = new DefaultRetryPolicy(12000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            jsonObj.setRetryPolicy(policy);
+            RequestQueue requestQueue = Volley.newRequestQueue(listener.getAPPContext());
+            requestQueue.add(jsonObj);*/
         }
         catch (Exception e){
             e.printStackTrace();

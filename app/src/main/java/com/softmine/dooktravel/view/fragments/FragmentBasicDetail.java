@@ -365,7 +365,8 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
         year  = newCalendar.get(Calendar.YEAR);
         month = newCalendar.get(Calendar.MONTH);
         day   = newCalendar.get(Calendar.DAY_OF_MONTH);
-       DatePickerDialogDob = new DatePickerDialog(getActivity(), new android.app.DatePickerDialog.OnDateSetListener() {
+
+        DatePickerDialogDob = new DatePickerDialog(getActivity(), new android.app.DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int y, int monthOfYear, int dayOfMonth) {
                 year  = y;
@@ -377,6 +378,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
             }
 
         },year, month, day);
+        DatePickerDialogDob.getDatePicker().setMaxDate(System.currentTimeMillis());
 
 
 
@@ -433,7 +435,9 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
             }
 
         }, year, month, day);
-            validation.addtoList(etAboutMe);
+        DatePickerDialogWorking.getDatePicker().setMaxDate(System.currentTimeMillis());
+
+        validation.addtoList(etAboutMe);
         try {
 
             if(C.isloggedIn) {
@@ -762,7 +766,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
 
         } else if (requestCode == CAMERA) {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            bitmap= Utils.scaleDown(bitmap, 300, true);
+            bitmap= Utils.scaleDown(bitmap, 500, true);
             imgProfile.setImageBitmap(bitmap);
             String profileImage= Utils.getBase64Image(bitmap);
             if(C.isloggedIn) {
@@ -1169,6 +1173,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                 } else {
                     if(profileStatus.getMessage().equals(C.InvalidToken)){
                         Utils.showToast(getActivity(), C.Session_expired);
+                        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,false);
                         Intent intent=new Intent(getActivity(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra(C.SCREEN,C.FRAGMENT_LOGIN);
@@ -1316,6 +1321,8 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
 
                     if (registerStatus.getMessage().equals(C.InvalidToken)) {
                         Utils.showToast(getActivity(), C.Session_expired);
+                        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,false);
+
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra(C.SCREEN, C.FRAGMENT_LOGIN);
@@ -1335,6 +1342,8 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
 
                     if (profileStatus.getMessage().equals(C.InvalidToken)) {
                         Utils.showToast(getActivity(), C.Session_expired);
+                        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,false);
+
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra(C.SCREEN, C.FRAGMENT_LOGIN);
@@ -1353,7 +1362,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
 
     @Override
     public void getResponseError(String response) {
-
+        Log.e(FragmentBasicDetail.class.getName(),"RESPONSE=="+response);
     }
 
     @Override

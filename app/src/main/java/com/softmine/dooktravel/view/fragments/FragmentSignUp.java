@@ -28,8 +28,8 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.softmine.dooktravel.R;
-import com.softmine.dooktravel.model.RegisterStatus;
 import com.softmine.dooktravel.model.ProfileDetail;
+import com.softmine.dooktravel.model.RegisterStatus;
 import com.softmine.dooktravel.presenter.FragmentSignUpPresenterImpl;
 import com.softmine.dooktravel.presenter.IFragmentSignUpPresenter;
 import com.softmine.dooktravel.util.C;
@@ -46,7 +46,7 @@ import org.json.JSONObject;
  * A simple {@link Fragment} subclass.
  */
 public class FragmentSignUp extends Fragment implements IFragmentView {
-
+    boolean mIsFbLogin=false;
     TextView tvLogin,tvAlreadyAccount;
     Button btnSignUp,btnFacebook;
     ValidateEditText etUserName,edPhone;
@@ -187,6 +187,7 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
             e.printStackTrace();
         }
         Log.e("DEBUG","Request="+jsonBody.toString());
+        mIsFbLogin=true;
         mIFragmentSignUpPresenter.validateSignUp(jsonBody);
     }
     View.OnClickListener mSignUpClickLisnter=new View.OnClickListener() {
@@ -205,6 +206,7 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    mIsFbLogin=false;
                    mIFragmentSignUpPresenter.validateSignUp(jsonBody);
                 }
                 else {
@@ -281,8 +283,14 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(C.DATA, profileDetail);
                 bundle.putBoolean(C.IS_SIGNUP, true);
-                SharedPreference.getInstance(getActivity()).setString(C.OTP,registerStatus.getOTP());
-                ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_OTP, bundle);
+                if(mIsFbLogin){
+
+                    ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_BASIC_DETAIL, bundle);
+                }
+                else {
+                    SharedPreference.getInstance(getActivity()).setString(C.OTP, registerStatus.getOTP());
+                    ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_OTP, bundle);
+                }
             } else {
                 getDailogConfirm(registerStatus.getMessage(), "");
             }

@@ -37,6 +37,7 @@ import com.softmine.dooktravel.util.SharedPreference;
 import com.softmine.dooktravel.util.Utils;
 import com.softmine.dooktravel.validations.ValidateEditText;
 import com.softmine.dooktravel.validations.Validations;
+import com.softmine.dooktravel.view.ActivityHome;
 import com.softmine.dooktravel.view.MainActivity;
 
 import org.json.JSONException;
@@ -54,7 +55,7 @@ public class FragmentLogin extends Fragment implements IFragmentView {
     IFragmentLoginPresenter mPresenter;
     CallbackManager callbackManager;
     Utils util;
-
+    boolean mIsFbLogin=false;
     ValidateEditText etUsername,etPassword;
     public FragmentLogin() {
         // Required empty public constructor
@@ -206,6 +207,8 @@ public class FragmentLogin extends Fragment implements IFragmentView {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        mIsFbLogin=true;
+        Log.e("DEBUG","LOGIN=="+jsonBody);
         mPresenter.validateLogin(jsonBody);
 
     }
@@ -224,6 +227,7 @@ public class FragmentLogin extends Fragment implements IFragmentView {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    mIsFbLogin=false;
                     mPresenter.validateLogin(jsonBody);
                 }
                 else {
@@ -271,8 +275,18 @@ public class FragmentLogin extends Fragment implements IFragmentView {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(C.DATA, profileDetail);
                 bundle.putBoolean(C.IS_SIGNUP, false);
-                SharedPreference.getInstance(getActivity()).setString(C.OTP,loginStatus.getMember().getOtp());
-                ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_OTP, bundle);
+
+                if(mIsFbLogin){
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN, true);
+
+                    Intent intent = new Intent(getActivity(), ActivityHome.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+                else {
+                    SharedPreference.getInstance(getActivity()).setString(C.OTP, loginStatus.getMember().getOtp());
+                    ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_OTP, bundle);
+                }
             } else {
                 getDailogConfirm(loginStatus.getMessage(), "");
             }

@@ -546,6 +546,7 @@ public class FragmentSearchResult extends Fragment implements IFragmentView{
                 } else {
                     if(profileList.getMessage().equals(C.InvalidToken)){
                         Utils.showToast(getActivity(), C.Session_expired);
+                        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,false);
                         Intent intent=new Intent(getActivity(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra(C.SCREEN,C.FRAGMENT_LOGIN);
