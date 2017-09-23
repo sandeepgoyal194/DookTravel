@@ -200,8 +200,8 @@ public class FragmentLogin extends Fragment implements IFragmentView {
     void userFacebookLogin(String token, String email){
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put(C.EMAIL, "");
-            jsonBody.put(C.PASSWORD, "");
+         /*   jsonBody.put(C.EMAIL, "");
+            jsonBody.put(C.PASSWORD, "");*/
             jsonBody.put(C.SOCAIL_ID,token);
 
         } catch (JSONException e) {
@@ -209,7 +209,7 @@ public class FragmentLogin extends Fragment implements IFragmentView {
         }
         mIsFbLogin=true;
         Log.e("DEBUG","LOGIN=="+jsonBody);
-        mPresenter.validateLogin(jsonBody);
+        mPresenter.validateLoginSocail(jsonBody);
 
     }
     View.OnClickListener mLoginButtonClickListner=new View.OnClickListener() {

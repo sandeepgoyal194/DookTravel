@@ -15,4 +15,6 @@ public interface ILoginResponseIntractor {
         Context getAPPContext();
     }
     public void getLoginResponse(JSONObject jsonObject, OnLoginFinishedListener listener);
+    public void getLoginResponseSocail(JSONObject jsonObject, OnLoginFinishedListener listener);
+
 }

@@ -9,5 +9,7 @@ import org.json.JSONObject;
 public interface IFragmentLoginPresenter  {
 
     void validateLogin(JSONObject jsonObject);
+    void validateLoginSocail(JSONObject jsonObject);
+
     void onDestroy();
 }

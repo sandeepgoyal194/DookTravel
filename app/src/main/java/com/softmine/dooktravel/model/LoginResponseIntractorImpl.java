@@ -61,4 +61,49 @@ public class LoginResponseIntractorImpl implements ILoginResponseIntractor {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void getLoginResponseSocail(JSONObject jsonObject, final OnLoginFinishedListener listener) {
+        try {
+//            Log.e("DEBUG","REQUEST="+jsonBody.toString());
+
+            String REGISTER_URL= C.BASE_URL+C.LOGIN_METHOD_SOCIAL;
+
+            JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                    REGISTER_URL,jsonObject ,new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    //Log.e(TAG, response.toString());
+                    listener.onSuccess(response.toString());
+
+                }
+            }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //   Log.e(TAG, "Error: " + error.getMessage());
+                    //  utils.hideDialog();
+                    listener.onError(error.toString());
+
+
+                }
+
+            });
+
+            // Adding request to request queue
+            // AppController.getInstance().addToRequestQueue(jsonObjReq);
+            /*RequestQueue requestQueue = Volley.newRequestQueue(listener.getAPPContext());
+            requestQueue.add(jsonObjReq);*/
+            RequestQueue requestQueue = Volley.newRequestQueue(listener.getAPPContext());
+            jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(
+                    12000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            requestQueue.add(jsonObjReq);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

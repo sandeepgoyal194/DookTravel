@@ -148,4 +148,5 @@
     <string name="otp_send_successfully">OTP sent successfully</string>
 
     <string name="find_people">Find People</string>
+    <string name="slow_network">Due to slow connection there is some problem. please try again</string>
 </resources>

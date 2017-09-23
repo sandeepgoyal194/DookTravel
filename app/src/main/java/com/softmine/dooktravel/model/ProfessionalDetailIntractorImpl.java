@@ -52,7 +52,7 @@ public class ProfessionalDetailIntractorImpl implements IProfessionalDetailIntra
 */
             RequestQueue requestQueue = Volley.newRequestQueue(listener.getAPPContext());
             jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(
-                    12000,
+                    30000,
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             requestQueue.add(jsonObjReq);
@@ -99,7 +99,7 @@ public class ProfessionalDetailIntractorImpl implements IProfessionalDetailIntra
             requestQueue.add(jsonObjReq);*/
             RequestQueue requestQueue = Volley.newRequestQueue(listener.getAPPContext());
             jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(
-                    12000,
+                    30000,
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             requestQueue.add(jsonObjReq);

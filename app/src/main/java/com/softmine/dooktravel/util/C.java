@@ -29,6 +29,7 @@ public class C {
     public static final String IMAGE_BASE_URL = "http://www.kenlabs.co/dook/user_profile/";
 
     public static final String LOGIN_METHOD = "login";
+    public static final String LOGIN_METHOD_SOCIAL = "loginsocial";
 
 
     public static final String EMAIL = "email";

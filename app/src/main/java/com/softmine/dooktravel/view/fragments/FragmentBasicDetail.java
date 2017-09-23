@@ -1363,6 +1363,9 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
     @Override
     public void getResponseError(String response) {
         Log.e(FragmentBasicDetail.class.getName(),"RESPONSE=="+response);
+        if (action.equals(C.UPDATE_PROFILE_METHOD) ||  action.equals(C.PROFILE_METHOD)  ||action.equals(C.UPDATE_PROFILE_METHOD)) {
+            getDailogConfirm(getResources().getString(R.string.slow_network), "");
+        }
     }
 
     @Override

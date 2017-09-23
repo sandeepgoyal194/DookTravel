@@ -33,6 +33,14 @@ public class FragmentLoginPresenterImpl implements IFragmentLoginPresenter,ILogi
     }
 
     @Override
+    public void validateLoginSocail(JSONObject jsonObject) {
+        if(mView!=null){
+            mView.showProgress();
+        }
+        iLoginResponseIntractor.getLoginResponseSocail(jsonObject, this);
+    }
+
+    @Override
     public void onDestroy() {
         mView=null;
     }
