@@ -127,7 +127,7 @@ public class Utils {
     public static void displayImage(Context context, String imageUrl, ImageView imageView){
         Picasso.with(context)
                 .load(imageUrl)
-                .resize(100,100)
+              //  .resize(300,500)
                    .placeholder(R.drawable.placeholder_man)
                 .error(R.drawable.placeholder_man)
                 .into(imageView);
@@ -165,16 +165,17 @@ public class Utils {
         toast.show();
     }
     public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
-                                   boolean filter) {
-      /*  float ratio = Math.min(
+                               boolean filter) {
+
+        float ratio = Math.min(
                 (float) maxImageSize / realImage.getWidth(),
                 (float) maxImageSize / realImage.getHeight());
         int width = Math.round((float) ratio * realImage.getWidth());
         int height = Math.round((float) ratio * realImage.getHeight());
 
         Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
-                height, filter);*/
-        Bitmap newBitmap=   Bitmap.createScaledBitmap(realImage,(int)(realImage.getWidth()*0.8), (int)(realImage.getHeight()*0.8), true);
+                height, filter);
+      //  Bitmap newBitmap=   Bitmap.createScaledBitmap(realImage,(int)(realImage.getWidth()*0.9), (int)(realImage.getHeight()*0.9), true);
         return newBitmap;
     }
     public static void hideSoftKeyboard(Activity activity) {

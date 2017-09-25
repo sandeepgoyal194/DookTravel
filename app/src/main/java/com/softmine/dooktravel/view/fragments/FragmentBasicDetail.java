@@ -9,8 +9,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
+import android.media.ExifInterface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -71,7 +74,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_CANCELED;
 
@@ -95,7 +100,8 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
     ArrayAdapter<String> spinnerCategoryAdapter=null;
     ArrayAdapter<String> spinnerStateAdapter=null;
     ArrayAdapter<String> spinnerCountryAdapter=null;
-
+    private Uri fileUri;
+    public static final int MEDIA_TYPE_IMAGE = 1;
     ArrayAdapter<String> spinnerCityAdapter=null;
 
     Button btnNext;
@@ -723,6 +729,8 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
     }
     private void takePhotoFromCamera() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
         startActivityForResult(intent, CAMERA);
     }
     void chooseImage(){
@@ -733,7 +741,41 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
 // Always show the chooser (if there are multiple options available)
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
+    public Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
 
+    /**
+     * returning image / video
+     */
+    private static File getOutputMediaFile(int type) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                C.IMAGE_DIRECTORY_NAME);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(C.IMAGE_DIRECTORY_NAME, "Oops! Failed create "
+                        + C.IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile=null;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
+        }
+
+        return mediaFile;
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -748,7 +790,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
                  //   String path = saveImage(bitmap);
-                    bitmap= Utils.scaleDown(bitmap, 800, true);
+                    bitmap= Utils.scaleDown(bitmap, 500, true);
                     imgProfile.setImageBitmap(bitmap);
                     String profileImage= Utils.getBase64Image(bitmap);
                     if(C.isloggedIn) {
@@ -766,19 +808,62 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
             }
 
         } else if (requestCode == CAMERA) {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            bitmap= Utils.scaleDown(bitmap, 800, true);
-            imgProfile.setImageBitmap(bitmap);
-            String profileImage= Utils.getBase64Image(bitmap);
-            if(C.isloggedIn) {
-                profile.setProfilePic(profileImage);
-                profile.setProfilePicname(Utils.getCurrentTimeStamp()+".jpg");
+            try {
+               /* Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                bitmap = Utils.scaleDown(bitmap, 800, true);
+                imgProfile.setImageBitmap(bitmap);
+                String profileImage = Utils.getBase64Image(bitmap);
+                if (C.isloggedIn) {
+                    profile.setProfilePic(profileImage);
+                    profile.setProfilePicname(Utils.getCurrentTimeStamp() + ".jpg");
+                } else {
+                    profileDetail.setPicture(profileImage);
+                    profileDetail.setPicturename(Utils.getCurrentTimeStamp() + ".jpg");
+                }*/
+                //   saveImage(thumbnail);
+               /* Uri u = data.getData();
+                Bitmap b = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), u);
+              Bitmap bi=  rotateImageIfRequired(b,u.toString());
+                imgProfile.setImageBitmap(bi);
+                String profileImage = Utils.getBase64Image(bi);
+                if (C.isloggedIn) {
+                    profile.setProfilePic(profileImage);
+                    profile.setProfilePicname(Utils.getCurrentTimeStamp() + ".jpg");
+                } else {
+                    profileDetail.setPicture(profileImage);
+                    profileDetail.setPicturename(Utils.getCurrentTimeStamp() + ".jpg");
+                }
+*/
+
+
+
+                BitmapFactory.Options options = new BitmapFactory.Options();
+
+                // downsizing image as it throws OutOfMemory Exception for larger
+                // images
+                options.inSampleSize = 8;
+
+                 Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(),
+                        options);
+
+                 bitmap=  rotateImageIfRequired(bitmap,fileUri.getPath());
+                imgProfile.setImageBitmap(bitmap);
+                String profileImage = Utils.getBase64Image(bitmap);
+                if (C.isloggedIn) {
+                    profile.setProfilePic(profileImage);
+                    profile.setProfilePicname(Utils.getCurrentTimeStamp() + ".jpg");
+                } else {
+                    profileDetail.setPicture(profileImage);
+                    profileDetail.setPicturename(Utils.getCurrentTimeStamp() + ".jpg");
+                }
+
+
+
+
             }
-            else {
-                profileDetail.setPicture(profileImage);
-                profileDetail.setPicturename(Utils.getCurrentTimeStamp()+".jpg");
+            catch (Exception e){
+                e.printStackTrace();
             }
-         //   saveImage(thumbnail);
 
         }
 
@@ -805,7 +890,30 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
             }
         }*/
     }
+    public static Bitmap rotateImageIfRequired(Bitmap img, String selectedImage) throws IOException {
 
+        ExifInterface ei = new ExifInterface(selectedImage);
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return rotateImage(img, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return rotateImage(img, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return rotateImage(img, 270);
+            default:
+                return img;
+        }
+    }
+
+    public static Bitmap rotateImage(Bitmap img, int degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+        img.recycle();
+        return rotatedImg;
+    }
     public String saveImage(Bitmap myBitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);

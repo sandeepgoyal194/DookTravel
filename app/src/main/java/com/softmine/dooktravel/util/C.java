@@ -86,7 +86,7 @@ public class C {
     public static final String IS_SIGNUP = "is_signup";
     public static final String OTPRESEND ="otpresend" ;
 
-
+    public static final String IMAGE_DIRECTORY_NAME = "ADBOEK";
     public static  boolean isloggedIn =false ;
 
     public static String InvalidToken="Invalid token";
