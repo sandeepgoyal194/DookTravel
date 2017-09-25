@@ -275,7 +275,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:drawableLeft="@drawable/email"
-                                        android:drawablePadding="20dp"
+                                        android:drawablePadding="16dp"
                                         android:hint="@string/email"
                                         android:inputType="textEmailAddress"
                                         android:lines="1"
@@ -400,6 +400,7 @@
 
 
                                     <LinearLayout
+                                        android:layout_marginTop="10dp"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical">
@@ -509,8 +510,8 @@
                                     android:layout_centerVertical="true"
                                     android:layout_gravity="center"
                                     android:layout_marginBottom="15dp"
-                                    android:layout_marginLeft="15dp"
-                                    android:layout_marginRight="15dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
                                     android:layout_marginTop="15dp"
                                     android:background="@color/white"
                                     android:gravity="center"
@@ -532,9 +533,9 @@
                                         android:drawableLeft="@drawable/org"
                                         android:drawablePadding="20dp"
                                         android:hint="@string/organization"
+                                        android:paddingLeft="10dp"
 
                                         android:lines="1"
-                                        android:paddingLeft="10dp"
                                         android:singleLine="true"
                                         android:textColor="@color/edittext_color"
                                         android:textColorHint="@color/hint"
@@ -560,6 +561,7 @@
                                         android:hint="@string/designation"
                                         android:lines="1"
                                         android:paddingLeft="10dp"
+
                                         android:singleLine="true"
                                         android:textColor="@color/edittext_color"
                                         android:textColorHint="@color/hint"
@@ -572,7 +574,7 @@
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="5dp"
+                                        android:layout_marginTop="10dp"
                                         android:orientation="vertical">
 
                                         <TextView
@@ -585,7 +587,7 @@
                                             android:visibility="gone" />
 
                                         <Spinner
-                                            android:paddingLeft="36dp"
+                                            android:paddingLeft="40dp"
                                             android:gravity="start"
                                             android:layout_gravity="start"
                                             android:id="@+id/spinner_category"
@@ -600,7 +602,6 @@
                                         android:layout_width="match_parent"
 
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="5dp"
                                         android:orientation="vertical">
 
                                         <TextView
@@ -655,9 +656,9 @@
                                     android:layout_centerVertical="true"
                                     android:layout_gravity="center"
                                     android:layout_marginBottom="15dp"
-                                    android:layout_marginLeft="15dp"
-                                    android:layout_marginRight="15dp"
-                                    android:layout_marginTop="15dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_marginTop="25dp"
                                     android:background="@color/white"
                                     android:gravity="center"
                                     android:orientation="vertical">
@@ -678,7 +679,7 @@
                                             android:visibility="gone" />
 
                                         <Spinner
-                                            android:paddingLeft="36dp"
+                                            android:paddingLeft="40dp"
                                             android:gravity="start"
                                             android:layout_gravity="start"
                                             android:id="@+id/spinner_country"
@@ -705,7 +706,7 @@
                                             android:visibility="gone" />
 
                                         <Spinner
-                                            android:paddingLeft="36dp"
+                                            android:paddingLeft="40dp"
                                             android:gravity="start"
                                             android:layout_gravity="start"
                                             android:id="@+id/spinner_province"
@@ -733,7 +734,7 @@
                                             android:visibility="gone" />
 
                                         <Spinner
-                                            android:paddingLeft="36dp"
+                                            android:paddingLeft="40dp"
                                             android:gravity="start"
                                             android:layout_gravity="start"
                                             android:id="@+id/spinner_city"
@@ -775,9 +776,9 @@
                                             android:hint="@string/zip"
                                             android:inputType="number"
                                             android:lines="1"
+                                            android:paddingLeft="15dp"
 
                                             android:maxLength="6"
-                                            android:paddingLeft="15dp"
                                             android:singleLine="true"
                                             android:textColor="@color/edittext_color"
                                             android:textColorHint="@color/hint"
@@ -803,7 +804,8 @@
                                         android:drawablePadding="20dp"
                                         android:hint="@string/street"
                                         android:lines="1"
-                                        android:paddingLeft="10dp"
+                                        android:paddingLeft="13dp"
+
                                         android:singleLine="true"
                                         android:textColor="@color/edittext_color"
                                         android:textColorHint="@color/hint"
@@ -841,8 +843,8 @@
                                             android:layout_height="100dp"
                                             android:layout_gravity="top"
                                             android:layout_marginLeft="5dp"
-                                            android:layout_marginRight="15dp"
-                                            android:layout_marginTop="15dp"
+                                            android:layout_marginRight="5dp"
+                                            android:layout_marginTop="25dp"
                                             android:background="@drawable/view_back_border"
                                             android:drawablePadding="20dp"
                                             android:gravity="top"

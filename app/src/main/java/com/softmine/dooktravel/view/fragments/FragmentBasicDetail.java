@@ -683,11 +683,12 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
     View.OnClickListener mUploadImageClickListner=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(isCameraPermissionGranted()) {
-                showPictureDialog();
-            }
-            else {
-                requestPermissionForCamera();
+            if(isEditProfile) {
+                if (isCameraPermissionGranted()) {
+                    showPictureDialog();
+                } else {
+                    requestPermissionForCamera();
+                }
             }
         }
     };
@@ -747,7 +748,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
                  //   String path = saveImage(bitmap);
-                    bitmap= Utils.scaleDown(bitmap, 400, true);
+                    bitmap= Utils.scaleDown(bitmap, 800, true);
                     imgProfile.setImageBitmap(bitmap);
                     String profileImage= Utils.getBase64Image(bitmap);
                     if(C.isloggedIn) {
@@ -766,7 +767,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
 
         } else if (requestCode == CAMERA) {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            bitmap= Utils.scaleDown(bitmap, 500, true);
+            bitmap= Utils.scaleDown(bitmap, 800, true);
             imgProfile.setImageBitmap(bitmap);
             String profileImage= Utils.getBase64Image(bitmap);
             if(C.isloggedIn) {
@@ -966,35 +967,40 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
         }
     }
     boolean isAllValid(){
-        if(isEditProfile) {
-            if (!C.isloggedIn && !edPassword.getEditText().getText().toString().equals(edConfirmPassword.getEditText().getText().toString())) {
-                edConfirmPassword.getEditText().setError(getString(R.string.password_validate));
-                return false;
-            } else if (spnGender.getSelectedItem().toString().equals(C.SELECT_GENDER)) {
-                Utils.showToast(getActivity(), getString(R.string.select_gender));
-                return false;
-            } else if (tvDob.getText().toString().equals("")) {
-                Utils.showToast(getActivity(), getString(R.string.enter_dob));
+        try {
 
-                return false;
-            } else if (spnMaritalStatus.getSelectedItem().toString().equals(C.SELECT_MARITAL_STATUS)) {
-                Utils.showToast(getActivity(), getString(R.string.selectMarital_status));
-                return false;
-            }
-            else if (spnCategory.getSelectedItem().toString().equals(C.SELECT_CATEGORY)) {
-                Utils.showToast(getActivity(), getString(R.string.select_category));
-                return false;
-            }
-            else if (spnCountry.getSelectedItem().toString().equals(C.SELECT_COUNTRY)) {
-                Utils.showToast(getActivity(), getString(R.string.select_country));
-                return false;
-            }
-            else if (spnCity.getSelectedItem().toString().equals(C.SELECT_CITY)) {
-                Utils.showToast(getActivity(), getString(R.string.select_city));
-                return false;
+            if (isEditProfile) {
+                if (!C.isloggedIn && !edPassword.getEditText().getText().toString().equals(edConfirmPassword.getEditText().getText().toString())) {
+                    edConfirmPassword.getEditText().setError(getString(R.string.password_validate));
+                    return false;
+                } else if (spnGender.getSelectedItem().toString().equals(C.SELECT_GENDER)) {
+                    Utils.showToast(getActivity(), getString(R.string.select_gender));
+                    return false;
+                } else if (tvDob.getText().toString().equals("")) {
+                    Utils.showToast(getActivity(), getString(R.string.enter_dob));
+
+                    return false;
+                } else if (spnMaritalStatus.getSelectedItem().toString().equals(C.SELECT_MARITAL_STATUS)) {
+                    Utils.showToast(getActivity(), getString(R.string.selectMarital_status));
+                    return false;
+                } else if (spnCategory.getSelectedItem().toString().equals(C.SELECT_CATEGORY)) {
+                    Utils.showToast(getActivity(), getString(R.string.select_category));
+                    return false;
+                } else if (spnCountry.getSelectedItem().toString().equals(C.SELECT_COUNTRY)) {
+                    Utils.showToast(getActivity(), getString(R.string.select_country));
+                    return false;
+                } else if (spnCity.getSelectedItem().toString().equals(C.SELECT_CITY)) {
+                    Utils.showToast(getActivity(), getString(R.string.select_city));
+                    return false;
+                }
             }
         }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
         return true;
+
     }
 
     @Override

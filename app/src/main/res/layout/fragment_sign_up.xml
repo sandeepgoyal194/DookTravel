@@ -83,7 +83,7 @@
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_email"
                         android:gravity="center"
-                        android:hint="@string/email_address"
+                        android:hint="@string/email"
                         android:inputType="textEmailAddress"
                         android:lines="1"
                         android:paddingLeft="10dp"
