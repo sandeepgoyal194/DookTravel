@@ -284,7 +284,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:drawableLeft="@drawable/email"
-                                        android:drawablePadding="20dp"
+                                        android:drawablePadding="16dp"
                                         android:focusable="false"
                                         android:hint="@string/email"
                                         android:inputType="textEmailAddress"
@@ -438,7 +438,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:drawableLeft="@drawable/gender"
-                                            android:drawablePadding="20dp"
+                                            android:drawablePadding="19dp"
                                             android:focusable="false"
                                             android:hint="@string/gender"
                                             android:lines="1"
@@ -471,7 +471,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:drawableLeft="@drawable/marital"
-                                            android:drawablePadding="20dp"
+                                            android:drawablePadding="16dp"
                                             android:focusable="false"
                                             android:hint="@string/marital_status"
                                             android:lines="1"
@@ -541,8 +541,8 @@
                                     android:layout_centerVertical="true"
                                     android:layout_gravity="center"
                                     android:layout_marginBottom="15dp"
-                                    android:layout_marginLeft="15dp"
-                                    android:layout_marginRight="15dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
                                     android:layout_marginTop="15dp"
                                     android:background="@color/white"
                                     android:gravity="center"
@@ -561,7 +561,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:drawableLeft="@drawable/org"
-                                        android:drawablePadding="20dp"
+                                        android:drawablePadding="16dp"
                                         android:focusable="false"
                                         android:hint="@string/organization"
                                         android:lines="1"
@@ -588,7 +588,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:drawableLeft="@drawable/des"
-                                        android:drawablePadding="20dp"
+                                        android:drawablePadding="18dp"
                                         android:focusable="false"
                                         android:hint="@string/designation"
                                         android:lines="1"
@@ -606,7 +606,6 @@
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="5dp"
                                         android:orientation="vertical">
 
                                         <TextView
@@ -624,7 +623,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:drawableLeft="@drawable/category"
-                                            android:drawablePadding="20dp"
+                                            android:drawablePadding="18dp"
                                             android:focusable="false"
                                             android:hint="@string/category"
                                             android:lines="1"
@@ -641,7 +640,6 @@
                                         android:layout_width="match_parent"
 
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="5dp"
                                         android:orientation="vertical">
 
                                         <TextView
@@ -660,7 +658,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:drawableLeft="@drawable/calender"
-                                            android:drawablePadding="20dp"
+                                            android:drawablePadding="22dp"
                                             android:focusable="false"
                                             android:hint="@string/working_since"
                                             android:lines="1"
@@ -694,8 +692,8 @@
                                     android:layout_centerVertical="true"
                                     android:layout_gravity="center"
                                     android:layout_marginBottom="15dp"
-                                    android:layout_marginLeft="15dp"
-                                    android:layout_marginRight="15dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
                                     android:layout_marginTop="15dp"
                                     android:background="@color/white"
                                     android:gravity="center"
@@ -722,7 +720,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:drawableLeft="@drawable/country"
-                                            android:drawablePadding="20dp"
+                                            android:drawablePadding="18dp"
                                             android:focusable="false"
                                             android:hint="@string/country"
                                             android:lines="1"
@@ -756,7 +754,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:drawableLeft="@drawable/state"
-                                            android:drawablePadding="20dp"
+                                            android:drawablePadding="18dp"
                                             android:focusable="false"
                                             android:hint="@string/province"
                                             android:lines="1"
@@ -791,7 +789,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:drawableLeft="@drawable/city"
-                                            android:drawablePadding="20dp"
+                                            android:drawablePadding="16dp"
                                             android:focusable="false"
                                             android:hint="@string/city"
                                             android:lines="1"
@@ -808,7 +806,6 @@
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="-10dp"
                                         android:orientation="vertical">
 
                                         <TextView
@@ -827,7 +824,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:drawableLeft="@drawable/zip"
-                                            android:drawablePadding="20dp"
+                                            android:drawablePadding="22dp"
                                             android:focusable="false"
                                             android:hint="@string/zip"
                                             android:inputType="number"
@@ -862,7 +859,7 @@
                                         android:hint="@string/street"
                                         android:lines="1"
 
-                                        android:paddingLeft="10dp"
+                                        android:paddingLeft="15dp"
                                         android:singleLine="true"
                                         android:textColor="@color/edittext_color"
                                         android:textColorHint="@color/hint"

@@ -153,6 +153,10 @@ public class ActivityHome extends AppCompatActivity
                     mSelectedPos=position;
                     fragmnetLoader(C.FRAGMENT_SEARCH_RESULT,null);
                 }
+                else if(position==0 &&fragment !=null && fragment instanceof FragmentProfileDetail){
+                    fragmnetLoader(C.FRAGMENT_SEARCH_RESULT,null);
+                   // onBackPressed();
+                }
                else if(position==1 && mSelectedPos!=position){
                     mSelectedPos=position;
                     Bundle bundle=new Bundle();
