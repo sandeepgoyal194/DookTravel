@@ -52,8 +52,10 @@ import com.softmine.dooktravel.pojos.CountryList;
 import com.softmine.dooktravel.pojos.ProfileStatus;
 import com.softmine.dooktravel.pojos.StateList;
 import com.softmine.dooktravel.presenter.FragmentBasicDetailPresenterImpl;
+import com.softmine.dooktravel.presenter.FragmentLoginPresenterImpl;
 import com.softmine.dooktravel.presenter.FragmentProfessionalDetailPresenterImpl;
 import com.softmine.dooktravel.presenter.IFragmentBasicDetailPresenter;
+import com.softmine.dooktravel.presenter.IFragmentLoginPresenter;
 import com.softmine.dooktravel.presenter.IFragmentProfessionalDetailPresenter;
 import com.softmine.dooktravel.util.C;
 import com.softmine.dooktravel.util.SharedPreference;
@@ -138,6 +140,8 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
     private int PICK_IMAGE_REQUEST = 1;
     IFragmentBasicDetailPresenter mIFragmentBasicDetailPresenter;
     IFragmentProfessionalDetailPresenter mIFragmentProfessionalDetailPresenter;
+    IFragmentLoginPresenter mLoginPresenter;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,6 +170,8 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
         }
         mIFragmentBasicDetailPresenter=new FragmentBasicDetailPresenterImpl(this,getActivity());
         mIFragmentProfessionalDetailPresenter=new FragmentProfessionalDetailPresenterImpl(this,getActivity());
+        mLoginPresenter = new FragmentLoginPresenterImpl(this,getActivity());
+
     }
 
     public FragmentBasicDetail() {
@@ -238,25 +244,25 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
 
 
         edPrimary.getEditText().setHint(code);*/
-        edPrimary.getEditText().setOnClickListener(new View.OnClickListener() {
+        /*edPrimary.getEditText().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(edPrimary.getEditText().getText().toString().length()>8){
                     getDialPad(Utils.getSubstringPhone(edPrimary.getEditText().getText().toString()));
                 }
             }
-        });
+        });*/
 
 
      //   edSecondary.getEditText().setHint(code1);
-        edSecondary.getEditText().setOnClickListener(new View.OnClickListener() {
+        /*edSecondary.getEditText().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(edSecondary.getEditText().getText().toString().length()>8){
-                    getDialPad(Utils.getSubstringPhone(edSecondary.getEditText().getText().toString()));
+                   getDialPad(Utils.getSubstringPhone(edSecondary.getEditText().getText().toString()));
                 }
             }
-        });
+        });*/
       /*  edSecondary.getEditText().addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
@@ -460,10 +466,10 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
              /*   validation.addtoList(edPassword);
                 validation.addtoList(edConfirmPassword);*/
 
-                edEmail.getEditText().setFocusable(false);
+             /*   edEmail.getEditText().setFocusable(false);
                 if(profileDtl.getPhone()!=null && profileDtl.getPhone().length()>0){
                     edPrimary.getEditText().setFocusable(false);
-                }
+                }*/
                 edEmail.getEditText().setText(profileDtl.getEmail());
                 edPrimary.getEditText().setText(profileDtl.getPhone());
                 getCategoryList();
@@ -1115,6 +1121,8 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
     public void onDestroy() {
         super.onDestroy();
         mIFragmentBasicDetailPresenter.onDestroy();
+       // mLoginPresenter.onDestroy();
+
     }
 
     void getProfileDetail(){
@@ -1143,9 +1151,9 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
             edMiddleName.getEditText().setText(profile.getMiddleName());
             edLastName.getEditText().setText(profile.getLastName());
             if(profile.getPhone()!=null && profile.getPhone().length()>1) {
-                edPrimary.getEditText().setFocusable(false);
+            //    edPrimary.getEditText().setFocusable(false);
             }
-            edEmail.getEditText().setFocusable(false);
+          //  edEmail.getEditText().setFocusable(false);
 
             edPrimary.getEditText().setText(profile.getPhone());
             edSecondary.getEditText().setText(profile.getMobile());
@@ -1236,15 +1244,31 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                 public void onClick(View v) {
                     dialog.dismiss();
                     if (titleText.equals("1")) {
-                        Intent intent=new Intent(getActivity(), MainActivity.class);
+                       /* Intent intent=new Intent(getActivity(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra(C.SCREEN,C.FRAGMENT_LOGIN);
-                        startActivity(intent);
+                        startActivity(intent);*/
                      /*   Intent intent=new Intent(getActivity(), ActivityHome.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra(C.SCREEN,C.FRAGMENT_SEARCH_RESULT);
                         startActivity(intent);*/
+                        if(util.isInternetOn(getActivity())) {
+                            JSONObject jsonBody = new JSONObject();
+                            try {
+                                jsonBody.put(C.PHONE, profileDetail.getPhone());
+                                //   jsonBody.put(C.PASSWORD, etPassword.getEditText().getText().toString());
+                                jsonBody.put(C.SOCAIL_ID, "");
 
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            action = C.LOGIN_METHOD;
+                            mLoginPresenter.validateLogin(jsonBody);
+                        }
+                        else {
+                            getDailogConfirm(getString(R.string.internet_issue)
+                                    , "Internet Issue");
+                        }
 
                     }
                    else if(titleText.equals("2")){

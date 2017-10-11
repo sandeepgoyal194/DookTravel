@@ -7,6 +7,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +52,7 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
     boolean mIsFbLogin=false;
     TextView tvLogin,tvAlreadyAccount;
     Button btnSignUp,btnFacebook;
-    ValidateEditText etUserName,edPhone;
+    ValidateEditText etUserName,edPhone,etPh;
     int flags;
     String email="",socailId="",phone="";
     LoginButton loginButton;
@@ -117,6 +120,8 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
         edPhone=new ValidateEditText((EditText)view.findViewById(R.id.edPhone),getActivity(),flags);
         validation.addtoList(etUserName);
         validation.addtoList(edPhone);
+        flags = 0 | Validations.FLAG_NOT_EMPTY;
+        etPh=new ValidateEditText((EditText)view.findViewById(R.id.ph),getActivity(),flags);
 
         callbackManager =CallbackManager.Factory.create();
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -137,6 +142,12 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
                 Log.e("DEBUG","error"+error.toString());
             }
         });
+        final Spannable code = new SpannableString(" + 91");
+
+        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 1,2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.blue2)), 3,5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        etPh.getEditText().setHint(code);
+        etPh.getEditText().setFocusable(false);
         mIFragmentSignUpPresenter=new FragmentSignUpPresenterImpl(this,getActivity());
     }
 

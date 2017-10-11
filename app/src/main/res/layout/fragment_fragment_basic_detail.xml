@@ -516,61 +516,6 @@
                                     android:background="@color/white"
                                     android:gravity="center"
                                     android:orientation="vertical">
-
-                                    <!--  <android.support.design.widget.TextInputLayout
-                                          android:id="@+id/ed_layout_firstName"
-                                          android:layout_width="match_parent"
-                                          android:layout_height="wrap_content"
-                                          android:lines="1"
-                                          >-->
-
-                                    <com.softmine.dooktravel.util.CustomEditText
-                                        custom:typeface="proxima-nova-semibold.otf"
-                                        android:id="@+id/edOrganization"
-                                        style="@style/EditText.custom_details"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:drawableLeft="@drawable/org"
-                                        android:drawablePadding="20dp"
-                                        android:hint="@string/organization"
-                                        android:paddingLeft="10dp"
-
-                                        android:lines="1"
-                                        android:singleLine="true"
-                                        android:textColor="@color/edittext_color"
-                                        android:textColorHint="@color/hint"
-                                        android:textSize="14sp"
-                                        android:theme="@style/EditText.custom_details" />
-                                    <!--   </android.support.design.widget.TextInputLayout>-->
-
-                                    <!-- <android.support.design.widget.TextInputLayout
-                                         android:id="@+id/ed_layout_MiddleName"
-                                         android:layout_width="match_parent"
-                                         android:layout_height="wrap_content"
-                                         android:lines="1"
-                                         >-->
-
-                                    <com.softmine.dooktravel.util.CustomEditText
-                                        custom:typeface="proxima-nova-semibold.otf"
-                                        android:id="@+id/edDesignation"
-                                        style="@style/EditText.custom_details"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:drawableLeft="@drawable/des"
-                                        android:drawablePadding="20dp"
-                                        android:hint="@string/designation"
-                                        android:lines="1"
-                                        android:paddingLeft="10dp"
-
-                                        android:singleLine="true"
-                                        android:textColor="@color/edittext_color"
-                                        android:textColorHint="@color/hint"
-                                        android:textSize="14sp"
-                                        android:theme="@style/EditText.custom_details" />
-                                    <!--   </android.support.design.widget.TextInputLayout>
-                    -->
-
-
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -598,9 +543,65 @@
                                             android:layout_marginRight="4dp" />
                                     </LinearLayout>
 
+                                    <!--  <android.support.design.widget.TextInputLayout
+                                          android:id="@+id/ed_layout_firstName"
+                                          android:layout_width="match_parent"
+                                          android:layout_height="wrap_content"
+                                          android:lines="1"
+                                          >-->
+
+                                    <com.softmine.dooktravel.util.CustomEditText
+                                        android:id="@+id/edOrganization"
+                                        style="@style/EditText.custom_details"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:drawableLeft="@drawable/org"
+                                        android:drawablePadding="20dp"
+                                        android:layout_marginTop="-15dp"
+                                        android:hint="@string/organization"
+                                        android:lines="1"
+                                        android:paddingLeft="10dp"
+
+                                        android:singleLine="true"
+                                        android:textColor="@color/edittext_color"
+                                        android:textColorHint="@color/hint"
+                                        android:textSize="14sp"
+                                        android:theme="@style/EditText.custom_details"
+                                        custom:typeface="proxima-nova-semibold.otf" />
+                                    <!--   </android.support.design.widget.TextInputLayout>-->
+
+                                    <!-- <android.support.design.widget.TextInputLayout
+                                         android:id="@+id/ed_layout_MiddleName"
+                                         android:layout_width="match_parent"
+                                         android:layout_height="wrap_content"
+                                         android:lines="1"
+                                         >-->
+
+                                    <com.softmine.dooktravel.util.CustomEditText
+                                        android:id="@+id/edDesignation"
+                                        style="@style/EditText.custom_details"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:drawableLeft="@drawable/des"
+                                        android:drawablePadding="20dp"
+                                        android:hint="@string/designation"
+                                        android:lines="1"
+                                        android:layout_marginTop="-5dp"
+                                        android:paddingLeft="10dp"
+                                        android:singleLine="true"
+
+                                        android:textColor="@color/edittext_color"
+                                        android:textColorHint="@color/hint"
+                                        android:textSize="14sp"
+                                        android:theme="@style/EditText.custom_details"
+                                        custom:typeface="proxima-nova-semibold.otf" />
+                                    <!--   </android.support.design.widget.TextInputLayout>
+                    -->
+
+
                                     <LinearLayout
                                         android:layout_width="match_parent"
-
+                                        android:layout_marginTop="5dp"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical">
 
@@ -615,10 +616,9 @@
                                             android:visibility="gone" />
 
                                         <com.softmine.dooktravel.util.CustomTextView
-                                            custom:typeface="proxima-nova-semibold.otf"
                                             android:id="@+id/tv_working_since"
-
                                             style="@style/SpinnerTheme_detail"
+
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="start"
@@ -632,7 +632,8 @@
                                             android:singleLine="true"
                                             android:textColor="@color/edittext_color"
                                             android:textColorHint="@color/hint"
-                                            android:textSize="14sp" />
+                                            android:textSize="14sp"
+                                            custom:typeface="proxima-nova-semibold.otf" />
                                     </LinearLayout>
 
                                 </LinearLayout>

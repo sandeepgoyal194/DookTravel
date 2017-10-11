@@ -6,64 +6,63 @@
     android:background="@color/background_blue"
     tools:context=".view.fragments.FragmentLogin">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="7"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="2"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:id="@+id/img"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/logo"
                 android:src="@drawable/logo"
                 />
-
+            <com.softmine.dooktravel.util.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_below="@+id/img"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="30dp"
+                android:text="@string/logIn"
+                android:textColor="@color/white"
+                custom:typeface="ProximaNova-Bold.otf" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.softmine.dooktravel.util.CustomTextView
-                custom:typeface="ProximaNova-Bold.otf"
-                android:layout_width="wrap_content"
+
+
+
+            <LinearLayout
+                android:id="@+id/ll"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="20dp"
-                android:text="@string/login"
-                android:textColor="@color/white" />
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="50dp"
+                android:gravity="center"
+                android:orientation="vertical">
 
-
-
-                <LinearLayout
-                    android:id="@+id/ll"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="vertical">
-
-                    <!-- <android.support.design.widget.TextInputLayout
+                <!-- <android.support.design.widget.TextInputLayout
                         android:id="@+id/ed_layout_username"
                         android:layout_width="match_parent"
                         android:textColorHint="@color/grey"
@@ -71,14 +70,33 @@
                         android:lines="1"
                         android:layout_height="wrap_content">-->
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
                     <com.softmine.dooktravel.util.CustomEditText
-                        custom:typeface="proxima-nova-semibold.otf"
+                        style="@style/EditText.custom"
+                        android:id="@+id/ph"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_phone"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:lines="1"
+                        android:maxLength="10"
+                        android:paddingLeft="10dp"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:theme="@style/EditText.custom"
+                        custom:typeface="proxima-nova-semibold.otf" />
+
+                    <com.softmine.dooktravel.util.CustomEditText
                         android:id="@+id/edUsername"
                         style="@style/EditText.custom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_phone"
-                        android:gravity="center"
                         android:hint="@string/phone"
                         android:inputType="number"
                         android:lines="1"
@@ -86,12 +104,14 @@
                         android:paddingLeft="10dp"
                         android:singleLine="true"
                         android:textColor="@color/white"
-                        android:textColorHint="@color/hint_color"
+                        android:textColorHint="@color/blue2"
                         android:textSize="14sp"
-                        android:theme="@style/EditText.custom" />
-                    <!--</android.support.design.widget.TextInputLayout>-->
+                        android:theme="@style/EditText.custom"
+                        custom:typeface="proxima-nova-semibold.otf" />
+                </LinearLayout>
+                <!--</android.support.design.widget.TextInputLayout>-->
 
-                    <!-- <android.support.design.widget.TextInputLayout
+                <!-- <android.support.design.widget.TextInputLayout
                         android:id="@+id/ed_layout_password"
                         android:layout_width="match_parent"
                         android:textColorHint="@color/grey"
@@ -99,82 +119,84 @@
                         android:lines="1"
                         android:layout_height="wrap_content">-->
 
-                    <com.softmine.dooktravel.util.CustomEditText
-                        custom:typeface="proxima-nova-semibold.otf"
-                        android:id="@+id/edPassword"
-                        style="@style/EditText.custom"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="5dp"
-                        android:gravity="center"
-                        android:hint="@string/password"
-                        android:visibility="gone"
-                        android:inputType="textPassword"
-                        android:lines="1"
-                        android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/hint_color"
-                        android:textSize="14sp"
-                        android:theme="@style/EditText.custom" />
-                    <!-- </android.support.design.widget.TextInputLayout>-->
+                <com.softmine.dooktravel.util.CustomEditText
+                    android:id="@+id/edPassword"
+                    style="@style/EditText.custom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:lines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/hint_color"
+                    android:textSize="14sp"
+                    android:theme="@style/EditText.custom"
+                    android:visibility="gone"
+                    custom:typeface="proxima-nova-semibold.otf" />
+                <!-- </android.support.design.widget.TextInputLayout>-->
 
 
-                    <TextView
-                        android:id="@+id/tvForgotPassword"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/tv_forgot_password"
-                        android:textColor="@color/grey2"
-                        android:textSize="14sp"
-                        android:visibility="gone" />
+                <TextView
+                    android:id="@+id/tvForgotPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/tv_forgot_password"
+                    android:textColor="@color/grey2"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
-                    <com.softmine.dooktravel.util.CustomButton
-                        custom:typeface="proxima-nova-semibold.otf"
-                        android:id="@+id/btnLogin"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
+                <com.softmine.dooktravel.util.CustomButton
+                    android:id="@+id/btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="15dp"
 
-                        android:layout_marginTop="15dp"
-                        android:background="@drawable/button_back"
-                        android:text="@string/logIn"
-                        android:textColor="@drawable/text_color"
-                        android:textSize="16sp" />
+                    android:background="@drawable/button_back"
+                    android:text="@string/logIn"
+                    android:textColor="@drawable/text_color"
+                    android:textSize="16sp"
+                    custom:typeface="proxima-nova-semibold.otf" />
 
-                    <com.softmine.dooktravel.util.CustomButton
-                        custom:typeface="proxima-nova-semibold.otf"
-                        android:id="@+id/btnfb"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
+                <com.softmine.dooktravel.util.CustomButton
+                    android:id="@+id/btnfb"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/button_blue"
+                    android:text="@string/login_fb"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    custom:typeface="proxima-nova-semibold.otf" />
 
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/button_blue"
-                        android:text="@string/login_fb"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/login_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="95dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone" />
+            </LinearLayout>
 
-                    <com.facebook.login.widget.LoginButton
-                        android:id="@+id/login_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="95dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="10dp"
-                        android:visibility="gone" />
-                </LinearLayout>
             <ImageView
-                android:layout_marginRight="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_above="@+id/ll"
                 android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
                 android:src="@drawable/bus"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:visibility="gone" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -184,27 +206,27 @@
                 android:gravity="center_horizontal">
 
                 <com.softmine.dooktravel.util.CustomTextView
-                    custom:typeface="proxima-nova-regular-italic.otf"
                     android:id="@+id/tv_dont_have_account"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/dont_have_account"
                     android:textColor="@color/blue2"
                     android:textSize="14sp"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    custom:typeface="proxima-nova-regular-italic.otf" />
 
                 <com.softmine.dooktravel.util.CustomTextView
-                    custom:typeface="proxima-nova-semibold.otf"
                     android:id="@+id/tv_sign_up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
                     android:text="@string/sign_up"
+                    android:textColor="@color/white"
                     android:textSize="14sp"
-                    android:textColor="@color/white" />
+                    custom:typeface="proxima-nova-semibold.otf" />
             </LinearLayout>
 
         </RelativeLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

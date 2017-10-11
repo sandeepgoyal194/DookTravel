@@ -7,6 +7,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +59,7 @@ public class FragmentLogin extends Fragment implements IFragmentView {
     CallbackManager callbackManager;
     Utils util;
     boolean mIsFbLogin=false;
-    ValidateEditText etUsername,etPassword;
+    ValidateEditText etUsername,etPassword,etPh;
     public FragmentLogin() {
         // Required empty public constructor
     }
@@ -108,6 +111,9 @@ public class FragmentLogin extends Fragment implements IFragmentView {
         etUsername=new ValidateEditText((EditText)view.findViewById(R.id.edUsername),getActivity(),flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
         etPassword=new ValidateEditText((EditText)view.findViewById(R.id.edPassword),getActivity(),flags);
+        flags = 0 | Validations.FLAG_NOT_EMPTY;
+        etPh=new ValidateEditText((EditText)view.findViewById(R.id.ph),getActivity(),flags);
+
         btnFacebook.setOnClickListener(mButtonClickListner);
       //  validation.addtoList(etPassword);
         validation.addtoList(etUsername);
@@ -131,6 +137,12 @@ public class FragmentLogin extends Fragment implements IFragmentView {
                 Log.e("DEBUG","error"+error.toString());
             }
         });
+        final Spannable code = new SpannableString(" + 91");
+
+        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 1,2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.blue2)), 3,5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        etPh.getEditText().setHint(code);
+        etPh.getEditText().setFocusable(false);
         mPresenter = new FragmentLoginPresenterImpl(this,getActivity());
 
     }
