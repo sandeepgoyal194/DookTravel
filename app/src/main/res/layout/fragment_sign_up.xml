@@ -6,7 +6,11 @@
     android:layout_height="match_parent"
     android:background="@color/background_blue"
     tools:context=".view.fragments.FragmentLogin">
-
+    <ScrollView
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -226,4 +230,5 @@ android:gravity="center_horizontal"
         </RelativeLayout>
 
     </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>
