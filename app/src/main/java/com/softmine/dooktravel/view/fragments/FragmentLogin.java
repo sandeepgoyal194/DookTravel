@@ -7,8 +7,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +21,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -113,7 +117,69 @@ public class FragmentLogin extends Fragment implements IFragmentView {
         etPassword=new ValidateEditText((EditText)view.findViewById(R.id.edPassword),getActivity(),flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
         etPh=new ValidateEditText((EditText)view.findViewById(R.id.ph),getActivity(),flags);
+        final Spannable code = new SpannableString("+");
 
+        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 0,code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //etPh.getEditText().setText(code);
+
+
+        final Spannable code_hint = new SpannableString("+91");
+
+        code_hint.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 0,1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        code_hint.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.blue2)), 2,code_hint.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        etPh.getEditText().setHint(code_hint);
+        etPh.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+
+                    if(etPh.getEditText().length()==0) {
+                        etPh.getEditText().setText(code);
+                    }
+                  //  etPh.getEditText().setSelection(etPh.getEditText().getText().toString().length());
+                }
+                else {
+                    if(etPh.getEditText().length()==0 || etPh.getEditText().length()==1) {
+                        etPh.getEditText().setText("");
+                        etPh.getEditText().setHint(code_hint);
+                    }
+                }
+
+            }
+        });
+        etPh.getEditText().addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+                if (s != null && s.length() == 0) {
+                    if(etPh.getEditText().hasFocus()) {
+                        etPh.getEditText().setText(code);
+                        etPh.getEditText().setSelection(etPh.getEditText().getText().toString().length());
+                    }
+                }
+               else if(s!=null && s.length()==3){
+                    etUsername.clearFocus();
+                    etUsername.getEditText().requestFocus();
+                    etUsername.getEditText().setCursorVisible(true);
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if(!s.toString().startsWith("+") && s.length()==2){
+                    etPh.getEditText().setText("+"+s.toString().substring(0,1));
+                }
+               else if(!s.toString().startsWith("+") && s.length()==3){
+                    etPh.getEditText().setText(s.toString().substring(1,s.toString().length())+s.toString().substring(0,1));
+                }
+                etPh.getEditText().setSelection(etPh.getEditText().getText().toString().length());
+            }
+        });
         btnFacebook.setOnClickListener(mButtonClickListner);
       //  validation.addtoList(etPassword);
         validation.addtoList(etUsername);
@@ -137,12 +203,12 @@ public class FragmentLogin extends Fragment implements IFragmentView {
                 Log.e("DEBUG","error"+error.toString());
             }
         });
-        final Spannable code = new SpannableString(" + 91");
+        /*final Spannable code = new SpannableString(" + 91");
 
         code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 1,2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.blue2)), 3,5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         etPh.getEditText().setHint(code);
-        etPh.getEditText().setFocusable(false);
+        etPh.getEditText().setFocusable(false);*/
         mPresenter = new FragmentLoginPresenterImpl(this,getActivity());
 
     }
@@ -229,22 +295,29 @@ public class FragmentLogin extends Fragment implements IFragmentView {
         public void onClick(View v) {
 
             if(validation.validateAllEditText()) {
-                if(util.isInternetOn(getActivity())) {
-                    JSONObject jsonBody = new JSONObject();
-                    try {
-                        jsonBody.put(C.PHONE, etUsername.getEditText().getText().toString());
-                     //   jsonBody.put(C.PASSWORD, etPassword.getEditText().getText().toString());
-                        jsonBody.put(C.SOCAIL_ID, "");
+                if(etPh.getEditText().getText()!=null &&etPh.getEditText().getText().toString().length()==3) {
+                    if (util.isInternetOn(getActivity())) {
+                        JSONObject jsonBody = new JSONObject();
+                        try {
+                            jsonBody.put(C.ACTION, C.Login);
+                            jsonBody.put(C.PHONE, etPh.getEditText().getText().toString().substring(1) + etUsername.getEditText().getText().toString());
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                            //   jsonBody.put(C.PASSWORD, etPassword.getEditText().getText().toString());
+                            jsonBody.put(C.SOCAIL_ID, "");
+                            Log.e("DEBUG", "json=" + jsonBody.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        mIsFbLogin = false;
+                        mPresenter.validateLogin(jsonBody);
+                    } else {
+                        getDailogConfirm(getString(R.string.internet_issue)
+                                , "Internet Issue");
                     }
-                    mIsFbLogin=false;
-                    mPresenter.validateLogin(jsonBody);
                 }
                 else {
-                    getDailogConfirm(getString(R.string.internet_issue)
-                            , "Internet Issue");
+                    Toast.makeText(getActivity(),getString(R.string.enter_country_code),Toast.LENGTH_LONG).show();
+                    etPh.getEditText().requestFocus();
                 }
             }
             /*Intent intent = new Intent(getActivity(), ActivityHome.class);

@@ -139,9 +139,19 @@ public class FragmentProfileDetail extends Fragment {
       //  etLastName.setText(profile.getLastName());
       //  etMiddleName.setText(profile.getMiddleName());
         etAddress.setText(profile.getAddress());
-        etContact.setText(profile.getPhone());
-        etContact1.setText(profile.getMobile());
+        if(profile.getPhone()!=null && profile.getPhone().length()==12) {
+            etContact.setText("+"+profile.getPhone());
+        }
+        else {
+            etContact.setText(profile.getPhone());
 
+        }
+        if(profile.getMobile()!=null && profile.getMobile().length()==12) {
+            etContact1.setText("+"+profile.getMobile());
+        }
+        else {
+            etContact1.setText(profile.getMobile());
+        }
         etDescription.setText(profile.getAbout());
         etSkype.setText(profile.getSkype());
         etEmail.setText(profile.getEmailId());
@@ -155,7 +165,9 @@ public class FragmentProfileDetail extends Fragment {
         else {
             spnGender.setText("Female");
         }
-        spnDateOfBirth.setText(Utils.getFormattedDate(profile.getDateOfBirth(),C.SERVER_DATE_FORMAT,C.DATE_FORMAT));
+        if(profile.getDateOfBirth()!=null && !profile.getDateOfBirth().equals("") && !profile.getDateOfBirth().equals("0000-00-00")) {
+            spnDateOfBirth.setText(Utils.getFormattedDate(profile.getDateOfBirth(), C.SERVER_DATE_FORMAT, C.DATE_FORMAT));
+        }
         spnMaritalStatus.setText(profile.getMaritalStatus());
         etZipCode.setText(profile.getZipCode());
         etOraginization.setText(profile.getOrganization());
@@ -163,7 +175,9 @@ public class FragmentProfileDetail extends Fragment {
         spnCountry.setText(profile.getCountryName());
         spnProvince.setText(profile.getStateName());
         spnCity.setText(profile.getCityName());
-        tvWorkingSince.setText(Utils.getFormattedDate(profile.getWorkingSince(),C.SERVER_DATE_FORMAT,C.DATE_FORMAT));
+        if(profile.getWorkingSince()!=null && !profile.getWorkingSince().equals("") && !profile.getWorkingSince().equals("0000-00-00")) {
+            tvWorkingSince.setText(Utils.getFormattedDate(profile.getWorkingSince(), C.SERVER_DATE_FORMAT, C.DATE_FORMAT));
+        }
         spnCategory.setText(profile.getCategoryName());
     }
     void getDialPad(String dial_number){

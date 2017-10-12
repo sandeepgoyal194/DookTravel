@@ -134,16 +134,22 @@ public class Utils {
     }
 
     public  static String getFormattedDate(String date, String dateFormat, String DesiredFormat){
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-        Date testDate = null;
+
         try {
-            testDate = sdf.parse(date);
-        }catch(Exception ex){
-            ex.printStackTrace();
+            SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+            Date testDate = null;
+
+                testDate = sdf.parse(date);
+
+            SimpleDateFormat formatter = new SimpleDateFormat(DesiredFormat);
+            String newFormat = formatter.format(testDate);
+            return newFormat;
         }
-        SimpleDateFormat formatter = new SimpleDateFormat(DesiredFormat);
-        String newFormat = formatter.format(testDate);
-        return newFormat;
+        catch (Exception e){
+            e.printStackTrace();
+            return "";
+        }
+
     }
 
     public static String getCurrentTimeStamp(){
@@ -195,4 +201,14 @@ public class Utils {
         return number.substring(0,number.length());
     }
 
+    public static String getCountryCode(String phone) {
+
+        String s="+"+phone.substring(0,2);
+        return s;
+    }
+    public static String getMobile(String phone) {
+
+        String s=phone.substring(2,phone.length());
+        return s;
+    }
 }

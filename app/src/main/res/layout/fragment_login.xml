@@ -88,7 +88,8 @@
                         android:gravity="center"
                         android:inputType="number"
                         android:lines="1"
-                        android:maxLength="10"
+
+                        android:maxLength="3"
                         android:paddingLeft="10dp"
                         android:singleLine="true"
                         android:textColor="@color/white"
@@ -101,7 +102,7 @@
                         style="@style/EditText.custom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/phone"
+                        android:hint="@string/phone_no"
                         android:inputType="number"
                         android:lines="1"
                         android:maxLength="10"

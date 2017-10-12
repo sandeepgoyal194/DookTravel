@@ -87,8 +87,12 @@ public class C {
     public static final String OTPRESEND ="otpresend" ;
 
     public static final String IMAGE_DIRECTORY_NAME = "ADBOEK";
+    public static final String ACTION = "action";
     public static  boolean isloggedIn =false ;
 
     public static String InvalidToken="Invalid token";
     public static String Session_expired="Session expired";
+    public static String Login="login";
+    public static String register="register";
+
 }

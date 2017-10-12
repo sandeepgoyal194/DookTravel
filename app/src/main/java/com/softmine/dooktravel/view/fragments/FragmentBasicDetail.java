@@ -25,7 +25,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +42,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.softmine.dooktravel.R;
@@ -91,7 +95,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
             tvProfesstionalDetail, tvCategory, tvWorkingHour, tvWorkingSince,
             tvCurrentAdd, tvCountry, tvCity, tvProvince, tvAboutMe, tvPostal,tvTextCount;;
     ValidateEditText edFirstName,edMiddleName,edLastName,edPassword,edConfirmPassword,edSkypeID,edPrimary,
-            etOraginization, etDesignation, etAddress, etAboutMe, etZipCode,edEmail,edSecondary;
+            etOraginization, etDesignation, etAddress, etAboutMe, etZipCode,edEmail,edSecondary,etPh_p,etPh_s;
 
     Spinner spnCategory, spnCountry, spnCity, spnProvince;
     CountryList countryList;
@@ -223,52 +227,54 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
 
 
         edSecondary=new ValidateEditText((EditText)view.findViewById(R.id.edContact2),getActivity(),flags);
-
-       /* final Spannable code = new SpannableString("(+91) Primary Number");
-
-        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 0,1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.background_blue)), 1,4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 4,code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        final Spannable code = new SpannableString("(+91) Primary Number");
-
-        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 0,1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.background_blue)), 1,4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 4,code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        final Spannable code1= new SpannableString("(+91) Secondary Number");
-
-        code1.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 0,1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        code1.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.background_blue)), 1,4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        code1.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 4,code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        etPh_p=new ValidateEditText((EditText)view.findViewById(R.id.ph_p),getActivity(),flags);
+        etPh_s=new ValidateEditText((EditText)view.findViewById(R.id.ph_s),getActivity(),flags);
 
 
-        edPrimary.getEditText().setHint(code);*/
-        /*edPrimary.getEditText().setOnClickListener(new View.OnClickListener() {
+        final Spannable code = new SpannableString("+");
+
+        code.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.edittext_color)), 0,code.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //etPh.getEditText().setText(code);
+
+
+        final Spannable code_hint = new SpannableString("+91");
+
+        code_hint.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 0,code_hint.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+      //  code_hint.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.hint)), 2,code_hint.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        etPh_p.getEditText().setHint(code_hint);
+        etPh_p.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
-                if(edPrimary.getEditText().getText().toString().length()>8){
-                    getDialPad(Utils.getSubstringPhone(edPrimary.getEditText().getText().toString()));
-                }
-            }
-        });*/
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
 
-
-     //   edSecondary.getEditText().setHint(code1);
-        /*edSecondary.getEditText().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(edSecondary.getEditText().getText().toString().length()>8){
-                   getDialPad(Utils.getSubstringPhone(edSecondary.getEditText().getText().toString()));
+                    if(etPh_p.getEditText().length()==0) {
+                        etPh_p.getEditText().setText(code);
+                    }
+                    //  etPh.getEditText().setSelection(etPh.getEditText().getText().toString().length());
                 }
+                else {
+                    if(etPh_p.getEditText().length()==0 || etPh_p.getEditText().length()==1) {
+                        etPh_p.getEditText().setText("");
+                        etPh_p.getEditText().setHint(code_hint);
+                    }
+                }
+
             }
-        });*/
-      /*  edSecondary.getEditText().addTextChangedListener(new TextWatcher() {
+        });
+        etPh_p.getEditText().addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
-                if (s != null && s.length() == 5 && (s.charAt(4) < '7')) {
-                    edSecondary.getEditText().setText("");
-                    edSecondary.getEditText().setError("Number should start with 9,8 and 7");
+                if (s != null && s.length() == 0) {
+                    if(etPh_p.getEditText().hasFocus()) {
+                        etPh_p.getEditText().setText(code);
+                        etPh_p.getEditText().setSelection(etPh_p.getEditText().getText().toString().length());
+                    }
+                }
+                else if(s!=null && s.length()==3){
+                    edPrimary.clearFocus();
+                    edPrimary.getEditText().requestFocus();
+                    edPrimary.getEditText().setCursorVisible(true);
                 }
             }
 
@@ -279,14 +285,70 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
 
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
-                if (!s.toString().startsWith("+91-")) {
-                    edSecondary.getEditText().setText("+91-");
-                    Selection.setSelection( edSecondary.getEditText().getText(),  edSecondary.getEditText()
-                            .getText().length());
+                if(!s.toString().startsWith("+") && s.length()==2){
+                    etPh_p.getEditText().setText("+"+s.toString().substring(0,1));
+                }
+                else if(!s.toString().startsWith("+") && s.length()==3){
+                    etPh_p.getEditText().setText(s.toString().substring(1,s.toString().length())+s.toString().substring(0,1));
+                }
+                etPh_p.getEditText().setSelection(etPh_p.getEditText().getText().toString().length());
+            }
+        });
 
+
+        etPh_s.getEditText().setHint(code_hint);
+        etPh_s.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+
+                    if(etPh_s.getEditText().length()==0) {
+                        etPh_s.getEditText().setText(code);
+                    }
+                    //  etPh.getEditText().setSelection(etPh.getEditText().getText().toString().length());
+                }
+                else {
+                    if(etPh_s.getEditText().length()==0 || etPh_s.getEditText().length()==1) {
+                        etPh_s.getEditText().setText("");
+                        etPh_s.getEditText().setHint(code_hint);
+                    }
+                }
+
+            }
+        });
+        etPh_s.getEditText().addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+                if (s != null && s.length() == 0) {
+                    if(etPh_s.getEditText().hasFocus()) {
+                        etPh_s.getEditText().setText(code);
+                        etPh_s.getEditText().setSelection(etPh_s.getEditText().getText().toString().length());
+                    }
+                }
+                else if(s!=null && s.length()==3){
+                    edSecondary.clearFocus();
+                    edSecondary.getEditText().requestFocus();
+                    edSecondary.getEditText().setCursorVisible(true);
                 }
             }
-        });*/
+
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if(!s.toString().startsWith("+") && s.length()==2){
+                    etPh_s.getEditText().setText("+"+s.toString().substring(0,1));
+                }
+                else if(!s.toString().startsWith("+") && s.length()==3){
+                    etPh_s.getEditText().setText(s.toString().substring(1,s.toString().length())+s.toString().substring(0,1));
+                }
+                etPh_s.getEditText().setSelection(etPh_s.getEditText().getText().toString().length());
+            }
+        });
+
 
         edEmail=new ValidateEditText((EditText)view.findViewById(R.id.edEmail),getActivity(),flags);
 
@@ -471,7 +533,10 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                     edPrimary.getEditText().setFocusable(false);
                 }*/
                 edEmail.getEditText().setText(profileDtl.getEmail());
-                edPrimary.getEditText().setText(profileDtl.getPhone());
+                if(profileDtl.getPhone()!=null && profileDtl.getPhone().length()==12) {
+                    etPh_p.getEditText().setText(Utils.getCountryCode(profileDtl.getPhone()));
+                    edPrimary.getEditText().setText(Utils.getMobile(profileDtl.getPhone()));
+                }
                 getCategoryList();
 
             }
@@ -654,6 +719,9 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
         edLastName.getEditText().setFocusable(false);
         edPassword.getEditText().setFocusable(false);
         edConfirmPassword.getEditText().setFocusable(false);
+        etPh_s.getEditText().setFocusable(false);
+        etPh_p.getEditText().setFocusable(false);
+
         edPrimary.getEditText().setFocusable(false);
         edSecondary.getEditText().setFocusable(false);
         edEmail.getEditText().setFocusable(false);
@@ -969,10 +1037,16 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                         profileDetail.setLastname(edLastName.getEditText().getText().toString());
                         profileDetail.setGender(spnGender.getSelectedItem().toString());
                         profileDetail.setSkype(edSkypeID.getEditText().getText().toString());
-                        profileDetail.setPhone(Utils.getSubstringPhone(edPrimary.getEditText().getText().toString()));
-                        if(edSecondary.getEditText().length()>8) {
-                            profileDetail.setMobile1(Utils.getSubstringPhone(edSecondary.getEditText().getText().toString()));
+
+                        if(edPrimary.getEditText().getText().toString()!=null && edPrimary.getEditText().getText().toString().length()==10) {
+                            profileDetail.setPhone(etPh_p.getEditText().getText().toString().substring(1)+edPrimary.getEditText().getText().toString());
+
                         }
+                        if(edSecondary.getEditText().getText().toString()!=null && edSecondary.getEditText().getText().toString().length()==10) {
+                            profileDetail.setMobile1(etPh_s.getEditText().getText().toString().substring(1)+edSecondary.getEditText().getText().toString());
+
+                        }
+
 
                            /* if (spnGender.getSelectedItem().toString().equalsIgnoreCase("Male")) {
                                 profileDetail.setGender("Male");
@@ -983,7 +1057,14 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                             }*/
                         profileDetail.setGender(spnGender.getSelectedItem().toString());
                         profileDetail.setPassword(edPassword.getEditText().getText().toString());
-                        profileDetail.setDob(Utils.getFormattedDate(spnDateOfBirth.getText().toString(), C.DATE_FORMAT, C.DESIRED_FORMAT));
+                        if(spnDateOfBirth.getText().toString()!=null && !spnDateOfBirth.getText().toString().equals("")) {
+                            profileDetail.setDob(Utils.getFormattedDate(spnDateOfBirth.getText().toString(), C.DATE_FORMAT, C.DESIRED_FORMAT));
+
+                        }
+                        else {
+                            profileDetail.setDob("");
+
+                        }
                         profileDetail.setEmail(edEmail.getEditText().getText().toString());
                         profileDetail.setSocialid(profileDtl.getSocialid());
                         profileDetail.setMarital(spnMaritalStatus.getSelectedItem().toString());
@@ -1026,11 +1107,17 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                         profile.setLastName(edLastName.getEditText().getText().toString());
                         profile.setMaritalStatus(spnMaritalStatus.getSelectedItem().toString());
                         profile.setSkype(edSkypeID.getEditText().getText().toString());
-                        profile.setPhone(Utils.getSubstringPhone(edPrimary.getEditText().getText().toString()));
                         profile.setEmailId(edEmail.getEditText().getText().toString());
-                        if(edSecondary.getEditText().getText().toString().length()>8) {
-                            profile.setMobile(Utils.getSubstringPhone(edSecondary.getEditText().getText().toString()));
+
+                        if(edPrimary.getEditText().getText().toString()!=null && edPrimary.getEditText().getText().toString().length()==10) {
+                            profile.setPhone(etPh_p.getEditText().getText().toString().substring(1)+edPrimary.getEditText().getText().toString());
+
                         }
+                        if(edSecondary.getEditText().getText().toString()!=null && edSecondary.getEditText().getText().toString().length()==10) {
+                            profile.setMobile(etPh_s.getEditText().getText().toString().substring(1)+edSecondary.getEditText().getText().toString());
+
+                        }
+
                            /* if (spnGender.getSelectedItem().toString().equalsIgnoreCase("Male")) {
                                 profile.setGender("Male");
                             } else {
@@ -1038,7 +1125,15 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                             }*/
                         profile.setGender(spnGender.getSelectedItem().toString());
 
-                        profile.setDateOfBirth(Utils.getFormattedDate(spnDateOfBirth.getText().toString(), C.DATE_FORMAT, C.DESIRED_FORMAT));
+                        if(spnDateOfBirth.getText().toString()!=null && !spnDateOfBirth.getText().toString().equals("")) {
+                            profile.setDateOfBirth(Utils.getFormattedDate(spnDateOfBirth.getText().toString(), C.DATE_FORMAT, C.DESIRED_FORMAT));
+
+                        }
+                        else {
+                            profile.setDateOfBirth("");
+
+                        }
+
                         profile.setToken(SharedPreference.getInstance(getActivity()).getString(C.TOKEN));
 
                         profile.setOrganization(etOraginization.getEditText().getText().toString());
@@ -1107,6 +1202,26 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                     Utils.showToast(getActivity(), getString(R.string.select_city));
                     return false;
                 }
+                else if(edPrimary.getEditText().getText()==null || edPrimary.getEditText().getText().toString().length()!=10){
+                    edPrimary.getEditText().setError(getString(R.string.valid_phone));
+                    edPrimary.getEditText().requestFocus();
+                    return false;
+                }
+                else if(edSecondary.getEditText().getText()!=null && edSecondary.getEditText().getText().toString().length()>1 && edSecondary.getEditText().getText().toString().length()!=10){
+                    edSecondary.getEditText().setError(getString(R.string.valid_phone));
+                    edSecondary.getEditText().requestFocus();
+                    return false;
+                }
+              else if(etPh_p.getEditText().getText()!=null && etPh_p.getEditText().getText().toString().length()!=3) {
+                    Toast.makeText(getActivity(),getString(R.string.enter_country_code),Toast.LENGTH_LONG).show();
+                    etPh_p.getEditText().requestFocus();
+                    return false;
+                }
+                else if(edSecondary.getEditText().getText()!=null && edSecondary.getEditText().getText().toString().length()>1 && etPh_s.getEditText().getText()!=null && etPh_s.getEditText().getText().toString().length()!=3 ){
+                    Toast.makeText(getActivity(),getString(R.string.enter_country_code),Toast.LENGTH_LONG).show();
+                    etPh_s.getEditText().requestFocus();
+                    return false;
+                }
             }
         }
         catch (Exception e){
@@ -1150,13 +1265,18 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
             edFirstName.getEditText().setText(profile.getFirstName());
             edMiddleName.getEditText().setText(profile.getMiddleName());
             edLastName.getEditText().setText(profile.getLastName());
-            if(profile.getPhone()!=null && profile.getPhone().length()>1) {
-            //    edPrimary.getEditText().setFocusable(false);
-            }
-          //  edEmail.getEditText().setFocusable(false);
 
-            edPrimary.getEditText().setText(profile.getPhone());
-            edSecondary.getEditText().setText(profile.getMobile());
+          //  edEmail.getEditText().setFocusable(false);
+            if(profile.getPhone()!=null && profile.getPhone().length()==12) {
+                etPh_p.getEditText().setText(Utils.getCountryCode(profile.getPhone()));
+                edPrimary.getEditText().setText(Utils.getMobile(profile.getPhone()));
+            }
+            if(profile.getMobile()!=null && profile.getMobile().length()==12) {
+                etPh_s.getEditText().setText(Utils.getCountryCode(profile.getMobile()));
+                edSecondary.getEditText().setText(Utils.getMobile(profile.getMobile()));
+            }
+          //  edPrimary.getEditText().setText(profile.getPhone());
+        //    edSecondary.getEditText().setText(profile.getMobile());
             edEmail.getEditText().setText(profile.getEmailId());
 
             edSkypeID.getEditText().setText(profile.getSkype());
@@ -1179,8 +1299,9 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
             else if(profile.getMaritalStatus().equalsIgnoreCase(C.DIVORCED)) {
                 spnMaritalStatus.setSelection(5);
             }
-
-            spnDateOfBirth.setText(Utils.getFormattedDate(profile.getDateOfBirth(), C.SERVER_DATE_FORMAT, C.DATE_FORMAT));
+            if(profile.getDateOfBirth()!=null && !profile.getDateOfBirth().equals("") &&!profile.getDateOfBirth().equals("0000-00-00") ) {
+                spnDateOfBirth.setText(Utils.getFormattedDate(profile.getDateOfBirth(), C.SERVER_DATE_FORMAT, C.DATE_FORMAT));
+            }
             if (profile.getProfilePic() != null && !profile.getProfilePic().equals("")) {
                 if(!isEditProfile) {
                     tvUpload.setVisibility(View.GONE);
@@ -1199,7 +1320,9 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
             etAddress.getEditText().setText(profile.getAddress());
             etAboutMe.getEditText().setText(profile.getAbout());
             // tvWorkingSince.setText(Utils.getFormattedDate( profile.getWorkingSince(),"yyyy/MM/dd","dd/MM/yyyy"));
-            tvWorkingSince.setText(Utils.getFormattedDate(profile.getWorkingSince(), C.SERVER_DATE_FORMAT, C.DATE_FORMAT));
+            if(profile.getWorkingSince()!=null && !profile.getWorkingSince().equals("") && !profile.getWorkingSince().equals("0000-00-00")) {
+                tvWorkingSince.setText(Utils.getFormattedDate(profile.getWorkingSince(), C.SERVER_DATE_FORMAT, C.DATE_FORMAT));
+            }
             tvAboutMe.setText("ABOUT "+profile.getFirstName()+" "+profile.getLastName());
 
             if(!isEditProfile) {

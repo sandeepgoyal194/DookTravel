@@ -310,6 +310,29 @@
                                             android:textColorHint="@color/hint"
                                             android:textSize="14sp"
                                             android:theme="@style/EditText.custom_details"/>
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                        <com.softmine.dooktravel.util.CustomEditText
+                                            style="@style/EditText.custom_details"
+                                            android:id="@+id/ph_p"
+                                            android:layout_width="80dp"
+                                            android:layout_height="wrap_content"
+                                            android:drawableLeft="@drawable/phone1"
+                                            android:gravity="center"
+                                            android:inputType="number"
+                                            android:lines="1"
+
+                                            android:maxLength="3"
+                                            android:paddingLeft="10dp"
+                                            android:singleLine="true"
+                                            android:textColor="@color/edittext_color"
+                                            android:textSize="14sp"
+                                            android:theme="@style/EditText.custom_details"
+                                            custom:typeface="proxima-nova-semibold.otf" />
                                         <com.softmine.dooktravel.util.CustomEditText
                                             custom:typeface="proxima-nova-semibold.otf"
                                             android:id="@+id/edContact1"
@@ -319,7 +342,6 @@
                                             android:hint="@string/primary"
                                             android:paddingLeft="10dp"
                                             android:drawablePadding="20dp"
-                                            android:drawableLeft="@drawable/phone1"
                                             android:inputType="number"
                                             android:maxLength="10"
                                             android:lines="1"
@@ -331,6 +353,7 @@
                                             android:layout_below="@+id/hint_country"
                                             android:layout_alignParentLeft="true"
                                             android:layout_alignParentStart="true" />
+                                        </LinearLayout>
                                     </RelativeLayout>
 
                                     <RelativeLayout
@@ -358,6 +381,29 @@
                                             android:textColorHint="@color/hint"
                                             android:textSize="14sp"
                                             android:theme="@style/EditText.custom_details"/>
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                        <com.softmine.dooktravel.util.CustomEditText
+                                            style="@style/EditText.custom_details"
+                                            android:id="@+id/ph_s"
+                                            android:layout_width="80dp"
+                                            android:layout_height="wrap_content"
+                                            android:drawableLeft="@drawable/phone1"
+                                            android:gravity="center"
+                                            android:inputType="number"
+                                            android:lines="1"
+
+                                            android:maxLength="3"
+                                            android:paddingLeft="10dp"
+                                            android:singleLine="true"
+                                            android:textColor="@color/edittext_color"
+                                            android:textSize="14sp"
+                                            android:theme="@style/EditText.custom_details"
+                                            custom:typeface="proxima-nova-semibold.otf" />
                                         <com.softmine.dooktravel.util.CustomEditText
                                             custom:typeface="proxima-nova-semibold.otf"
                                             android:layout_toRightOf="@id/hint_country_2"
@@ -371,12 +417,12 @@
                                             android:paddingLeft="10dp"
                                             android:drawablePadding="20dp"
                                             android:lines="1"
-                                            android:drawableLeft="@drawable/phone1"
                                             android:singleLine="true"
                                             android:textColor="@color/edittext_color"
                                             android:textColorHint="@color/hint"
                                             android:textSize="14sp"
                                             android:theme="@style/EditText.custom_details" />
+                                  </LinearLayout>
                                     </RelativeLayout>
                                     <com.softmine.dooktravel.util.CustomEditText
                                         custom:typeface="proxima-nova-semibold.otf"
