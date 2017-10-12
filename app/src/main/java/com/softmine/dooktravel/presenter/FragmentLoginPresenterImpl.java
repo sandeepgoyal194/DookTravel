@@ -42,7 +42,12 @@ public class FragmentLoginPresenterImpl implements IFragmentLoginPresenter,ILogi
 
     @Override
     public void onDestroy() {
-        mView=null;
+        try {
+            mView = null;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

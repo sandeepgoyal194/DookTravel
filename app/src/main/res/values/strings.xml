@@ -16,8 +16,8 @@
     <string name="tv_forgot_password">Forgot your password?</string>
     <string name="login_fb">LOGIN WITH FACEBOOK</string>
     <string name="dont_have_account">Don\'t have an account?</string>
-    <string name="sign_up"><u>Sign UP</u></string>
-    <string name="signup">Sign UP</string>
+    <string name="sign_up"><u>Sign up</u></string>
+    <string name="signup">Sign up</string>
 
     <string name="login_u"><u>Login</u></string>
     <string name="email_address">EMAIL ADDRESS</string>

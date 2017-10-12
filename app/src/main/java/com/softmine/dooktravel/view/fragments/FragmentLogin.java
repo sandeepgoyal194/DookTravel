@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -271,8 +270,13 @@ public class FragmentLogin extends Fragment implements IFragmentView {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-        mPresenter.onDestroy();
+        try {
+            super.onDestroy();
+            mPresenter.onDestroy();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     void userFacebookLogin(String token, String email){

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.softmine.dooktravel.R;
 import com.softmine.dooktravel.model.Profile;
@@ -30,6 +31,7 @@ public class FragmentProfileDetail extends Fragment {
     EditText etFirstName,etMiddleName,etLastName,etAddress,etContact,etSkype,etDescription,etEmail,etOraginization, etDesignation,etZipCode;
     EditText spnMaritalStatus,spnGender,spnCategory, spnCountry, spnCity, spnProvince,spnDateOfBirth,tvWorkingSince,etContact1;
     ImageView imgProfile;
+    TextView tvAboutUs;
     Profile profile;
     public FragmentProfileDetail() {
         // Required empty public constructor
@@ -122,7 +124,7 @@ public class FragmentProfileDetail extends Fragment {
         etOraginization = (EditText) view.findViewById(R.id.edOrganization);
 
         etDesignation = (EditText) view.findViewById(R.id.edDesignation);
-
+        tvAboutUs=(TextView)view.findViewById(R.id.tvAboutUs);
         showDetail();
 
     }
@@ -152,6 +154,7 @@ public class FragmentProfileDetail extends Fragment {
         else {
             etContact1.setText(profile.getMobile());
         }
+        tvAboutUs.setText("ABOUT "+profile.getFirstName()+" "+ profile.getLastName());
         etDescription.setText(profile.getAbout());
         etSkype.setText(profile.getSkype());
         etEmail.setText(profile.getEmailId());
