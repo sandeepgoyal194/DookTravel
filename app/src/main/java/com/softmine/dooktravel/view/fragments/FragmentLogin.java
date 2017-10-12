@@ -307,7 +307,7 @@ public class FragmentLogin extends Fragment implements IFragmentView {
                             jsonBody.put(C.PHONE, etPh.getEditText().getText().toString().substring(1) + etUsername.getEditText().getText().toString());
 
                             //   jsonBody.put(C.PASSWORD, etPassword.getEditText().getText().toString());
-                            jsonBody.put(C.SOCAIL_ID, "");
+                       //     jsonBody.put(C.SOCAIL_ID, "");
                             Log.e("DEBUG", "json=" + jsonBody.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();

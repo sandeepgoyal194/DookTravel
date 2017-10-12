@@ -1380,7 +1380,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                             try {
                                 jsonBody.put(C.PHONE, profileDetail.getPhone());
                                 //   jsonBody.put(C.PASSWORD, etPassword.getEditText().getText().toString());
-                                jsonBody.put(C.ACTION, C.Login);
+                                jsonBody.put(C.ACTION, C.register);
                                 jsonBody.put(C.SOCAIL_ID, "");
                                 Log.e("DEBUG","JSOn="+jsonBody.toString());
                             } catch (JSONException e) {

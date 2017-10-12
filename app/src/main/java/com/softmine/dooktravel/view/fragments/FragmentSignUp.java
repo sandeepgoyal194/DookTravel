@@ -278,9 +278,9 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
                             phone = etPh.getEditText().getText().toString().substring(1)+edPhone.getEditText().getText().toString();
                             socailId = "";
                             jsonBody.put(C.EMAIL, email);
-                            jsonBody.put(C.SOCAIL_ID, "");
+                         //  jsonBody.put(C.SOCAIL_ID, "");
                             jsonBody.put(C.PHONE,phone);
-                            jsonBody.put(C.ACTION, C.register);
+
                             Log.e("DEBUG", "JSON=" + jsonBody);
                         } catch (JSONException e) {
                             e.printStackTrace();
