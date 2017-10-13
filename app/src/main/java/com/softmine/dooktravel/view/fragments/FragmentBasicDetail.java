@@ -24,6 +24,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -271,7 +272,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                         etPh_p.getEditText().setSelection(etPh_p.getEditText().getText().toString().length());
                     }
                 }
-                else if(s!=null && s.length()==3){
+                else if(s!=null && s.length()==4){
                     edPrimary.clearFocus();
                     edPrimary.getEditText().requestFocus();
                     edPrimary.getEditText().setCursorVisible(true);
@@ -289,6 +290,9 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                     etPh_p.getEditText().setText("+"+s.toString().substring(0,1));
                 }
                 else if(!s.toString().startsWith("+") && s.length()==3){
+                    etPh_p.getEditText().setText(s.toString().substring(1,s.toString().length())+s.toString().substring(0,1));
+                }
+                else if(!s.toString().startsWith("+") && s.length()==4){
                     etPh_p.getEditText().setText(s.toString().substring(1,s.toString().length())+s.toString().substring(0,1));
                 }
                 etPh_p.getEditText().setSelection(etPh_p.getEditText().getText().toString().length());
@@ -325,7 +329,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                         etPh_s.getEditText().setSelection(etPh_s.getEditText().getText().toString().length());
                     }
                 }
-                else if(s!=null && s.length()==3){
+                else if(s!=null && s.length()==4){
                     edSecondary.clearFocus();
                     edSecondary.getEditText().requestFocus();
                     edSecondary.getEditText().setCursorVisible(true);
@@ -343,6 +347,9 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                     etPh_s.getEditText().setText("+"+s.toString().substring(0,1));
                 }
                 else if(!s.toString().startsWith("+") && s.length()==3){
+                    etPh_s.getEditText().setText(s.toString().substring(1,s.toString().length())+s.toString().substring(0,1));
+                }
+                else if(!s.toString().startsWith("+") && s.length()==4){
                     etPh_s.getEditText().setText(s.toString().substring(1,s.toString().length())+s.toString().substring(0,1));
                 }
                 etPh_s.getEditText().setSelection(etPh_s.getEditText().getText().toString().length());
@@ -533,7 +540,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                     edPrimary.getEditText().setFocusable(false);
                 }*/
                 edEmail.getEditText().setText(profileDtl.getEmail());
-                if(profileDtl.getPhone()!=null && profileDtl.getPhone().length()==12) {
+                if(profileDtl.getPhone()!=null && profileDtl.getPhone().length()>=11) {
                     etPh_p.getEditText().setText(Utils.getCountryCode(profileDtl.getPhone()));
                     edPrimary.getEditText().setText(Utils.getMobile(profileDtl.getPhone()));
                 }
@@ -816,7 +823,14 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
     public Uri getOutputMediaFileUri(int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+          return FileProvider.getUriForFile(getActivity().getApplicationContext(),
+                    "com.softmine.dooktravel", // As defined in Manifest
+                    getOutputMediaFile(type));
+        }
+        else {
+            return Uri.fromFile(getOutputMediaFile(type));
+        }
     }
 
     /**
@@ -1212,12 +1226,12 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                     edSecondary.getEditText().requestFocus();
                     return false;
                 }
-              else if(etPh_p.getEditText().getText()!=null && etPh_p.getEditText().getText().toString().length()!=3) {
+              else if(etPh_p.getEditText().getText()!=null && etPh_p.getEditText().getText().toString().length()<2) {
                     Toast.makeText(getActivity(),getString(R.string.enter_country_code),Toast.LENGTH_LONG).show();
                     etPh_p.getEditText().requestFocus();
                     return false;
                 }
-                else if(edSecondary.getEditText().getText()!=null && edSecondary.getEditText().getText().toString().length()>1 && etPh_s.getEditText().getText()!=null && etPh_s.getEditText().getText().toString().length()!=3 ){
+                else if(edSecondary.getEditText().getText()!=null && edSecondary.getEditText().getText().toString().length()>1 && etPh_s.getEditText().getText()!=null && etPh_s.getEditText().getText().toString().length()<2 ){
                     Toast.makeText(getActivity(),getString(R.string.enter_country_code),Toast.LENGTH_LONG).show();
                     etPh_s.getEditText().requestFocus();
                     return false;
@@ -1267,11 +1281,11 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
             edLastName.getEditText().setText(profile.getLastName());
 
           //  edEmail.getEditText().setFocusable(false);
-            if(profile.getPhone()!=null && profile.getPhone().length()==12) {
+            if(profile.getPhone()!=null && profile.getPhone().length()>=11) {
                 etPh_p.getEditText().setText(Utils.getCountryCode(profile.getPhone()));
                 edPrimary.getEditText().setText(Utils.getMobile(profile.getPhone()));
             }
-            if(profile.getMobile()!=null && profile.getMobile().length()==12) {
+            if(profile.getMobile()!=null && profile.getMobile().length()>=11) {
                 etPh_s.getEditText().setText(Utils.getCountryCode(profile.getMobile()));
                 edSecondary.getEditText().setText(Utils.getMobile(profile.getMobile()));
             }

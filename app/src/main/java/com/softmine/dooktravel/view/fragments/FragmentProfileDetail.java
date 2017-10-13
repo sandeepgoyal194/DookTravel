@@ -141,14 +141,14 @@ public class FragmentProfileDetail extends Fragment {
       //  etLastName.setText(profile.getLastName());
       //  etMiddleName.setText(profile.getMiddleName());
         etAddress.setText(profile.getAddress());
-        if(profile.getPhone()!=null && profile.getPhone().length()==12) {
+        if(profile.getPhone()!=null && profile.getPhone().length()>=11) {
             etContact.setText("+"+profile.getPhone());
         }
         else {
             etContact.setText(profile.getPhone());
 
         }
-        if(profile.getMobile()!=null && profile.getMobile().length()==12) {
+        if(profile.getMobile()!=null && profile.getMobile().length()>=11) {
             etContact1.setText("+"+profile.getMobile());
         }
         else {

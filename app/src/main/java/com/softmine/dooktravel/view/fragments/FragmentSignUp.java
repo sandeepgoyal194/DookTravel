@@ -165,7 +165,7 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
                         etPh.getEditText().setSelection(etPh.getEditText().getText().toString().length());
                     }
                 }
-                else if(s!=null && s.length()==3){
+                else if(s!=null && s.length()==4){
                     edPhone.clearFocus();
                     edPhone.getEditText().requestFocus();
                     edPhone.getEditText().setCursorVisible(true);
@@ -183,6 +183,9 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
                     etPh.getEditText().setText("+"+s.toString().substring(0,1));
                 }
                 else if(!s.toString().startsWith("+") && s.length()==3){
+                    etPh.getEditText().setText(s.toString().substring(1,s.toString().length())+s.toString().substring(0,1));
+                }
+                else if(!s.toString().startsWith("+") && s.length()==4){
                     etPh.getEditText().setText(s.toString().substring(1,s.toString().length())+s.toString().substring(0,1));
                 }
                 etPh.getEditText().setSelection(etPh.getEditText().getText().toString().length());
@@ -270,7 +273,7 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
         @Override
         public void onClick(View v) {
             if(validation.validateAllEditText()) {
-                if(etPh.getEditText().getText()!=null && etPh.getEditText().getText().toString().length()==3) {
+                if(etPh.getEditText().getText()!=null && etPh.getEditText().getText().toString().length()>1) {
                     if (utils.isInternetOn(getActivity())) {
                         JSONObject jsonBody = new JSONObject();
                         try {

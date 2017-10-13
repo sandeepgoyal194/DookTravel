@@ -203,12 +203,12 @@ public class Utils {
 
     public static String getCountryCode(String phone) {
 
-        String s="+"+phone.substring(0,2);
+        String s="+"+phone.substring(0,phone.length()-10);
         return s;
     }
     public static String getMobile(String phone) {
 
-        String s=phone.substring(2,phone.length());
+        String s=phone.substring(phone.length()-10);
         return s;
     }
 }
