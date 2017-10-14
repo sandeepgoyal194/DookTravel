@@ -809,11 +809,28 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
         startActivityForResult(galleryIntent, GALLERY);
     }
     private void takePhotoFromCamera() {
-        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-        startActivityForResult(intent, CAMERA);
-    }
+        try {
+            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            //  fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+            File file = createImageFile();
+            boolean isDirectoryCreated = file.getParentFile().mkdirs();
+            Log.e("DEBUG", "openCamera: isDirectoryCreated: " + isDirectoryCreated);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Uri tempFileUri = FileProvider.getUriForFile(getActivity().getApplicationContext(),
+                        "com.softmine.dooktravel", // As defined in Manifest
+                        file);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, tempFileUri);
+            } else {
+                Uri tempFileUri = Uri.fromFile(file);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, tempFileUri);
+            }
+            // intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+            startActivityForResult(intent, CAMERA);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        }
     void chooseImage(){
         Intent intent = new Intent();
 // Show only images, no videos or anything else
@@ -836,12 +853,22 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
     /**
      * returning image / video
      */
+
+
+    private File createImageFile() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new
+                Date());
+        File file = new File(C.IMAGE_PATH, "IMG_" + timeStamp +
+                ".jpg");
+        fileUri = Uri.fromFile(file);
+        return file;
+    }
     private static File getOutputMediaFile(int type) {
 
         // External sdcard location
         File mediaStorageDir = new File(
                 Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                        .getExternalStorageDirectory().getPath()+
                 C.IMAGE_DIRECTORY_NAME);
 
         // Create the storage directory if it does not exist

@@ -1,5 +1,7 @@
 package com.softmine.dooktravel.util;
 
+import android.os.Environment;
+
 /**
  * Created by gaurav.garg on 30-06-2017.
  */
@@ -88,6 +90,8 @@ public class C {
 
     public static final String IMAGE_DIRECTORY_NAME = "ADBOEK";
     public static final String ACTION = "action";
+    public static final String IMAGE_PATH = Environment
+            .getExternalStorageDirectory().getPath() + "/ADBOEK";
     public static  boolean isloggedIn =false ;
 
     public static String InvalidToken="Invalid token";
