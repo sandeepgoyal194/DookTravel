@@ -110,7 +110,7 @@ public class FragmentLogin extends Fragment implements IFragmentView {
         tvDontHaveAccount=(TextView)view.findViewById(R.id.tv_dont_have_account);
         btnFacebook=(Button)view.findViewById(R.id.btnfb);
             flags = 0 | Validations.FLAG_NOT_EMPTY;
-        flags = flags | Validations.TYPE_MOBILE;
+    //    flags = flags | Validations.TYPE_MOBILE;
         etUsername=new ValidateEditText((EditText)view.findViewById(R.id.edUsername),getActivity(),flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
         etPassword=new ValidateEditText((EditText)view.findViewById(R.id.edPassword),getActivity(),flags);
@@ -303,23 +303,25 @@ public class FragmentLogin extends Fragment implements IFragmentView {
 
             if(validation.validateAllEditText()) {
                 if(etPh.getEditText().getText()!=null &&etPh.getEditText().getText().toString().length()>1) {
-                    if (util.isInternetOn(getActivity())) {
-                        JSONObject jsonBody = new JSONObject();
-                        try {
-                            jsonBody.put(C.ACTION, C.Login);
-                            jsonBody.put(C.PHONE, etPh.getEditText().getText().toString().substring(1) + etUsername.getEditText().getText().toString());
+                    if (isAllValid()) {
+                        if (util.isInternetOn(getActivity())) {
+                            JSONObject jsonBody = new JSONObject();
+                            try {
+                                jsonBody.put(C.ACTION, C.Login);
+                                jsonBody.put(C.PHONE, etPh.getEditText().getText().toString().substring(1) + etUsername.getEditText().getText().toString());
 
-                            //   jsonBody.put(C.PASSWORD, etPassword.getEditText().getText().toString());
-                       //     jsonBody.put(C.SOCAIL_ID, "");
-                            Log.e("DEBUG", "json=" + jsonBody.toString());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                                //   jsonBody.put(C.PASSWORD, etPassword.getEditText().getText().toString());
+                                //     jsonBody.put(C.SOCAIL_ID, "");
+                                Log.e("DEBUG", "json=" + jsonBody.toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            mIsFbLogin = false;
+                            mPresenter.validateLogin(jsonBody);
+                        } else {
+                            getDailogConfirm(getString(R.string.internet_issue)
+                                    , "Internet Issue");
                         }
-                        mIsFbLogin = false;
-                        mPresenter.validateLogin(jsonBody);
-                    } else {
-                        getDailogConfirm(getString(R.string.internet_issue)
-                                , "Internet Issue");
                     }
                 }
                 else {
@@ -341,7 +343,14 @@ public class FragmentLogin extends Fragment implements IFragmentView {
 
 
 
-
+    boolean isAllValid(){
+        if(etUsername.getEditText().getText().toString().length()!=10){
+            etUsername.getEditText().setError(getString(R.string.valid_phone));
+            etUsername.getEditText().requestFocus();
+            return false;
+        }
+        return true;
+    }
 
 
 

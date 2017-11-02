@@ -459,7 +459,6 @@
                                             android:textColor="@color/black"
                                             android:textSize="14sp"
                                             android:visibility="gone" />
-
                                         <Spinner
                                             android:paddingLeft="40dp"
                                             android:gravity="start"

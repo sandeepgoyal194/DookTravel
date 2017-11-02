@@ -59,30 +59,30 @@ public class Utils {
         return false;
     }
 
-    public void showDialog(String msg, Context context){
-        try {
+        public void showDialog(String msg, Context context){
+            try {
 
-            if (progressDialog == null || !progressDialog.isShowing()) {
-                progressDialog = new ProgressDialog(context);
-                progressDialog.setMessage(msg);
-                progressDialog.show();
+                if (progressDialog == null || !progressDialog.isShowing()) {
+                    progressDialog = new ProgressDialog(context);
+                    progressDialog.setMessage(msg);
+                    progressDialog.show();
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
             }
         }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-   public void hideDialog(){
-       try {
+       public void hideDialog(){
+           try {
 
-           if (progressDialog.isShowing()) {
-               progressDialog.dismiss();
+               if (progressDialog.isShowing()) {
+                   progressDialog.dismiss();
+               }
            }
-       }
-       catch (Exception e){
-           e.printStackTrace();
-       }
-    }
+           catch (Exception e){
+               e.printStackTrace();
+           }
+        }
     public static Typeface getRegularTypeFace(Context context){
         return Typeface.createFromAsset(context.getAssets(), "font/proxima-nova-regular.otf");
     }
