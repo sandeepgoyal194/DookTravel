@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:custom="http://schemas.android.com/apk/res-auto/com.softmine.dooktravel.util"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     >
 
     <RelativeLayout
