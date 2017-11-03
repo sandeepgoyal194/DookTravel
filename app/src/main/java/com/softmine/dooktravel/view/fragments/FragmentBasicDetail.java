@@ -44,7 +44,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.softmine.dooktravel.R;
@@ -229,8 +228,8 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
 
 
         edSecondary=new ValidateEditText((EditText)view.findViewById(R.id.edContact2),getActivity(),flags);
-        etPh_p=new ValidateEditText((EditText)view.findViewById(R.id.ph_p),getActivity(),flags);
-        etPh_s=new ValidateEditText((EditText)view.findViewById(R.id.ph_s),getActivity(),flags);
+        etPh_p=new ValidateEditText((EditText)view.findViewById(R.id.ph_p),getActivity(),0);
+        etPh_s=new ValidateEditText((EditText)view.findViewById(R.id.ph_s),getActivity(),0);
 
 
         final Spannable code = new SpannableString("+");
@@ -541,9 +540,9 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                     edPrimary.getEditText().setFocusable(false);
                 }*/
                 edEmail.getEditText().setText(profileDtl.getEmail());
-                if(profileDtl.getPhone()!=null && profileDtl.getPhone().length()>=11) {
-                    etPh_p.getEditText().setText(Utils.getCountryCode(profileDtl.getPhone()));
-                    edPrimary.getEditText().setText(Utils.getMobile(profileDtl.getPhone()));
+                if(profileDtl.getPhone()!=null && profileDtl.getPhone().length()>0) {
+                 //   etPh_p.getEditText().setText(Utils.getCountryCode(profileDtl.getPhone()));
+                    edPrimary.getEditText().setText(profileDtl.getPhone());
                 }
                 getCategoryList();
 
@@ -1080,12 +1079,12 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                         profileDetail.setGender(spnGender.getSelectedItem().toString());
                         profileDetail.setSkype(edSkypeID.getEditText().getText().toString());
 
-                        if(edPrimary.getEditText().getText().toString()!=null && edPrimary.getEditText().getText().toString().length()==10) {
-                            profileDetail.setPhone(etPh_p.getEditText().getText().toString().substring(1)+edPrimary.getEditText().getText().toString());
+                        if(edPrimary.getEditText().getText().toString()!=null && edPrimary.getEditText().getText().toString().length()>0) {
+                            profileDetail.setPhone(edPrimary.getEditText().getText().toString());
 
                         }
-                        if(edSecondary.getEditText().getText().toString()!=null && edSecondary.getEditText().getText().toString().length()==10) {
-                            profileDetail.setMobile1(etPh_s.getEditText().getText().toString().substring(1)+edSecondary.getEditText().getText().toString());
+                        if(edSecondary.getEditText().getText().toString()!=null && edSecondary.getEditText().getText().toString().length()>0) {
+                            profileDetail.setMobile1(edSecondary.getEditText().getText().toString());
 
                         }
 
@@ -1160,12 +1159,12 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                         profile.setSkype(edSkypeID.getEditText().getText().toString());
                         profile.setEmailId(edEmail.getEditText().getText().toString());
 
-                        if(edPrimary.getEditText().getText().toString()!=null && edPrimary.getEditText().getText().toString().length()==10) {
-                            profile.setPhone(etPh_p.getEditText().getText().toString().substring(1)+edPrimary.getEditText().getText().toString());
+                        if(edPrimary.getEditText().getText().toString()!=null && edPrimary.getEditText().getText().toString().length()>0) {
+                            profile.setPhone(edPrimary.getEditText().getText().toString());
 
                         }
-                        if(edSecondary.getEditText().getText().toString()!=null && edSecondary.getEditText().getText().toString().length()==10) {
-                            profile.setMobile(etPh_s.getEditText().getText().toString().substring(1)+edSecondary.getEditText().getText().toString());
+                        if(edSecondary.getEditText().getText().toString()!=null && edSecondary.getEditText().getText().toString().length()>0) {
+                            profile.setMobile(edSecondary.getEditText().getText().toString());
 
                         }
 
@@ -1262,17 +1261,17 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                     Utils.showToast(getActivity(), getString(R.string.select_city));
                     return false;
                 }
-                else if(edPrimary.getEditText().getText()==null || edPrimary.getEditText().getText().toString().length()!=10){
+                else if(edPrimary.getEditText().getText()!=null && edPrimary.getEditText().getText().toString().length()==0){
                     edPrimary.getEditText().setError(getString(R.string.valid_phone));
                     edPrimary.getEditText().requestFocus();
                     return false;
                 }
-                else if(edSecondary.getEditText().getText()!=null && edSecondary.getEditText().getText().toString().length()>1 && edSecondary.getEditText().getText().toString().length()!=10){
+               /* else if(edSecondary.getEditText().getText()!=null && edSecondary.getEditText().getText().toString().length()>1 && edSecondary.getEditText().getText().toString().length()!=10){
                     edSecondary.getEditText().setError(getString(R.string.valid_phone));
                     edSecondary.getEditText().requestFocus();
                     return false;
-                }
-              else if(etPh_p.getEditText().getText()!=null && etPh_p.getEditText().getText().toString().length()<2) {
+                }*/
+             /* else if(etPh_p.getEditText().getText()!=null && etPh_p.getEditText().getText().toString().length()<2) {
                     Toast.makeText(getActivity(),getString(R.string.enter_country_code),Toast.LENGTH_LONG).show();
                     etPh_p.getEditText().requestFocus();
                     return false;
@@ -1281,7 +1280,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                     Toast.makeText(getActivity(),getString(R.string.enter_country_code),Toast.LENGTH_LONG).show();
                     etPh_s.getEditText().requestFocus();
                     return false;
-                }
+                }*/
             }
         }
         catch (Exception e){
@@ -1327,13 +1326,13 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
             edLastName.getEditText().setText(profile.getLastName());
 
           //  edEmail.getEditText().setFocusable(false);
-            if(profile.getPhone()!=null && profile.getPhone().length()>=11) {
-                etPh_p.getEditText().setText(Utils.getCountryCode(profile.getPhone()));
-                edPrimary.getEditText().setText(Utils.getMobile(profile.getPhone()));
+            if(profile.getPhone()!=null && profile.getPhone().length()>0) {
+              //  etPh_p.getEditText().setText(Utils.getCountryCode(profile.getPhone()));
+                edPrimary.getEditText().setText(profile.getPhone());
             }
-            if(profile.getMobile()!=null && profile.getMobile().length()>=11) {
-                etPh_s.getEditText().setText(Utils.getCountryCode(profile.getMobile()));
-                edSecondary.getEditText().setText(Utils.getMobile(profile.getMobile()));
+            if(profile.getMobile()!=null && profile.getMobile().length()>0) {
+           //     etPh_s.getEditText().setText(Utils.getCountryCode(profile.getMobile()));
+                edSecondary.getEditText().setText(profile.getMobile());
             }
           //  edPrimary.getEditText().setText(profile.getPhone());
         //    edSecondary.getEditText().setText(profile.getMobile());

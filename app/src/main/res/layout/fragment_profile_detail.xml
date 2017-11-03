@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto/com.softmine.dooktravel.util"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
     android:fitsSystemWindows="true">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:custom="http://schemas.android.com/apk/res-auto/com.softmine.dooktravel.util"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -328,23 +327,23 @@
                                             style="@style/EditText.custom_details"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_alignParentLeft="true"
-                                            android:layout_alignParentStart="true"
-                                            android:layout_below="@+id/hint_country"
                                             android:drawableLeft="@drawable/phone1"
                                             android:drawablePadding="20dp"
                                             android:focusable="false"
                                             android:hint="@string/primary"
                                             android:inputType="number"
                                             android:lines="1"
-                                            android:maxLength="14"
+                                            android:maxLength="17"
                                             android:paddingLeft="10dp"
                                             android:singleLine="true"
                                             android:textColor="@color/edittext_color"
                                             android:textColorHint="@color/hint"
                                             android:textSize="14sp"
                                             android:theme="@style/EditText.custom_details"
-                                            custom:typeface="proxima-nova-semibold.otf" />
+                                            custom:typeface="proxima-nova-semibold.otf"
+                                            android:layout_below="@+id/hint_country"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
                                     </RelativeLayout>
 
                                     <RelativeLayout
@@ -379,21 +378,23 @@
                                             style="@style/EditText.custom_details"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_toRightOf="@id/hint_country_2"
                                             android:drawableLeft="@drawable/phone1"
                                             android:drawablePadding="20dp"
                                             android:focusable="false"
                                             android:hint="@string/secondary"
                                             android:inputType="number"
                                             android:lines="1"
-                                            android:maxLength="14"
+                                            android:maxLength="17"
                                             android:paddingLeft="10dp"
                                             android:singleLine="true"
                                             android:textColor="@color/edittext_color"
                                             android:textColorHint="@color/hint"
                                             android:textSize="14sp"
                                             android:theme="@style/EditText.custom_details"
-                                            custom:typeface="proxima-nova-semibold.otf" />
+                                            custom:typeface="proxima-nova-semibold.otf"
+                                            android:layout_below="@+id/hint_country_2"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentStart="true" />
                                     </RelativeLayout>
 
                                     <com.softmine.dooktravel.util.CustomEditText
@@ -586,6 +587,7 @@
                                             android:theme="@style/EditText.custom_details"
                                             custom:typeface="proxima-nova-semibold.otf" />
                                     </LinearLayout>
+
                                     <com.softmine.dooktravel.util.CustomEditText
                                         android:id="@+id/edOrganization"
                                         style="@style/EditText.custom_details"
@@ -632,8 +634,6 @@
                                         custom:typeface="proxima-nova-semibold.otf" />
                                     <!--   </android.support.design.widget.TextInputLayout>
                     -->
-
-
 
 
                                     <LinearLayout
@@ -894,13 +894,13 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="100dp"
                                             android:layout_gravity="top"
-                                            android:gravity="top"
-
-                                            android:background="@drawable/view_back_border"
                                             android:layout_marginLeft="5dp"
+
                                             android:layout_marginRight="5dp"
                                             android:layout_marginTop="10dp"
+                                            android:background="@drawable/view_back_border"
                                             android:focusable="false"
+                                            android:gravity="top"
                                             android:maxLength="250"
                                             android:paddingLeft="10dp"
                                             android:paddingTop="10dp"
@@ -915,13 +915,13 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="right"
-                                            android:visibility="gone"
                                             android:layout_marginBottom="100dp"
                                             android:layout_marginLeft="15dp"
                                             android:layout_marginRight="15dp"
                                             android:layout_marginTop="2dp"
                                             android:hint="@string/tv_no_of_char"
                                             android:textColor="@color/background_blue"
+                                            android:visibility="gone"
                                             custom:typeface="ProximaNova-Bold.otf" />
 
                                     </LinearLayout>

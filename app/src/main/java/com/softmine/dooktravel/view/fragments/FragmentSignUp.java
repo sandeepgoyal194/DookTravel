@@ -274,7 +274,7 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
         public void onClick(View v) {
             if(validation.validateAllEditText()) {
                 if(etPh.getEditText().getText()!=null && etPh.getEditText().getText().toString().length()>1) {
-                    if (isAllValid()) {
+
                         if (utils.isInternetOn(getActivity())) {
                             JSONObject jsonBody = new JSONObject();
                             try {
@@ -295,7 +295,7 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
                             getDailogConfirm(getString(R.string.internet_issue)
                                     , "Internet Issue");
                         }
-                    }
+
                 }
                 else {
                     Toast.makeText(getActivity(),getString(R.string.enter_country_code),Toast.LENGTH_LONG).show();
