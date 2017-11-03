@@ -146,7 +146,6 @@ public class FragmentProfileDetail extends Fragment {
         }
         else {
             etContact.setText(profile.getPhone());
-
         }
         if(profile.getMobile()!=null && profile.getMobile().length()>0) {
             etContact1.setText("+"+profile.getMobile());
