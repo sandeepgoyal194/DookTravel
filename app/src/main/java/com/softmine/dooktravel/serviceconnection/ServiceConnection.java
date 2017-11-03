@@ -73,7 +73,7 @@ public class ServiceConnection {
         public void getResponse(final CompleteListener completeListener){
             try {
                 RequestQueue requestQueue = Volley.newRequestQueue(completeListener.getApplicationsContext());
-                String URL = "http://www.kenlabs.co/dook/apis/?device=phone&api=login";
+                String URL = "http://admin.adboek.com/dook/apis/?device=phone&api=login";
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put(C.EMAIL, "pradeep.bansal@techmobia.com");
                 jsonBody.put(C.PASSWORD, "abc123");
