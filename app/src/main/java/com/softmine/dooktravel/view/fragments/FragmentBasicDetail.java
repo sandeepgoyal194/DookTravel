@@ -28,6 +28,7 @@ import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -222,7 +223,7 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
         flags = 0 | Validations.FLAG_NOT_EMPTY;
         edSkypeID=new ValidateEditText((EditText)view.findViewById(R.id.edSkype),getActivity(),flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
-        flags = flags | Validations.TYPE_MOBILE;
+       // flags = flags | Validations.TYPE_MOBILE;
 
         edPrimary=new ValidateEditText((EditText)view.findViewById(R.id.edContact1),getActivity(),flags);
 
@@ -1121,7 +1122,16 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
 
                         }
                         profileDetail.setAddress(etAddress.getEditText().getText().toString());
-                        profileDetail.setAbout(etAboutMe.getEditText().getText().toString());
+                        if(!TextUtils.isEmpty(etAboutMe.getEditText().getText().toString())){
+                            int i=0;
+                            String a=etAboutMe.getEditText().getText().toString();
+                            while (i!= a.length()){
+                                a= a.replaceAll("\n\n","\n");
+                                i++;
+                            }
+                            profileDetail.setAbout(a);
+
+                        }
                         profileDetail.setZip(etZipCode.getEditText().getText().toString());
                            /* Bundle bundle = new Bundle();
                             bundle.putSerializable(C.DATA, profileDetail);
@@ -1189,7 +1199,16 @@ public class FragmentBasicDetail extends Fragment implements IFragmentView{
                         }
                         profile.setZipCode(etZipCode.getEditText().getText().toString());
                         profile.setAddress(etAddress.getEditText().getText().toString());
-                        profile.setAbout(etAboutMe.getEditText().getText().toString());
+                        if(!TextUtils.isEmpty(etAboutMe.getEditText().getText().toString())){
+                            int i=0;
+                            String a=etAboutMe.getEditText().getText().toString();
+                            while (i!= a.length()){
+                                a= a.replaceAll("\n\n","\n");
+                                i++;
+                            }
+                            profile.setAbout(a);
+
+                        }
                         Gson gson = new Gson();
                         String obj = gson.toJson(profile);
                         Log.e("DEBUG", "profile=" + obj);

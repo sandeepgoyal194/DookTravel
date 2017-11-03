@@ -119,7 +119,7 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
         flags = flags | Validations.TYPE_EMAIL;
         etUserName=new ValidateEditText((EditText)view.findViewById(R.id.edEmail),getActivity(),flags);
         flags = 0 | Validations.FLAG_NOT_EMPTY;
-        flags = flags | Validations.TYPE_MOBILE;
+       // flags = flags | Validations.TYPE_MOBILE;
         edPhone=new ValidateEditText((EditText)view.findViewById(R.id.edPhone),getActivity(),flags);
         validation.addtoList(etUserName);
         validation.addtoList(edPhone);
@@ -274,25 +274,27 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
         public void onClick(View v) {
             if(validation.validateAllEditText()) {
                 if(etPh.getEditText().getText()!=null && etPh.getEditText().getText().toString().length()>1) {
-                    if (utils.isInternetOn(getActivity())) {
-                        JSONObject jsonBody = new JSONObject();
-                        try {
-                            email = etUserName.getEditText().getText().toString();
-                            phone = etPh.getEditText().getText().toString().substring(1)+edPhone.getEditText().getText().toString();
-                            socailId = "";
-                            jsonBody.put(C.EMAIL, email);
-                         //  jsonBody.put(C.SOCAIL_ID, "");
-                            jsonBody.put(C.PHONE,phone);
+                    if (isAllValid()) {
+                        if (utils.isInternetOn(getActivity())) {
+                            JSONObject jsonBody = new JSONObject();
+                            try {
+                                email = etUserName.getEditText().getText().toString();
+                                phone = etPh.getEditText().getText().toString().substring(1) + edPhone.getEditText().getText().toString();
+                                socailId = "";
+                                jsonBody.put(C.EMAIL, email);
+                                //  jsonBody.put(C.SOCAIL_ID, "");
+                                jsonBody.put(C.PHONE, phone);
 
-                            Log.e("DEBUG", "JSON=" + jsonBody);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                                Log.e("DEBUG", "JSON=" + jsonBody);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            mIsFbLogin = false;
+                            mIFragmentSignUpPresenter.validateSignUp(jsonBody);
+                        } else {
+                            getDailogConfirm(getString(R.string.internet_issue)
+                                    , "Internet Issue");
                         }
-                        mIsFbLogin = false;
-                        mIFragmentSignUpPresenter.validateSignUp(jsonBody);
-                    } else {
-                        getDailogConfirm(getString(R.string.internet_issue)
-                                , "Internet Issue");
                     }
                 }
                 else {
@@ -305,6 +307,15 @@ public class FragmentSignUp extends Fragment implements IFragmentView {
 
         }
     };
+
+    boolean isAllValid(){
+        if(edPhone.getEditText().getText().toString().length()!=10){
+            edPhone.getEditText().setError(getString(R.string.valid_phone));
+            edPhone.getEditText().requestFocus();
+            return false;
+        }
+        return true;
+    }
     View.OnClickListener tvLoginCLickListner=new View.OnClickListener() {
         @Override
         public void onClick(View v) {

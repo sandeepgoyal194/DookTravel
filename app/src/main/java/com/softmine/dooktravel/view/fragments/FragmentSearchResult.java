@@ -240,27 +240,28 @@ public class FragmentSearchResult extends Fragment implements IFragmentView{
         @Override
         public void onClick(View v) {
 
-            if(validation.validateAllEditText()){
+            if(validation.validateAllEditText()) {
+                if (isAllValid()) {
                     Utils.hideSoftKeyboard(getActivity());
-                if(utils.isInternetOn(getActivity())) {
-                    profileListRequest.setMemberId(SharedPreference.getInstance(getActivity()).getString(C.MEMBER_ID));
-                    profileListRequest.setToken(SharedPreference.getInstance(getActivity()).getString(C.TOKEN));
-                    profileListRequest.setKeyword(etKeyword.getEditText().getText().toString());
+                    if (utils.isInternetOn(getActivity())) {
+                        profileListRequest.setMemberId(SharedPreference.getInstance(getActivity()).getString(C.MEMBER_ID));
+                        profileListRequest.setToken(SharedPreference.getInstance(getActivity()).getString(C.TOKEN));
+                        profileListRequest.setKeyword(etKeyword.getEditText().getText().toString());
 
-                    Gson gson = new Gson();
-                    String obj = gson.toJson(profileListRequest);
-                    try {
-                        action = C.PROFILE_LIST_METHOD;
-                        JSONObject jsonObject = new JSONObject(obj);
-                        mIFragmentSearchResultPresenter.getProfileList(jsonObject);
+                        Gson gson = new Gson();
+                        String obj = gson.toJson(profileListRequest);
+                        try {
+                            action = C.PROFILE_LIST_METHOD;
+                            JSONObject jsonObject = new JSONObject(obj);
+                            mIFragmentSearchResultPresenter.getProfileList(jsonObject);
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        getDailogConfirm(getString(R.string.internet_issue)
+                                , "Internet Issue");
                     }
-                }
-                else {
-                    getDailogConfirm(getString(R.string.internet_issue)
-                            , "Internet Issue");
                 }
             }
 
@@ -269,7 +270,7 @@ public class FragmentSearchResult extends Fragment implements IFragmentView{
 
     boolean isAllValid(){
 
-        if(spnCountry.getSelectedItem().toString().equals(C.SELECT_COUNTRY)){
+       /* if(spnCountry.getSelectedItem().toString().equals(C.SELECT_COUNTRY)){
             Utils.showToast(getActivity(),getString(R.string.select_country));
 
             return false;
@@ -283,6 +284,12 @@ public class FragmentSearchResult extends Fragment implements IFragmentView{
         else if(spnCategory.getSelectedItem().toString().equals(C.SELECT_CATEGORY)){
             Utils.showToast(getActivity(),getString(R.string.select_catogary));
             return false;
+        }
+        return true;*/
+       if(etKeyword.getEditText().getText().toString().length()<3){
+            etKeyword.getEditText().setError(getString(R.string.search_validate_msg));
+           etKeyword.getEditText().requestFocus();
+           return false;
         }
         return true;
     }

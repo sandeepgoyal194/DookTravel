@@ -152,5 +152,6 @@
     <string name="find_people">Find People</string>
     <string name="slow_network">Due to slow connection there is some problem. please try again</string>
     <string name="enter_country_code">Please enter country code</string>
-    <string name="valid_phone">Please enter valid mobile number</string>
+    <string name="valid_phone">Please enter 10 digit mobile number</string>
+    <string name="search_validate_msg">Please provide minimum 3 characters for search </string>
 </resources>
